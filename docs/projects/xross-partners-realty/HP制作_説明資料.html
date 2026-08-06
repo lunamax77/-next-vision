@@ -3,8 +3,8 @@
   :root{
     --navy:#14335F;--navy2:#1B3A6B;--ink:#1A2433;--sub:#5A6678;--line:#D9E0EA;
     --line2:#E9EEF4;--bg:#F4F6FA;--accent:#2E5AA0;--gold:#B8894B;--green:#2F7D54;
-    --serif:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP",serif;
-    --sans:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic","Meiryo","Noto Sans JP",system-ui,sans-serif;
+    --serif:"Meiryo","メイリオ","Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",sans-serif;
+    --sans:"Meiryo","メイリオ","Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",sans-serif;
   }
   *{box-sizing:border-box;}
   body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.8;font-size:13.5px;}
@@ -62,7 +62,11 @@
   .contact .r{color:#C3D3EC;font-size:12px;text-align:right;}
   @media print{body{background:#fff;font-size:11px;}.draft-note{display:none;}
     .doc{box-shadow:none;border:none;margin:0 auto;max-width:none;}
-    ul.feat{columns:2;}@page{size:A4;margin:0;}}
+    ul.feat{columns:2;}
+    h2.sec{page-break-after:avoid;}
+    .why,.flow,table,.meishi,.callout,.cond,ul.feat,.contact{page-break-inside:avoid;}
+    .price tr{page-break-inside:avoid;}
+    @page{size:A4;margin:0;}}
 </style>
 
 <section class="doc">
