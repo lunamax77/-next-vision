@@ -1,0 +1,163 @@
+<title>ホームページ制作 ご案内 ｜ DreamCreation</title>
+<style>
+  :root{
+    --navy:#14335F;--navy2:#1B3A6B;--ink:#1A2433;--sub:#5A6678;--line:#D9E0EA;
+    --line2:#E9EEF4;--bg:#F4F6FA;--accent:#2E5AA0;--gold:#B8894B;--green:#2F7D54;
+    --serif:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP",serif;
+    --sans:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic","Meiryo","Noto Sans JP",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.8;font-size:13.5px;}
+  .draft-note{background:repeating-linear-gradient(45deg,#FBEAEA,#FBEAEA 12px,#F6DFDF 12px,#F6DFDF 24px);color:#8B2E2E;border-bottom:1px solid #E7C9C9;text-align:center;padding:9px 16px;font-size:12.5px;}
+  .doc{background:#fff;max-width:920px;margin:22px auto;box-shadow:0 8px 30px -18px rgba(12,33,64,.35);border:1px solid var(--line2);}
+  /* hero */
+  .hero{background:linear-gradient(135deg,var(--navy),var(--navy2) 60%,#24507F);color:#fff;padding:46px 50px 40px;}
+  .hero .st{font-size:10px;letter-spacing:.34em;color:#AEC4E6;}
+  .hero h1{font-family:var(--serif);font-size:30px;letter-spacing:.06em;margin:8px 0 6px;line-height:1.4;}
+  .hero p{color:#D7E2F2;font-size:13.5px;margin:8px 0 0;max-width:640px;}
+  .hero .to{margin-top:20px;font-size:12px;color:#C3D3EC;border-top:1px solid rgba(255,255,255,.18);padding-top:14px;}
+  .hero .to b{color:#fff;}
+  .body{padding:36px 50px 44px;}
+  h2.sec{font-family:var(--serif);font-size:18px;color:var(--navy);margin:34px 0 10px;letter-spacing:.04em;display:flex;align-items:baseline;gap:12px;}
+  h2.sec .no{font-family:var(--sans);font-size:11px;letter-spacing:.16em;color:#fff;background:var(--navy);border-radius:3px;padding:3px 9px;}
+  h2.sec:first-child{margin-top:0;}
+  p.lead{color:var(--sub);font-size:13px;margin:6px 0 12px;}
+  .why{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:12px 0;}
+  .why .card{border:1px solid var(--line);border-radius:6px;padding:16px 16px;background:#FAFBFD;}
+  .why .card .h{font-weight:700;color:var(--navy);font-size:13.5px;margin-bottom:4px;}
+  .why .card .d{font-size:11.5px;color:var(--sub);}
+  ul.feat{margin:8px 0;padding-left:0;list-style:none;columns:2;column-gap:26px;}
+  ul.feat li{padding:6px 0 6px 22px;position:relative;font-size:12.5px;break-inside:avoid;border-bottom:1px dashed var(--line2);}
+  ul.feat li::before{content:"✓";position:absolute;left:0;top:6px;color:var(--green);font-weight:700;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.8px;}
+  th,td{border:1px solid var(--line);padding:11px 12px;text-align:left;vertical-align:top;}
+  thead th{background:var(--navy);color:#fff;font-weight:600;letter-spacing:.03em;}
+  td.r,th.r{text-align:right;}td.c,th.c{text-align:center;}
+  .price td .sub{color:var(--sub);font-size:11px;margin-top:3px;}
+  .price tr.total td{background:#EAF1FB;font-weight:700;color:var(--navy);font-size:14px;}
+  .price tr.opt td{background:#FBFAF5;}
+  .tag{display:inline-block;font-size:10px;padding:1px 8px;border-radius:11px;background:#EAF3EC;color:var(--green);border:1px solid #C9E3D2;margin-left:6px;white-space:nowrap;}
+  .tag.gold{background:#FBF4E5;color:#9A6B22;border-color:#EAD6AE;}
+  .flow{display:flex;gap:0;margin:14px 0;counter-reset:step;flex-wrap:wrap;}
+  .flow .s{flex:1;min-width:120px;border:1px solid var(--line);border-right:none;padding:14px 12px;background:#FAFBFD;position:relative;}
+  .flow .s:last-child{border-right:1px solid var(--line);}
+  .flow .s .n{width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-size:12px;margin-bottom:7px;}
+  .flow .s .t{font-weight:700;font-size:12.5px;color:var(--navy);}
+  .flow .s .d{font-size:11px;color:var(--sub);margin-top:3px;}
+  /* meishi */
+  .meishi{border:1px solid var(--gold);border-radius:8px;overflow:hidden;margin:10px 0;}
+  .meishi .head{background:linear-gradient(135deg,#8A6A34,#B8894B);color:#fff;padding:14px 18px;}
+  .meishi .head .k{font-size:10px;letter-spacing:.28em;color:#F0E4CF;}
+  .meishi .head .t{font-family:var(--serif);font-size:18px;letter-spacing:.05em;margin-top:2px;}
+  .meishi .in{padding:16px 18px;}
+  .callout{background:#F5F8FC;border:1px solid #DCE7F3;border-left:4px solid var(--accent);border-radius:4px;padding:11px 15px;font-size:12.5px;margin:10px 0;}
+  .callout b{color:var(--navy);}
+  .cond{border:1px solid var(--line);border-radius:6px;background:#FAFBFD;padding:14px 18px;font-size:12px;color:var(--sub);margin-top:8px;}
+  .cond dl{margin:0;display:grid;grid-template-columns:130px 1fr;gap:6px 12px;}
+  .cond dt{color:var(--navy);font-weight:600;}
+  .cond dd{margin:0;}
+  .foot{text-align:center;color:var(--sub);font-size:10.5px;margin:26px 0 8px;}
+  .contact{background:var(--navy);color:#fff;padding:20px 50px;font-size:12.5px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  .contact .l b{font-family:var(--serif);font-size:15px;letter-spacing:.05em;}
+  .contact .r{color:#C3D3EC;font-size:12px;text-align:right;}
+  @media print{body{background:#fff;font-size:11px;}.draft-note{display:none;}
+    .doc{box-shadow:none;border:none;margin:0 auto;max-width:none;}
+    ul.feat{columns:2;}@page{size:A4;margin:0;}}
+</style>
+
+<div class="draft-note">🔒 社内確認用ドラフト｜サービス内容・料金・名刺提案を反映済み。<b>代表の最終承認後</b>にクライアントへ提示します（現時点で送付していません）。</div>
+
+<section class="doc">
+  <div class="hero">
+    <div class="st">DREAMCREATION ｜ WEBSITE DESIGN STUDIO</div>
+    <h1>ホームページ制作 ご案内</h1>
+    <p>「制作会社の品質」を、無理のない価格で。御社の信頼を伝えるコーポレートサイトを、企画からデザイン・公開・運用まで一貫してお手伝いします。</p>
+    <div class="to">ご提案先：<b>株式会社Xross Partners Realty 御中</b>（代表取締役　東 蓮 様）　／　作成日：2026年8月6日</div>
+  </div>
+
+  <div class="body">
+    <!-- 選ばれる理由 -->
+    <h2 class="sec"><span class="no">POINT</span>DreamCreation が選ばれる理由</h2>
+    <div class="why">
+      <div class="card"><div class="h">大手より大幅にお得</div><div class="d">制作会社の中央値（約50万円）の半額以下。品質はそのままに、価格を抑えます。</div></div>
+      <div class="card"><div class="h">一式おまかせ</div><div class="d">サーバー・ドメイン・メールの契約設定から公開・保守まで、まとめて代行します。</div></div>
+      <div class="card"><div class="h">公開後も安心</div><div class="d">月額の保守で、SSL・バックアップ・簡易更新をサポート。作って終わりにしません。</div></div>
+    </div>
+
+    <!-- 含まれるもの -->
+    <h2 class="sec"><span class="no">PLAN</span>ビジネスHPプランに含まれるもの</h2>
+    <p class="lead">5〜7ページ規模のコーポレートサイトを、スマートフォン対応・SEO初期設定込みで制作します。</p>
+    <ul class="feat">
+      <li>トップページ</li>
+      <li>会社案内・会社概要</li>
+      <li>事業内容</li>
+      <li>選ばれる理由</li>
+      <li>お知らせ（更新機能）</li>
+      <li>アクセス（地図）</li>
+      <li>お問い合わせフォーム</li>
+      <li>スマートフォン対応（レスポンシブ）</li>
+      <li>基本SEO・内部SEO初期設定</li>
+      <li>公開設定・SSL初期設定</li>
+    </ul>
+
+    <!-- 料金 -->
+    <h2 class="sec"><span class="no">PRICE</span>料金プラン</h2>
+    <table class="price">
+      <thead><tr><th style="width:52%">項目</th><th class="c" style="width:16%">区分</th><th class="r" style="width:32%">金額（税込）</th></tr></thead>
+      <tbody>
+        <tr><td>ホームページ制作（ビジネスHPプラン）<div class="sub">上記「含まれるもの」一式。一度きりの制作費です。</div></td><td class="c">一括</td><td class="r">¥238,000</td></tr>
+        <tr><td>初期セットアップ代行<div class="sub">レンタルサーバー契約・初期設定／独自ドメイン取得・設定／独自ドメインメール設定の代行一式。<b>大手一般価格より割安に。</b></div></td><td class="c">一括（初回のみ）</td><td class="r">¥32,000</td></tr>
+        <tr><td>年間保守・運用（ライト保守）<div class="sub">サーバー・ドメイン管理／SSL確認／バックアップ／簡易保守。月額¥5,500 × 12ヶ月。</div></td><td class="c">1年分</td><td class="r">¥66,000</td></tr>
+        <tr class="total"><td>合計</td><td class="c">—</td><td class="r">¥336,000</td></tr>
+      </tbody>
+    </table>
+    <div class="callout">💡 <b>ドメイン・サーバー・メールの年間実費（目安 年¥15,000〜25,000）は上記に含まず、実費を別途ご請求</b>いたします（手数料の上乗せはありません）。ページ増設・EC・予約システム等の追加機能、写真撮影・原稿作成代行は別途お見積りです。</div>
+
+    <!-- 流れ -->
+    <h2 class="sec"><span class="no">FLOW</span>制作の流れ</h2>
+    <div class="flow">
+      <div class="s"><div class="n">1</div><div class="t">ヒアリング・着手</div><div class="d">ご要望を伺い、構成を決定（着手：8月6日）</div></div>
+      <div class="s"><div class="n">2</div><div class="t">デザイン・制作</div><div class="d">デザイン案→制作→ご確認</div></div>
+      <div class="s"><div class="n">3</div><div class="t">検収</div><div class="d">納品後7日以内にご確認</div></div>
+      <div class="s"><div class="n">4</div><div class="t">公開</div><div class="d">サーバー設定・公開（8月中）</div></div>
+      <div class="s"><div class="n">5</div><div class="t">保守・運用</div><div class="d">公開日から1年間サポート</div></div>
+    </div>
+
+    <!-- 名刺（新規追加） -->
+    <h2 class="sec"><span class="no">OPTION</span>名刺制作 のご提案</h2>
+    <p class="lead">ホームページと世界観をそろえた<b>オリジナルデザインの名刺</b>も承ります。ネット印刷のテンプレートとは違う「御社だけのデザイン」を、印刷会社に頼むより手頃な価格で。</p>
+    <div class="meishi">
+      <div class="head"><div class="k">BUSINESS CARD DESIGN &amp; PRINT</div><div class="t">オリジナル名刺 制作</div></div>
+      <div class="in">
+        <table class="price" style="margin:0;">
+          <thead><tr><th style="width:52%">プラン</th><th class="c" style="width:16%">数量</th><th class="r" style="width:32%">金額（税込・目安）</th></tr></thead>
+          <tbody>
+            <tr><td>オリジナルデザイン制作（データ納品）<div class="sub">御社ロゴ・HPと調和した完全オリジナルデザイン。両面対応。</div></td><td class="c">1点</td><td class="r">¥18,000</td></tr>
+            <tr class="opt"><td>デザイン＋印刷セット（両面カラー）<span class="tag gold">おすすめ</span><div class="sub">デザインから印刷・納品までまるごと。追加100枚ごとの増刷も可。</div></td><td class="c">100枚</td><td class="r">¥25,000</td></tr>
+            <tr><td>印刷リピート（同デザインで増刷）<div class="sub">2回目以降、同じデザインの刷り直し。</div></td><td class="c">100枚</td><td class="r">¥4,000</td></tr>
+          </tbody>
+        </table>
+        <div class="callout" style="margin:12px 0 0;">✨ <b>市場のオリジナルデザイン名刺（印刷込み）の相場は約4〜5万円</b>。当社はデザイン＋印刷100枚<b>¥25,000</b>で、<b>約4割おトク</b>。しかもネット印刷のテンプレ品と違い<b>完全オリジナル</b>、2回目以降は増刷¥4,000でリピートいただけます。</div>
+      </div>
+    </div>
+    <p class="lead" style="font-size:11.5px;margin-top:8px;">※ 名刺はホームページ制作の御見積金額には含まれません（ご希望の場合の追加オプションです）。用紙グレード・特殊加工・急ぎ納品はご相談ください。</p>
+
+    <!-- 条件 -->
+    <h2 class="sec"><span class="no">TERMS</span>お取引条件</h2>
+    <div class="cond">
+      <dl>
+        <dt>納期</dt><dd>2026年8月中（着手日 2026年8月6日）</dd>
+        <dt>お支払方法</dt><dd>先入金（前払い・一括）／お支払期限 2026年8月13日・銀行振込</dd>
+        <dt>著作権</dt><dd>制作物の著作権は、委託料の完済時に御社へ移転します（当社の汎用ノウハウ・第三者素材〈フォント等〉を除く）。当社は実績として掲載できるものとします。</dd>
+        <dt>保守契約</dt><dd>公開日から1年間。満了1ヶ月前までにお申出がなければ同条件で自動更新。</dd>
+        <dt>その他</dt><dd>本契約に関する紛争は大阪地方裁判所を第一審の専属的合意管轄とします。</dd>
+      </dl>
+    </div>
+    <p class="foot">社内確認用ドラフト（2026年8月6日作成）／株式会社DreamCreation ｜ 金額はすべて税込・目安を含みます。対外提出前に代表承認が必要です。</p>
+  </div>
+
+  <div class="contact">
+    <div class="l"><b>株式会社DreamCreation</b>　WEBSITE DESIGN STUDIO</div>
+    <div class="r">〒550-0015 大阪府大阪市西区南堀江1-10-1 KT堀江801号室<br>TEL 06-4967-1038　Email data@d-creation-o.com　適格請求書登録番号 T5120001206752</div>
+  </div>
+</section>
