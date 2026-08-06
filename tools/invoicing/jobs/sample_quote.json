@@ -1,0 +1,18 @@
+{
+  "type": "quote",
+  "customer": "株式会社新通エスピー",
+  "subject": "エアー遊具レンタルについて",
+  "period": "2026年9月1日～2026年9月30日",
+  "issue_date": "2026-08-06",
+  "person": "竹村英哲",
+  "rental_items": [
+    {"item": "エアリズム トランポリン", "qty": 1, "days": 2},
+    {"item": "カーニバルA", "qty": 1, "days": 2},
+    {"name": "キッズライセンスパーク（スタンダード）", "qty": 1, "days": 1}
+  ],
+  "transport_items": [
+    {"name": "配送料金(片道)　大阪→福岡", "qty": 1, "days": 1, "unit_price": 10000,
+     "note": "バルーン本体(大箱)＋コンプレッサー(中箱)で1セット"}
+  ],
+  "output": "out/見積_新通エスピー_202609.xlsx"
+}

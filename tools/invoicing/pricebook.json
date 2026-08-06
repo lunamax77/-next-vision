@@ -1,0 +1,19 @@
+{
+  "_comment": "遊具マスタ。価格はHP掲載の機材レンタル費用(税別)と同一。daily=1日あたり単価, monthly=月額(あれば), quote_only=個別見積のみ。日数計算の既定ルールは『初日は満額、2日目以降は50%』。",
+  "multiday_rule": {"first_day": 1.0, "extra_day": 0.5},
+  "items": {
+    "キッズライセンスパーク（スタンダード）": {"daily": 80000, "monthly": null, "category": "運転体験"},
+    "キッズライセンスパーク（プレミアム）": {"daily": 125000, "monthly": null, "category": "運転体験"},
+    "スクイーズ ワークショップ": {"daily": 80000, "monthly": null, "category": "ワークショップ"},
+    "シールデコ ワークショップ": {"daily": 80000, "monthly": null, "category": "ワークショップ"},
+    "エアリズム": {"daily": 50000, "monthly": 350000, "category": "エア遊具"},
+    "エアリズム トランポリン": {"daily": 70000, "monthly": 350000, "category": "エア遊具"},
+    "カーニバルA": {"daily": 50000, "monthly": 320000, "category": "ゲーム遊具"},
+    "カーニバルB": {"daily": 50000, "monthly": 320000, "category": "ゲーム遊具"},
+    "ユニコーンターゲット": {"daily": null, "monthly": null, "category": "ゲーム遊具", "quote_only": true},
+    "フープショット": {"daily": null, "monthly": null, "category": "ゲーム遊具", "quote_only": true},
+    "ウエスタンフープ": {"daily": null, "monthly": null, "category": "ゲーム遊具", "quote_only": true},
+    "チックタックトゥ": {"daily": null, "monthly": null, "category": "ゲーム遊具", "quote_only": true},
+    "アックススロー": {"daily": null, "monthly": null, "category": "ゲーム遊具", "quote_only": true}
+  }
+}

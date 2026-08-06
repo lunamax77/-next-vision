@@ -1,0 +1,13 @@
+{
+  "type": "invoice",
+  "customer": "株式会社新通エスピー",
+  "subject": "エアー遊具レンタル料御請求書につきまして",
+  "period": "2026年8月1日～8月31日",
+  "issue_date": "2026-08-31",
+  "due_date": "令和8年9月30日",
+  "person": "竹村英哲",
+  "rental_items": [
+    {"name": "エアー遊具", "qty": 1, "days": 1, "unit_price": "一式", "amount": 300000}
+  ],
+  "output": "out/請求_新通エスピー_202608.xlsx"
+}
