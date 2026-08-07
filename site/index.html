@@ -60,6 +60,7 @@ p{margin:0}
 :focus-visible{outline:3px solid var(--orange);outline-offset:3px;border-radius:6px}
 .wrap{max-width:1140px;margin:0 auto;padding:0 var(--pad)}
 .en{font-family:var(--round)}
+.nowrap{white-space:nowrap}
 
 /* ===== header ===== */
 .topbar{background:var(--navy);color:#fff}
@@ -127,10 +128,10 @@ nav.main a:hover{color:var(--blue);border-color:var(--orange)}
   margin-top:14px;line-height:1.5}
 .hero .hook::before{content:"";display:inline-block;width:22px;height:3px;border-radius:2px;background:var(--orange);
   vertical-align:middle;margin-right:9px}
-.chips{display:flex;gap:9px;flex-wrap:wrap;margin-top:22px;justify-content:center}
-@media(min-width:921px){.chips{justify-content:flex-start}}
-.chips span{display:inline-flex;align-items:center;gap:7px;background:#fff;border:2px solid var(--line);
-  border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:700;font-family:var(--display)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px;justify-content:center}
+@media(min-width:921px){.chips{justify-content:flex-start;flex-wrap:nowrap}}
+.chips span{display:inline-flex;align-items:center;gap:6px;background:#fff;border:2px solid var(--line);
+  border-radius:999px;padding:8px 13px;font-size:13px;font-weight:700;font-family:var(--display);white-space:nowrap}
 .chips .ic{width:19px;height:19px;flex:none}
 .hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px;justify-content:center}
 @media(min-width:921px){.hero-cta{justify-content:flex-start}}
@@ -431,11 +432,11 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
       <span class="eyebrow"><span class="d"></span>商業施設・店舗のキッズ体験イベント</span>
       <h1>こどもが主役の一日を、<br><span class="mk">企画から運営まで。</span></h1>
       <p class="hook">こどもの「たのしい！」が、そのまま集客の力になる。</p>
-      <p class="lead"><b class="c-blue">工作ワークショップ</b>と、こども免許証がもらえる運転体験<b class="c-blue">「キッズライセンスパーク」</b>。<br>この2つを主役に、<b>企画から当日の運営まで</b>を一社でお届けする、キッズ体験イベントの専門チームです。</p>
+      <p class="lead"><b class="c-blue">工作ワークショップ</b>と、こども免許証がもらえる運転体験<br><b class="c-blue nowrap">「キッズライセンスパーク」</b>。この2つを主役に、<br><b>企画から当日の運営まで</b>を一社でお届けする、キッズ体験イベントの専門チームです。</p>
       <div class="chips">
         <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>工作ワークショップ</span>
-        <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>こども免許証（運転体験）</span>
-        <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>設営〜運営まで代行</span>
+        <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>こども免許証</span>
+        <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>設営〜運営代行</span>
       </div>
       <div class="hero-cta">
         <a href="#contents" class="btn btn-blue">体験コンテンツを見る</a>
