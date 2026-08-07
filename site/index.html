@@ -122,6 +122,11 @@ nav.main a:hover{color:var(--blue);border-color:var(--orange)}
 .hero .lead{font-size:clamp(15px,1.5vw,17px);color:var(--ink-soft);max-width:33em;margin:18px auto 0}
 @media(min-width:921px){.hero .lead{margin-left:0}}
 .hero .lead b{color:var(--ink);font-weight:700}
+.hero .lead .c-blue{color:var(--blue-d)}
+.hero .hook{font-family:var(--display);font-weight:700;font-size:clamp(16px,1.7vw,19px);color:var(--blue-d);
+  margin-top:14px;line-height:1.5}
+.hero .hook::before{content:"";display:inline-block;width:22px;height:3px;border-radius:2px;background:var(--orange);
+  vertical-align:middle;margin-right:9px}
 .chips{display:flex;gap:9px;flex-wrap:wrap;margin-top:22px;justify-content:center}
 @media(min-width:921px){.chips{justify-content:flex-start}}
 .chips span{display:inline-flex;align-items:center;gap:7px;background:#fff;border:2px solid var(--line);
@@ -136,10 +141,12 @@ nav.main a:hover{color:var(--blue);border-color:var(--orange)}
 .mascot{position:relative;z-index:2;width:100%;filter:drop-shadow(0 16px 18px rgb(var(--shadow)/.28))}
 .float{animation:float 4s ease-in-out infinite alternate}
 @keyframes float{from{transform:translateY(0)}to{transform:translateY(-10px)}}
-.lic-chip{position:absolute;z-index:3;right:-6px;top:8%;background:#fff;border:2.5px solid var(--ink);border-radius:12px;
-  padding:9px 12px;box-shadow:0 12px 24px -14px rgb(var(--shadow)/.6);transform:rotate(6deg);font-family:var(--display)}
-.lic-chip b{display:block;font-size:12px;color:var(--ink)}
-.lic-chip span{font-family:var(--mono);font-size:9.5px;color:var(--blue-d)}
+.lic-card{position:absolute;z-index:4;right:-7%;top:14%;width:47%;border-radius:14px;border:5px solid #fff;
+  transform:rotate(7deg);box-shadow:0 20px 36px -14px rgb(var(--shadow)/.6)}
+.lic-tag{position:absolute;z-index:5;right:2%;top:8%;background:var(--coral);color:#fff;font-family:var(--display);
+  font-weight:700;font-size:12px;padding:6px 12px;border-radius:999px;transform:rotate(7deg);
+  box-shadow:0 8px 16px -8px rgb(var(--shadow)/.6);white-space:nowrap}
+.float2{animation:float 4.6s ease-in-out .35s infinite alternate}
 .spark{position:absolute;z-index:3;animation:tw 2.4s ease-in-out infinite}
 @keyframes tw{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(.6);opacity:.4}}
 
@@ -216,9 +223,10 @@ h2{font-size:clamp(24px,3.4vw,36px)}
 .cnt:hover{transform:translateY(-4px);box-shadow:0 18px 30px -22px rgb(var(--shadow)/.5)}
 .cnt::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:linear-gradient(90deg,var(--orange),var(--coral))}
 .cnt .cic{width:40px;height:40px;margin:0 auto 6px;color:var(--blue)}
-.cnt b{display:block;font-family:var(--mono);font-weight:700;font-size:clamp(40px,5vw,52px);color:var(--coral);line-height:1;letter-spacing:-.02em}
-.cnt b small{font-size:18px;font-family:var(--display);color:var(--ink);margin-left:2px}
-.cnt span{display:block;font-size:13.5px;color:var(--ink-soft);margin-top:8px}
+.cnt b{display:flex;align-items:baseline;justify-content:center;gap:3px;line-height:1}
+.cnt .num{font-family:var(--mono);font-weight:700;font-size:clamp(58px,7.5vw,82px);color:var(--coral);letter-spacing:-.03em;line-height:.9}
+.cnt b small{font-size:21px;font-family:var(--display);font-weight:700;color:var(--ink)}
+.cnt span{display:block;font-size:13.5px;color:var(--ink-soft);margin-top:12px}
 .cnt span strong{color:var(--ink);font-weight:700}
 
 /* ===== usecases ===== */
@@ -421,7 +429,8 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
     <div>
       <span class="eyebrow"><span class="d"></span>商業施設・店舗のキッズ体験イベント</span>
       <h1>こどもが主役の一日を、<br><span class="mk">企画から運営まで。</span></h1>
-      <p class="lead"><b>NextVision</b>は、工作ワークショップと、こども免許証がもらえる運転体験「キッズライセンスパーク」を中心にした、<b>キッズ体験イベントの専門チーム</b>です。設営・受付・安全管理までまるごとお任せいただけます。</p>
+      <p class="hook">こどもの「たのしい！」が、そのまま集客の力になる。</p>
+      <p class="lead"><b class="c-blue">工作ワークショップ</b>と、こども免許証がもらえる運転体験<b class="c-blue">「キッズライセンスパーク」</b>。<br>この2つを主役に、<b>企画から当日の運営まで</b>を一社でお届けする、キッズ体験イベントの専門チームです。</p>
       <div class="chips">
         <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>工作ワークショップ</span>
         <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>こども免許証（運転体験）</span>
@@ -437,8 +446,9 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
         <div class="disc"></div>
         <svg class="spark" style="top:2%;left:6%;width:34px" viewBox="0 0 24 24" fill="var(--orange)"><path d="M12 0l2.4 8.4L22 12l-7.6 3.6L12 24l-2.4-8.4L2 12l7.6-3.6z"/></svg>
         <svg class="spark" style="bottom:16%;left:-2%;width:22px;animation-delay:.6s" viewBox="0 0 24 24" fill="var(--coral)"><path d="M12 0l2.4 8.4L22 12l-7.6 3.6L12 24l-2.4-8.4L2 12l7.6-3.6z"/></svg>
-        <div class="lic-chip"><b>こども免許証 🚗</b><span>その場で発行・約5分</span></div>
         <img class="mascot float" src="images/mascot.png" alt="NextVisionのマスコット ペンギン" width="440" height="560">
+        <img class="lic-card float2" src="images/license.jpg" alt="こども免許証（見本）">
+        <span class="lic-tag">その場で発行・約5分</span>
       </div>
     </div>
   </div>
