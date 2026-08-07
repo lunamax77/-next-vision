@@ -72,12 +72,12 @@ header{position:sticky;top:0;z-index:60;background:rgb(255 251 239 / .9);backdro
 .logo img{height:44px;width:auto}
 .logo b{font-family:var(--display);font-weight:900;font-size:19px;color:var(--ink);line-height:1.1;display:block}
 .logo small{display:block;font-size:10.5px;font-weight:500;color:var(--sub)}
-nav.main{margin-left:auto;display:flex;gap:18px;align-items:center}
-nav.main a{text-decoration:none;font-size:14px;font-weight:700;color:var(--ink-soft);font-family:var(--display);
-  padding:6px 2px;border-bottom:2.5px solid transparent;transition:.18s}
+nav.main{margin-left:auto;display:flex;gap:15px;align-items:center}
+nav.main a{text-decoration:none;font-size:13.5px;font-weight:700;color:var(--ink-soft);font-family:var(--display);
+  padding:6px 2px;border-bottom:2.5px solid transparent;transition:.18s;white-space:nowrap}
 nav.main a:hover{color:var(--blue);border-color:var(--orange)}
-.tel{display:flex;flex-direction:column;align-items:flex-end;line-height:1.2;text-decoration:none}
-.tel b{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--ink)}
+.tel{display:flex;flex-direction:column;align-items:flex-end;line-height:1.2;text-decoration:none;flex:none}
+.tel b{font-family:var(--mono);font-size:19px;font-weight:700;color:var(--ink);white-space:nowrap}
 .tel span{font-size:10px;color:var(--sub)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--display);
   font-weight:700;text-decoration:none;padding:13px 26px;border-radius:999px;border:2.5px solid transparent;
@@ -95,7 +95,7 @@ nav.main a:hover{color:var(--blue);border-color:var(--orange)}
 .burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7.6px) rotate(45deg)}
 .burger[aria-expanded="true"] span:nth-child(2){opacity:0}
 .burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7.6px) rotate(-45deg)}
-@media(max-width:1080px){
+@media(max-width:1140px){
   .burger{display:block}
   nav.main{position:fixed;inset:0 0 auto 0;top:0;background:var(--paper);flex-direction:column;align-items:stretch;
     gap:0;padding:78px var(--pad) 28px;margin:0;height:100dvh;overflow-y:auto;transform:translateY(-100%);
@@ -117,7 +117,7 @@ nav.main a:hover{color:var(--blue);border-color:var(--orange)}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-weight:700;font-size:13.5px;
   color:var(--blue-d);background:#fff;border:2px solid var(--line);border-radius:999px;padding:7px 15px;margin-bottom:18px}
 .eyebrow .d{width:9px;height:9px;border-radius:50%;background:var(--orange)}
-.hero h1{font-size:clamp(30px,5vw,52px);line-height:1.32}
+.hero h1{font-size:clamp(25px,4vw,44px);line-height:1.36;white-space:nowrap}
 .hero h1 .mk{background:linear-gradient(transparent 62%,var(--pink) 62%);padding:0 .05em;border-radius:3px}
 .hero .lead{font-size:clamp(15px,1.5vw,17px);color:var(--ink-soft);max-width:33em;margin:18px auto 0}
 @media(min-width:921px){.hero .lead{margin-left:0}}
@@ -151,12 +151,13 @@ nav.main a:hover{color:var(--blue);border-color:var(--orange)}
 section{padding:clamp(50px,7vw,86px) 0;position:relative}
 .tint{background:var(--cream)}
 .blue-sec{background:linear-gradient(160deg,var(--blue),var(--blue-d));color:#fff}
-.sec-head{text-align:center;max-width:44em;margin:0 auto clamp(26px,3.5vw,42px)}
+.sec-head{text-align:center;max-width:none;margin:0 auto clamp(26px,3.5vw,42px)}
 .kick{display:inline-block;font-family:var(--round);font-weight:700;font-size:13px;letter-spacing:.14em;
   color:var(--blue-d);background:var(--pink-soft);padding:5px 14px;border-radius:999px;margin-bottom:12px}
 .blue-sec .kick{color:#fff;background:rgb(255 255 255 / .18)}
 h2{font-size:clamp(24px,3.4vw,36px)}
 .sec-head p{color:var(--ink-soft);font-size:15.5px;margin-top:12px}
+@media(min-width:860px){.sec-head p{white-space:nowrap}}
 .blue-sec .sec-head p{color:rgb(255 255 255 / .9)}
 .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
 .reveal.in{opacity:1;transform:none}
@@ -197,14 +198,28 @@ h2{font-size:clamp(24px,3.4vw,36px)}
 .price{border-top:1.5px dashed var(--line);padding-top:11px;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
 .price b{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--coral)}
 .price small{font-size:11.5px;color:var(--sub)}
+.more{margin-top:12px;align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-family:var(--display);
+  font-weight:700;font-size:13.5px;color:var(--blue-d);text-decoration:none;border:2px solid var(--line);
+  border-radius:999px;padding:8px 16px;transition:.16s}
+.more:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+.more span{transition:transform .16s}.more:hover span{transform:translateX(3px)}
+.callout{display:flex;gap:13px;align-items:flex-start;background:var(--pink-soft);border:2px solid var(--orange);
+  border-radius:16px;padding:16px 20px;margin-top:18px;font-size:14.5px;color:var(--ink);line-height:1.75}
+.callout svg{flex:none;width:28px;height:28px;color:var(--coral);margin-top:1px}
+.callout b{color:var(--coral)}
 
 /* ===== counters ===== */
-.counters{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:760px;margin:0 auto clamp(26px,3vw,40px)}
+.counters{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:900px;margin:0 auto clamp(26px,3vw,42px)}
 @media(max-width:640px){.counters{grid-template-columns:1fr}}
-.cnt{background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:18px;text-align:center}
-.cnt b{display:block;font-family:var(--mono);font-weight:700;font-size:33px;color:var(--blue-d);line-height:1.1}
-.cnt b small{font-size:15px;font-family:var(--display)}
-.cnt span{font-size:13px;color:var(--ink-soft)}
+.cnt{background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:26px 18px 22px;text-align:center;
+  position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.cnt:hover{transform:translateY(-4px);box-shadow:0 18px 30px -22px rgb(var(--shadow)/.5)}
+.cnt::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:linear-gradient(90deg,var(--orange),var(--coral))}
+.cnt .cic{width:40px;height:40px;margin:0 auto 6px;color:var(--blue)}
+.cnt b{display:block;font-family:var(--mono);font-weight:700;font-size:clamp(40px,5vw,52px);color:var(--coral);line-height:1;letter-spacing:-.02em}
+.cnt b small{font-size:18px;font-family:var(--display);color:var(--ink);margin-left:2px}
+.cnt span{display:block;font-size:13.5px;color:var(--ink-soft);margin-top:8px}
+.cnt span strong{color:var(--ink);font-weight:700}
 
 /* ===== usecases ===== */
 .uses{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -257,8 +272,8 @@ h2{font-size:clamp(24px,3.4vw,36px)}
 @media(max-width:900px){.opt-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.opt-grid{grid-template-columns:1fr}}
 .opt{background:var(--card);border:2px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
-.opt .othumb{aspect-ratio:1/1;background:var(--cream);overflow:hidden}
-.opt .othumb img,.opt .othumb svg{width:100%;height:100%;object-fit:cover}
+.opt .othumb{aspect-ratio:4/3;background:#fff;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:6px;border-bottom:1px solid var(--line)}
+.opt .othumb img,.opt .othumb svg{width:100%;height:100%;object-fit:contain}
 .opt .ob{padding:12px 13px 14px}
 .opt h4{margin:0 0 4px;font-family:var(--display);font-size:15px;font-weight:700}
 .opt .op{font-family:var(--mono);font-size:12.5px;color:var(--coral);font-weight:700}
@@ -387,10 +402,10 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
     <nav class="main">
       <a href="#pillars">できること</a>
       <a href="#contents">体験コンテンツ</a>
-      <a href="#plan">2つのプラン</a>
+      <a href="#plan">プラン</a>
       <a href="#safety">安心・安全</a>
-      <a href="#price">料金・見積り</a>
-      <a href="#faq">よくある質問</a>
+      <a href="#price">料金</a>
+      <a href="#faq">FAQ</a>
       <a href="tel:07013192126" class="tel"><b>070-1319-2126</b><span>平日 9:30 - 18:00</span></a>
       <a href="#contact" class="btn btn-primary nav-cta">相談する</a>
     </nav>
@@ -462,9 +477,9 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
 <section id="contents">
   <div class="wrap">
     <div class="counters reveal">
-      <div class="cnt"><b><span class="num" data-to="3">0</span><small>本柱</small></b><span>主役コンテンツ</span></div>
-      <div class="cnt"><b><span class="num" data-to="7">0</span><small>タイプ</small></b><span>EVカーの車種</span></div>
-      <div class="cnt"><b><span class="num" data-to="5">0</span><small>分</small></b><span>免許証の発行時間</span></div>
+      <div class="cnt"><b><span class="num" data-to="5">0</span><small>分で</small></b><span>こども免許証を<strong>その場で発行・お渡し</strong></span></div>
+      <div class="cnt"><b><span class="num" data-to="7">0</span><small>車種</small></b><span>本格<strong>EVカー</strong>で、憧れの運転体験</span></div>
+      <div class="cnt"><b><span class="num" data-to="20">0</span><small>分</small></b><span>着座ワークショップで<strong>商談タイム</strong>を確保</span></div>
     </div>
     <div class="sec-head reveal">
       <span class="kick">CONTENTS</span>
@@ -480,6 +495,7 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
           <div class="spec">対象 3〜8歳／所要 8〜12分・1組／車種 7タイプ</div>
           <div class="tags"><span>週末集客</span><span>着座・商談</span><span>回遊促進</span></div>
           <div class="price"><b>¥80,000</b><small>〜／日（税別）</small></div>
+          <a class="more" href="klp.html">詳しく見る <span aria-hidden="true">→</span></a>
         </div>
       </article>
       <article class="item">
@@ -490,6 +506,7 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
           <div class="spec">所要 約20分・1組／7工程×5分／6畳程度から</div>
           <div class="tags"><span>着座・商談</span><span>待ち時間対策</span><span>省スペース</span></div>
           <div class="price"><b>¥80,000</b><small>／日（税別）</small></div>
+          <a class="more" href="squeeze.html">詳しく見る <span aria-hidden="true">→</span></a>
         </div>
       </article>
       <article class="item">
@@ -500,6 +517,7 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
           <div class="spec">所要 約20分・1組／道具不要／6畳程度から</div>
           <div class="tags"><span>着座・商談</span><span>待ち時間対策</span><span>省スペース</span></div>
           <div class="price"><b>¥80,000</b><small>／日（税別）</small></div>
+          <a class="more" href="seal.html">詳しく見る <span aria-hidden="true">→</span></a>
         </div>
       </article>
     </div>
@@ -634,7 +652,7 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
       <table>
         <thead><tr><th>コンテンツ</th><th>プラン・仕様</th><th>機材費／日</th><th>機材費／月</th></tr></thead>
         <tbody>
-          <tr><td class="name">キッズライセンスパーク</td><td>スタンダード／車両1台・1コース</td><td class="num">¥80,000</td><td class="num">—</td></tr>
+          <tr><td class="name">キッズライセンスパーク</td><td>スタンダード／車両2台・1コース</td><td class="num">¥80,000</td><td class="num">—</td></tr>
           <tr><td class="name">キッズライセンスパーク</td><td>プレミアム／車両3台・フルセット</td><td class="num">¥125,000</td><td class="num">—</td></tr>
           <tr><td class="name">スクイーズ ワークショップ</td><td>約20分／組</td><td class="num">¥80,000</td><td class="num">—</td></tr>
           <tr><td class="name">シールデコ ワークショップ</td><td>約20分／組</td><td class="num">¥80,000</td><td class="num">—</td></tr>
@@ -646,7 +664,9 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
         </tbody>
       </table>
     </div>
-    <p class="note">※表示価格はすべて税別・機材レンタル費用です。運営スタッフの人件費は含まれません。※送料・配送費は別途申し受けます。※運営代行は必要人員数・開催時間・会場所在地により変動するため個別見積りとなります。</p>
+    <div class="callout reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18.5" cy="18.5" r="2"/></svg>
+      <div><b>配送料金は「実費」でご請求します。</b><br>会場の所在地により変動するため、お見積り時は概算でご案内し、ご請求時に実費で精算いたします。（機材レンタル費用とは別途）</div></div>
+    <p class="note">※表示価格はすべて税別・機材レンタル費用です。運営スタッフの人件費は含まれません。※運営代行は必要人員数・開催時間・会場所在地により変動するため個別見積りとなります。</p>
 
     <div class="est-box reveal" style="margin-top:26px">
       <div class="est-cols">
