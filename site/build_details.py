@@ -173,6 +173,12 @@ puni_steps=[("型と色を選ぶ","お気に入りの動物型（とら・ぞう
  ("おうちで剥がす","ご自宅で水につけて型から剥がす"),
  ("パウダーで完成","マジックパウダーをかけて完成！")]
 puni_mid=(
+ '<section><div class="wrap"><div class="sec-head reveal"><span class="kick">SCENE</span>'
+ '<h2>実際の開催の様子</h2><p>商業施設・店舗の店頭で、ワークショップブースを設営・運営します。</p></div>'
+ '<div class="gallery reveal">'
+ '<figure><img src="images/squeeze-event.jpg" alt="スクイーズ作成体験ブース"><figcaption>スクイーズ作成体験ブース（ヨドバシ梅田・docomo）</figcaption></figure>'
+ '<figure><img src="images/squeeze.jpg" alt="完成したスクイーズ"><figcaption>完成イメージ（動物モチーフ）</figcaption></figure>'
+ '</div></div></section>'
  '<section class="tint"><div class="wrap"><div class="sec-head reveal"><span class="kick">PROCESS</span>'
  '<h2>制作の流れ（全7工程）</h2><p>「型のまま持ち帰る」設計で、おうちで完成させるワクワクまで。ご家庭での体験価値と満足度を高めます。</p></div>'
  '<div class="steps reveal">'+''.join(
@@ -195,6 +201,12 @@ puni=page("punilab","ぷにラボ｜スクイーズ工作ワークショップ�
 
 # ---------- SEAL ----------
 seal_mid=(
+ '<section><div class="wrap"><div class="sec-head reveal"><span class="kick">RECORD</span>'
+ '<h2>開催実績</h2><p>楽天モバイル・ドコモなど、通信キャリアの店頭イベントで多数開催しています。</p></div>'
+ '<div class="gallery contain reveal">'
+ '<figure><img src="images/seal-event.jpg" alt="ふにふにシール作り体験会 告知"><figcaption>ふにふにシール作り体験会（楽天モバイル イオンモール高岡店）</figcaption></figure>'
+ '<figure><img src="images/seal.jpg" alt="シールデコ 制作イメージ"><figcaption>制作イメージ（シャカシャカシール）</figcaption></figure>'
+ '</div></div></section>'
  '<section class="tint"><div class="wrap"><div class="sec-head reveal"><span class="kick">POINT</span><h2>シールデコの特長</h2></div>'
  '<div class="specbox reveal">'+specbox([
    ('シャカシャカシール','振ると中が揺れる、キラキラのオリジナルシール'),
