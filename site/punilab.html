@@ -143,6 +143,11 @@ section{padding:clamp(50px,7vw,86px) 0;position:relative}
 h2{font-size:clamp(24px,3.4vw,36px)}
 .sec-head p{color:var(--ink-soft);font-size:15.5px;margin-top:12px}
 @media(min-width:860px){.sec-head p{white-space:nowrap}}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:700px){.gallery{grid-template-columns:1fr}}
+.gallery figure{margin:0}
+.gallery img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:16px;border:2px solid var(--line);background:#fff}
+.gallery figcaption{font-size:12.5px;color:var(--sub);margin-top:7px;text-align:center}
 .blue-sec .sec-head p{color:rgb(255 255 255 / .9)}
 .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
 .reveal.in{opacity:1;transform:none}
@@ -402,6 +407,24 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
 .rel img{width:78px;height:78px;object-fit:cover;border-radius:10px;flex:none;background:#fff}
 .rel b{font-family:var(--display);font-size:15px;color:var(--ink)}
 .rel span{font-size:12.5px;color:var(--sub);display:block}
+.carsel{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:center;background:var(--card);
+  border:2px solid var(--line);border-radius:var(--r);padding:clamp(18px,3vw,26px)}
+@media(max-width:760px){.carsel{grid-template-columns:1fr}}
+.car-stage{text-align:center}
+.car-stage img{width:100%;max-width:440px;margin:0 auto;border-radius:12px;background:#fff}
+.car-meta b{display:block;font-family:var(--display);font-size:clamp(18px,2.4vw,22px);margin-top:12px;color:var(--ink)}
+.car-meta span{font-size:13.5px;color:var(--sub)}
+.car-thumbs{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.car-t{background:#fff;border:2px solid var(--line);border-radius:12px;padding:6px;cursor:pointer;transition:.15s;font:inherit}
+.car-t:hover{border-color:var(--blue);transform:translateY(-2px)}
+.car-t.is-on{border-color:var(--coral);background:var(--pink-soft)}
+.car-t img{width:100%;border-radius:8px;display:block}
+.car-t small{display:block;font-size:11px;color:var(--ink-soft);font-weight:700;font-family:var(--display);padding:4px 2px 2px}
+.effs{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+@media(max-width:760px){.effs{grid-template-columns:repeat(2,1fr)}}
+.eff{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center}
+.eff b{display:block;font-family:var(--mono);font-weight:700;font-size:20px;color:var(--coral)}
+.eff span{font-size:12px;color:var(--ink-soft)}
 </style>
 </head><body><div class="topbar"><div class="topbar-in"><span>大阪発・全国対応</span><span>平日 9:30 - 18:00</span></div></div>
 <header>

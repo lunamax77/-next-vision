@@ -57,6 +57,24 @@ EXTRA = """
 .rel img{width:78px;height:78px;object-fit:cover;border-radius:10px;flex:none;background:#fff}
 .rel b{font-family:var(--display);font-size:15px;color:var(--ink)}
 .rel span{font-size:12.5px;color:var(--sub);display:block}
+.carsel{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:center;background:var(--card);
+  border:2px solid var(--line);border-radius:var(--r);padding:clamp(18px,3vw,26px)}
+@media(max-width:760px){.carsel{grid-template-columns:1fr}}
+.car-stage{text-align:center}
+.car-stage img{width:100%;max-width:440px;margin:0 auto;border-radius:12px;background:#fff}
+.car-meta b{display:block;font-family:var(--display);font-size:clamp(18px,2.4vw,22px);margin-top:12px;color:var(--ink)}
+.car-meta span{font-size:13.5px;color:var(--sub)}
+.car-thumbs{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.car-t{background:#fff;border:2px solid var(--line);border-radius:12px;padding:6px;cursor:pointer;transition:.15s;font:inherit}
+.car-t:hover{border-color:var(--blue);transform:translateY(-2px)}
+.car-t.is-on{border-color:var(--coral);background:var(--pink-soft)}
+.car-t img{width:100%;border-radius:8px;display:block}
+.car-t small{display:block;font-size:11px;color:var(--ink-soft);font-weight:700;font-family:var(--display);padding:4px 2px 2px}
+.effs{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+@media(max-width:760px){.effs{grid-template-columns:repeat(2,1fr)}}
+.eff{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center}
+.eff b{display:block;font-family:var(--mono);font-weight:700;font-size:20px;color:var(--coral)}
+.eff span{font-size:12px;color:var(--ink-soft)}
 </style>
 """
 
@@ -143,6 +161,49 @@ def page(slug, title, desc, hero_photo, kick, h1, lead, keys, price_html, body_m
 
 # ---------- KLP ----------
 klp_mid=(
+ # 車を選べる(インタラクティブ)
+ '<section id="cars" class="tint"><div class="wrap"><div class="sec-head reveal"><span class="kick">LINE-UP</span>'
+ '<h2>車を選べる</h2><p>本格EVカーを複数ご用意。会場やご希望に合わせて車種をお選びいただけます。</p></div>'
+ '<div class="carsel reveal"><div class="car-stage"><img id="car-img" src="images/car-gtr.jpg" alt="選択中の車種">'
+ '<div class="car-meta"><b id="car-name">Mercedes-Benz GT R</b><span id="car-type">スポーツカー／スピード感重視</span></div></div>'
+ '<div class="car-thumbs">'
+ '<button type="button" class="car-t is-on" data-img="car-gtr.jpg" data-name="Mercedes-Benz GT R" data-type="スポーツカー／スピード感重視"><img src="images/car-gtr.jpg" alt="GT R"><small>GT R</small></button>'
+ '<button type="button" class="car-t" data-img="car-lc500.jpg" data-name="LEXUS LC500" data-type="高級スポーツカー／高級感重視"><img src="images/car-lc500.jpg" alt="LC500"><small>LC500</small></button>'
+ '<button type="button" class="car-t" data-img="car-540k.jpg" data-name="Mercedes-Benz 540K" data-type="クラシックカー／レトロ感"><img src="images/car-540k.jpg" alt="540K"><small>540K</small></button>'
+ '<button type="button" class="car-t" data-img="car-gx550.jpg" data-name="LEXUS GX550（二人乗り）" data-type="SUV／二人乗り"><img src="images/car-gx550.jpg" alt="GX550"><small>GX550</small></button>'
+ '</div></div>'
+ '<p class="note">※パトカー（サイレン演出付き）など、その他車種にも対応可能です。車種は在庫状況により変わる場合があります。</p>'
+ '<script>(function(){var i=document.getElementById("car-img"),n=document.getElementById("car-name"),t=document.getElementById("car-type");'
+ 'document.querySelectorAll(".car-t").forEach(function(b){b.addEventListener("click",function(){'
+ 'document.querySelectorAll(".car-t").forEach(function(x){x.classList.remove("is-on")});b.classList.add("is-on");'
+ 'i.src="images/"+b.dataset.img;n.textContent=b.dataset.name;t.textContent=b.dataset.type;});});})();</script>'
+ '</div></section>'
+ # 3つのポイント
+ '<section><div class="wrap"><div class="sec-head reveal"><span class="kick">POINT</span>'
+ '<h2>集客を強くする3つのポイント</h2></div><div class="uses reveal">'
+ '<div class="use"><div class="u-ic" style="background:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/></svg></div><h3>視認性</h3><p>キッズカー展示＋ゲートで「何のイベントか」が一目で伝わり、通行客の足を止めます。</p></div>'
+ '<div class="use"><div class="u-ic" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1L12 16.8 5.7 21l2.3-7.1-6-4.5h7.6z"/></svg></div><h3>記念性</h3><p>顔写真入り「こども免許証」が“参加した証”に。持ち帰れる成果物で満足度が高い。</p></div>'
+ '<div class="use"><div class="u-ic" style="background:var(--coral)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7l1.5-2h3L15 7"/><circle cx="12" cy="13" r="3"/></svg></div><h3>撮影価値</h3><p>免許証×キッズカーでSNS映え。自然な拡散で来場喚起＆ブランド露出を獲得。</p></div>'
+ '</div></div></section>'
+ # 体験フロー
+ '<section class="tint"><div class="wrap"><div class="sec-head reveal"><span class="kick">FLOW</span>'
+ '<h2>体験フロー（1組 約8〜10分）</h2></div><div class="flow reveal">'
+ '<div class="step"><div class="n">1</div><b>受付・撮影</b><i>顔写真を撮影</i></div>'
+ '<div class="step"><div class="n">2</div><b>運転体験</b><i>コースを約3周</i></div>'
+ '<div class="step"><div class="n">3</div><b>免許証発行</b><i>その場でプリント</i></div>'
+ '<div class="step"><div class="n">4</div><b>撮影</b><i>フォトスポットで</i></div>'
+ '<div class="step"><div class="n">5</div><b>商談導線へ</b><i>保護者様をご案内</i></div>'
+ '</div></div></section>'
+ # 期待される効果
+ '<section><div class="wrap"><div class="sec-head reveal"><span class="kick">EFFECT</span><h2>期待される効果</h2></div>'
+ '<div class="effs reveal">'
+ '<div class="eff"><b>+30分</b><span>滞在時間</span></div>'
+ '<div class="eff"><b>SNS</b><span>自然拡散</span></div>'
+ '<div class="eff"><b>再来訪</b><span>率アップ</span></div>'
+ '<div class="eff"><b>商談</b><span>導線確立</span></div>'
+ '<div class="eff"><b>3世代</b><span>集客</span></div>'
+ '</div></div></section>'
+ # 開催の様子
  '<section class="tint"><div class="wrap"><div class="sec-head reveal"><span class="kick">SCENE</span>'
  '<h2>実際の開催の様子</h2><p>商業施設・店舗の店頭で、コース・受付・免許発行までワンストップで運営します。</p></div>'
  '<div class="gallery reveal">'
@@ -214,12 +275,18 @@ seal_mid=(
    ('省スペース・着座','6畳程度から。着座20分で待ち時間対策に'),
    ('当日持ち帰り','その場で完成、すぐにお持ち帰りいただけます'),
  ])+'</div></div></section>')
-seal_price='<div><div class="p">¥90,000<small>／日（税別）</small></div><div style="font-size:13px;color:var(--ink-soft);margin-top:6px">所要 約20分／組・道具不要／6畳程度から</div></div>'
+seal_steps=[("材料選び","ビーズやスパンコールを選ぶ"),("封入","カプセル内にパーツを投入"),
+ ("接着","接着剤を塗り、固定準備"),("ラインストーン","飾りを散らす"),("仕上げ","背面にテープを貼り完成")]
+seal_mid=('<section class="tint"><div class="wrap"><div class="sec-head reveal"><span class="kick">PROCESS</span>'
+ '<h2>制作の流れ（全5工程・約25分）</h2><p>「こだわりを選ぶ」工程が集中を生み、テンポの良い5分×5工程設計。</p></div>'
+ '<div class="steps reveal">'+''.join(f'<div class="pstep"><div class="n">{i+1}</div><b>{t}</b><p>{d}</p></div>' for i,(t,d) in enumerate(seal_steps))+
+ '</div></div></section>')+seal_mid
+seal_price='<div><div class="p">¥90,000<small>／日（税別）</small></div><div style="font-size:13px;color:var(--ink-soft);margin-top:6px">所要 約25分／組・全5工程／6畳程度から</div></div>'
 seal=page("seal","シールデコ ワークショップ｜シャカシャカシール｜NextVision",
  "振ると中が揺れる『シャカシャカシール』を制作するワークショップ。はさみ不要で小さなお子様も安心。省スペース・着座20分で集客イベントに。",
  "images/seal.jpg","SEAL DECO","シールデコ ワークショップ",
- "振ると中が揺れる「シャカシャカシール」を制作。はさみを使わず、小さなお子様も安心して楽しめるワークショップです。",
- ["振ると揺れるキラキラのシャカシャカシール","はさみ不要・道具いらずで安心","6畳〜の省スペース・着座20分","その場で完成、当日お持ち帰り"],
+ "星やハートの型と丸型カプセル、好みのスパンコールを組み合わせ、振ると中で揺れる“シャカシャカ”シールを制作するワークショップです。",
+ ["振ると中で揺れるキラキラの“シャカシャカ”シール","パーツを選んで組み合わせる、唯一無二のデザイン","6畳〜の省スペース・着座 約25分で商談タイムも","その場で完成、当日お持ち帰り"],
  seal_price, seal_mid)
 
 for slug,html in [("klp",klp),("punilab",puni),("seal",seal)]:
