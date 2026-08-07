@@ -141,11 +141,12 @@ nav.main a:hover{color:var(--blue);border-color:var(--orange)}
 .mascot{position:relative;z-index:2;width:100%;filter:drop-shadow(0 16px 18px rgb(var(--shadow)/.28))}
 .float{animation:float 4s ease-in-out infinite alternate}
 @keyframes float{from{transform:translateY(0)}to{transform:translateY(-10px)}}
-.lic-card{position:absolute;z-index:4;right:-7%;top:14%;width:47%;border-radius:14px;border:5px solid #fff;
-  transform:rotate(7deg);box-shadow:0 20px 36px -14px rgb(var(--shadow)/.6)}
-.lic-tag{position:absolute;z-index:5;right:2%;top:8%;background:var(--coral);color:#fff;font-family:var(--display);
-  font-weight:700;font-size:12px;padding:6px 12px;border-radius:999px;transform:rotate(7deg);
+.lic-card{position:absolute;z-index:4;right:-11%;bottom:2%;width:41%;border-radius:14px;border:5px solid #fff;
+  transform:rotate(6deg);box-shadow:0 20px 36px -14px rgb(var(--shadow)/.6)}
+.lic-tag{position:absolute;z-index:5;right:-4%;bottom:46%;background:var(--coral);color:#fff;font-family:var(--display);
+  font-weight:700;font-size:12px;padding:6px 12px;border-radius:999px;transform:rotate(6deg);
   box-shadow:0 8px 16px -8px rgb(var(--shadow)/.6);white-space:nowrap}
+@media(max-width:920px){.lic-card{right:-4%;width:38%}.lic-tag{right:2%}}
 .float2{animation:float 4.6s ease-in-out .35s infinite alternate}
 .spark{position:absolute;z-index:3;animation:tw 2.4s ease-in-out infinite}
 @keyframes tw{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(.6);opacity:.4}}
