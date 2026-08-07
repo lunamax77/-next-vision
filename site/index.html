@@ -485,17 +485,17 @@ footer{background:#071B34;color:rgba(255,255,255,.6);padding:36px 0 30px;font-si
 
   <div class="wrap cats">
     <div class="cat-grid">
-      <a class="cat" href="#lineup" data-cat="ワークショップ"><div class="art"><img src="images/squeeze.jpg" alt="工作ワークショップ" loading="lazy"></div>
+      <a class="cat" href="#lineup"><div class="art"><img src="images/squeeze.jpg" alt="工作ワークショップ" loading="lazy"></div>
         <span class="lab"><i>WORKSHOP ・ 主役</i><b>工作ワークショップ</b></span></a>
 
-      <a class="cat" href="#lineup" data-cat="運転体験"><div class="art"><img src="images/klp.jpg" alt="キッズライセンスパーク" loading="lazy"></div>
+      <a class="cat" href="#lineup"><div class="art"><img src="images/klp.jpg" alt="キッズライセンスパーク" loading="lazy"></div>
         <span class="lab"><i>LICENSE PARK ・ 主役</i><b>キッズライセンスパーク</b></span></a>
 
-      <a class="cat" href="#lineup" data-cat="エア遊具"><div class="art"><img src="images/airizm.jpg" alt="エア遊具" loading="lazy"></div>
-        <span class="lab"><i>AIR PLAY</i><b>エア遊具</b></span></a>
+      <a class="cat" href="#options"><div class="art"><img src="images/airizm.jpg" alt="エア遊具" loading="lazy"></div>
+        <span class="lab"><i>AIR PLAY ・ オプション</i><b>エア遊具</b></span></a>
 
-      <a class="cat" href="#lineup" data-cat="ゲーム遊具"><div class="art"><img src="images/carnival-a.jpg" alt="ゲーム遊具" loading="lazy"></div>
-        <span class="lab"><i>GAME</i><b>ゲーム遊具</b></span></a>
+      <a class="cat" href="#options"><div class="art"><img src="images/carnival-a.jpg" alt="ゲーム遊具" loading="lazy"></div>
+        <span class="lab"><i>GAME ・ オプション</i><b>ゲーム遊具</b></span></a>
     </div>
   </div>
 </div>
@@ -513,15 +513,6 @@ footer{background:#071B34;color:rgba(255,255,255,.6);padding:36px 0 30px;font-si
       <div class="kicker">CONTENTS</div>
       <h2>体験コンテンツ</h2>
       <p>主役は<b>工作ワークショップ</b>と<b>キッズライセンスパーク</b>。会場を広く使いたいときのエア遊具・ゲームもご用意しています。表示価格は機材レンタル費用（1日・税別）です。</p>
-    </div>
-
-    <div class="filters reveal" role="group" aria-label="目的で絞り込む">
-      <button class="chip" data-filter="all" aria-pressed="true">すべて</button>
-      <button class="chip" data-filter="集客" aria-pressed="false">週末集客</button>
-      <button class="chip" data-filter="商談" aria-pressed="false">着座・商談</button>
-      <button class="chip" data-filter="回遊" aria-pressed="false">回遊促進</button>
-      <button class="chip" data-filter="待ち時間" aria-pressed="false">待ち時間対策</button>
-      <button class="chip" data-filter="省スペース" aria-pressed="false">省スペース</button>
     </div>
 
     <div class="grid reveal" id="cards">
@@ -560,7 +551,19 @@ footer{background:#071B34;color:rgba(255,255,255,.6);padding:36px 0 30px;font-si
           <div class="price"><b>¥80,000</b><small>／日（税別）</small></div>
         </div>
       </article>
+    </div>
+  </div>
+</section>
 
+<!-- オプション: 会場を広げるエア遊具・ゲーム -->
+<section id="options">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <div class="kicker">OPTION</div>
+      <h2>会場を広げるオプション</h2>
+      <p>主役の体験コンテンツに、エア遊具・ゲームをプラス。会場の空きスペースを、そのまま賑わいに変えられます。</p>
+    </div>
+    <div class="grid reveal" id="option-cards">
       <article class="item" data-tags="集客 回遊" data-cat="エア遊具">
         <div class="thumb"><span class="pin">AIR PLAY</span>
           <img src="images/airizm-tramp.jpg" alt="エアリズム トランポリン" loading="lazy"></div>
@@ -1004,19 +1007,6 @@ const cio=new IntersectionObserver(es=>{es.forEach(e=>{
   });
 })},{threshold:.4});
 const cbox=document.getElementById('counters'); if(cbox)cio.observe(cbox);
-
-const chips=document.querySelectorAll('.chip'),cards=document.querySelectorAll('#cards .item');
-function byTag(f){
-  chips.forEach(x=>x.setAttribute('aria-pressed',x.dataset.filter===f?'true':'false'));
-  cards.forEach(card=>{card.hidden=!(f==='all'||card.dataset.tags.includes(f))});
-}
-chips.forEach(c=>c.addEventListener('click',()=>byTag(c.dataset.filter)));
-
-document.querySelectorAll('.cat[data-cat]').forEach(a=>a.addEventListener('click',()=>{
-  const cat=a.dataset.cat;
-  chips.forEach(x=>x.setAttribute('aria-pressed','false'));
-  cards.forEach(card=>{card.hidden=card.dataset.cat!==cat});
-}));
 
 const burger=document.querySelector('.burger'),navm=document.querySelector('nav.main');
 burger.addEventListener('click',()=>{
