@@ -78,6 +78,17 @@
 
 **短評**: SNS運用の土台=**comnico**(承認フロー重視)or **SocialDog/Zoho Social**(低コスト着手)。文章生成=**Catchy**(採用募集文・広告文の量産)＋長文テンプレは **SAKUBUN**。8名規模なら承認は軽量運用(担当→代表確認)で足りる。MA(HubSpot/SATORI等)は第2段階。
 
+### 💬 生成AIチャット(Claude / Gemini / ChatGPT / Genspark)の対象可否
+
+代表からの照会事項。調査結果(要・公式確認):
+
+- **個人向けプランは対象外**: Claude Pro / Gemini Advanced / ChatGPT Plus 等の個人契約は補助対象になりません。
+- **"直接契約"は対象になりにくい**: 補助金は「登録ITツール × 登録IT導入支援事業者経由」が原則。汎用AIチャットを自社で直接契約する形は対象外になりがち。
+- **法人プランを登録ツールとして導入すればチャンスあり**: **Claude for Business / Gemini for Google Workspace / ChatGPT Team・Enterprise / Microsoft Copilot for M365 / Perplexity Enterprise** 等を、**登録支援事業者が登録ITツールとして提供**していれば対象になり得る。
+- **Genspark**: 補助金の登録ツールか否かは未確認(Genspark社はIT導入補助金関連の発信あり)。**要・公式ツール検索で確認**。
+- **AIを補助金で入れる2つの道**: (a)**法人向け生成AIチャット**(登録されていれば) / (b)**生成AIを業務に組み込んだ登録SaaS**(本メモの Catchy・SAKUBUN=文章生成、UMWELT=AI予測、バクラク・invox=AI-OCR、プロキャス=マッチング 等)。
+- **注意**: いずれも「登録の有無」は年度で変わるため**公式ツール検索での確認が必須**。導入したい生成AIが決まれば、それを**登録ITツールとして扱える支援事業者**を探す(逆引き)。
+
 ---
 
 ## 登録IT導入支援事業者(パートナー)の探し方【大阪】
