@@ -8,8 +8,8 @@ idx = open(os.path.join(HERE, "index.html"), encoding="utf-8").read()
 STYLE = re.search(r'<style>.*?</style>', idx, re.S).group(0)
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
-         '<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900'
-         '&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Baloo+2:wght@600;700;800'
+         '<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900'
+         '&family=Baloo+2:wght@600;700;800'
          '&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">')
 
 EXTRA = """
