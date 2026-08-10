@@ -20,6 +20,7 @@
 | `07-form-answers.md` | 申請フォーム入力項目まとめ(転記用) | 業務管理 |
 | `08-security-action.md` | **SECURITY ACTION 着手キット**(必須要件・手順・6か条チェック・基本方針案) | 業務管理 |
 | `09-partner-tool-candidates.md` | 登録ITツール・IT導入支援事業者(パートナー)候補調査 | プロダクト/営業 |
+| `10-genai-claude-gemini.md` | 生成AIの絞り込み(Claude for Business × Gemini for Workspace)比較・推奨 | プロダクト |
 
 ## いまの状態(サマリ)
 
