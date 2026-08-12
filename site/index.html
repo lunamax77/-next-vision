@@ -409,6 +409,70 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
 .foot{display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap;align-items:flex-end}
 .foot img{height:52px;margin-bottom:10px}
 .foot a{color:rgb(255 255 255 / .7);text-decoration:none}.foot a:hover{color:#fff}
+
+/* ===== 汎用: 中央CTA / サブ見出し ===== */
+.center-cta{text-align:center;margin-top:clamp(24px,3.5vw,34px)}
+.sub-label{font-family:var(--display);font-weight:900;font-size:clamp(16px,2.2vw,19px);color:var(--ink);
+  text-align:center;margin:0 0 16px;line-height:1.4}
+.sub-label::before{content:"";display:inline-block;width:22px;height:3px;border-radius:2px;background:var(--orange);
+  vertical-align:middle;margin-right:10px}
+
+/* ===== ① 開催実績ゾーン ===== */
+.rz-cats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+@media(max-width:820px){.rz-cats{grid-template-columns:repeat(2,1fr)}}
+.rz-cat{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:16px 13px;text-align:center;
+  font-family:var(--display);font-weight:700;font-size:14px;color:var(--ink);line-height:1.5}
+.rz-cat small{display:block;font-family:var(--round);font-size:10.5px;color:var(--blue-d);margin-top:5px;letter-spacing:.05em}
+.rz-brands{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:4px auto 6px;max-width:760px}
+.rz-brands span{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:2px solid var(--line);
+  border-radius:999px;padding:9px 18px;font-family:var(--display);font-weight:700;font-size:14px;color:var(--ink)}
+.rz-brands span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--orange)}
+.rz-brands-lead{text-align:center;font-size:12.5px;color:var(--sub);margin:0 0 12px;font-family:var(--display);font-weight:700}
+
+/* ===== ② ジャンル選択カード ===== */
+.genre{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:clamp(30px,4.5vw,44px)}
+@media(max-width:760px){.genre{grid-template-columns:1fr}}
+.genre a{display:flex;flex-direction:column;background:var(--card);border:2px solid var(--line);border-radius:var(--r);
+  overflow:hidden;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.genre a:hover{transform:translateY(-5px);box-shadow:0 22px 38px -22px rgb(var(--shadow)/.5)}
+.genre .g-photo{aspect-ratio:16/10;overflow:hidden;background:var(--cream)}
+.genre .g-photo img{width:100%;height:100%;object-fit:cover}
+.genre .g-body{padding:15px 18px 18px}
+.genre h3{font-size:17px;margin-bottom:5px}
+.genre p{font-size:12.5px;color:var(--ink-soft);line-height:1.7}
+.genre .g-more{display:inline-flex;align-items:center;gap:6px;margin-top:11px;font-family:var(--display);font-weight:700;
+  font-size:13.5px;color:var(--blue-d)}
+.genre .g-more span{transition:transform .16s}
+.genre a:hover .g-more span{transform:translateX(3px)}
+
+/* ===== ③ コンテンツカードのスペックチップ ===== */
+.specrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.specrow .sc{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;font-family:var(--display);
+  color:var(--ink-soft);background:var(--cream);border:1.5px solid var(--line);border-radius:8px;padding:5px 9px}
+.specrow .sc svg{width:14px;height:14px;flex:none;color:var(--blue-d)}
+.specrow .sc.space{color:#3a2600;background:var(--orange);border-color:var(--orange);font-size:12.5px;padding:6px 11px}
+.specrow .sc.space svg{color:#3a2600}
+:root[data-theme="dark"] .specrow .sc.space,
+:root:not([data-theme="light"]) .specrow .sc.space{color:#2a1c05}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .specrow .sc.space svg{color:#2a1c05}}
+:root[data-theme="dark"] .specrow .sc.space svg{color:#2a1c05}
+
+/* ===== ⑤ 開催日程バンド ===== */
+.sched-chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:18px 0 24px}
+.sched-chips span{display:inline-flex;align-items:center;gap:7px;background:var(--pink-soft);border:2px solid var(--orange);
+  border-radius:999px;padding:9px 16px;font-family:var(--display);font-weight:700;font-size:13.5px;color:var(--ink)}
+.sched-chips span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--coral)}
+
+/* ===== ④ モバイル固定CTAバー ===== */
+.mobile-cta{display:none}
+@media(max-width:820px){
+  .mobile-cta{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:55;align-items:center;justify-content:center;
+    gap:8px;background:var(--orange);color:#3a2600;font-family:var(--display);font-weight:700;font-size:16px;
+    text-decoration:none;padding:14px 20px;padding-bottom:calc(14px + env(safe-area-inset-bottom));
+    box-shadow:0 -6px 20px -8px rgb(var(--shadow)/.5);border-top:2.5px solid #C9871A}
+  .mobile-cta:active{background:var(--blue);color:#fff}
+  body{padding-bottom:calc(62px + env(safe-area-inset-bottom))}
+}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"LocalBusiness","name":"株式会社NextVision","url":"https://nextvision.fun/",
@@ -491,6 +555,37 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
   <svg class="wave" viewBox="0 0 1440 70" preserveAspectRatio="none" aria-hidden="true"><path fill="var(--cream)" d="M0,40 C240,75 480,75 720,45 C960,15 1200,15 1440,45 L1440,70 L0,70 Z"/></svg>
 </div>
 
+<!-- ===== ① 導入・開催実績 ===== -->
+<section id="results" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kick">RESULTS / 実績</span>
+      <h2>大手企業のイベントで、多数の開催実績</h2>
+      <p>家電量販店・商業施設・携帯キャリアの店頭イベントで、企画から運営までお手伝いしています。</p>
+    </div>
+    <div class="rz-cats reveal">
+      <div class="rz-cat">大手家電量販店<small>ELECTRONICS</small></div>
+      <div class="rz-cat">大型商業施設<small>SHOPPING MALL</small></div>
+      <div class="rz-cat">携帯キャリアイベント<small>MOBILE CARRIER</small></div>
+      <div class="rz-cat">関西・北陸ほか<br>全国対応<small>NATIONWIDE</small></div>
+    </div>
+    <!-- ロゴ画像を入れる場合はここ（現在は上品にテキストチップで表示。公式ロゴ提供後に差し替え可能） -->
+    <p class="rz-brands-lead reveal">導入・取引先（一例）</p>
+    <div class="rz-brands reveal">
+      <span>NTTドコモ</span>
+      <span>ヨドバシカメラ</span>
+      <span>楽天モバイル</span>
+      <span>イオンモール</span>
+    </div>
+    <div class="gallery reveal" style="margin-top:8px">
+      <figure><img src="images/klp-event1.jpg" alt="大手企業イベントでの開催の様子1" loading="lazy"><figcaption>キッズライセンスパーク（店頭イベント）</figcaption></figure>
+      <figure><img src="images/klp-event2.jpg" alt="大手企業イベントでの開催の様子2" loading="lazy"><figcaption>EVカーで運転体験</figcaption></figure>
+    </div>
+    <p class="note" style="text-align:center">※掲載は開催実績に基づく一例です。</p>
+    <div class="center-cta reveal"><a class="btn btn-primary" href="#contact">開催について相談する</a></div>
+  </div>
+</section>
+
 <!-- ===== 3本柱: できること ===== -->
 <section id="pillars" class="tint">
   <div class="wrap">
@@ -527,6 +622,24 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
       <h2>主役の体験コンテンツ</h2>
       <p>まずはこの3つ。工作ワークショップと、キッズライセンスパーク。表示価格は機材レンタル費用（1日・税別）です。</p>
     </div>
+    <div class="sub-label reveal">ジャンルから選ぶ</div>
+    <div class="genre reveal">
+      <a href="punilab.html">
+        <div class="g-photo"><img src="images/squeeze.jpg" alt="ワークショップ系（ぷにラボ・シールデコ）" loading="lazy"></div>
+        <div class="g-body"><h3>ワークショップ系</h3><p>ぷにラボ（スクイーズ）・シールデコ。着座20分・省スペースの制作体験。</p>
+          <span class="g-more">見る <span aria-hidden="true">→</span></span></div>
+      </a>
+      <a href="klp.html">
+        <div class="g-photo"><img src="images/klp.jpg" alt="キッズライセンスパーク（免許づくり）" loading="lazy"></div>
+        <div class="g-body"><h3>キッズライセンスパーク</h3><p>EVカーの運転体験＋こども免許証をその場で発行。看板コンテンツ。</p>
+          <span class="g-more">見る <span aria-hidden="true">→</span></span></div>
+      </a>
+      <a href="#options">
+        <div class="g-photo"><img src="images/airizm.jpg" alt="エア遊具" loading="lazy"></div>
+        <div class="g-body"><h3>エア遊具</h3><p>会場の空きスペースを賑わいに。単体レンタルにも対応します。</p>
+          <span class="g-more">見る <span aria-hidden="true">→</span></span></div>
+      </a>
+    </div>
     <div class="grid reveal">
       <article class="item">
         <div class="thumb"><span class="pin">人気No.1</span><img src="images/klp.jpg" alt="キッズライセンスパーク" loading="lazy"></div>
@@ -534,6 +647,13 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
           <h3>キッズライセンスパーク</h3>
           <p class="desc">EVカーでコースを周回し、顔写真入りの「こども免許証」をその場で発行します。</p>
           <div class="spec">対象 3〜8歳／所要 8〜12分・1組／車種 7タイプ</div>
+          <div class="specrow">
+            <span class="sc space"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>必要スペース 10m×8m目安</span>
+            <span class="sc">対象 3〜8歳</span>
+            <span class="sc">8〜12分/組</span>
+            <span class="sc">電源 必要</span>
+            <span class="sc">屋内・屋外</span>
+          </div>
           <div class="tags"><span>週末集客</span><span>着座・商談</span><span>回遊促進</span></div>
           <div class="price"><b>¥90,000</b><small>〜／日（税別）</small></div>
           <a class="more" href="klp.html">詳しく見る <span aria-hidden="true">→</span></a>
@@ -545,6 +665,13 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
           <h3>ぷにラボ｜スクイーズ工作</h3>
           <p class="desc">動物モールド（とら・ぞう・ペンギン）から、ぷにぷにのスクイーズを制作。型のまま持ち帰り、おうちで完成させるワクワクも。</p>
           <div class="spec">所要 約20分・1組／全7工程／6畳程度から</div>
+          <div class="specrow">
+            <span class="sc space"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>必要スペース 6畳〜</span>
+            <span class="sc">対象 4歳〜</span>
+            <span class="sc">約20分/組</span>
+            <span class="sc">電源 一部必要</span>
+            <span class="sc">屋内向き</span>
+          </div>
           <div class="tags"><span>着座・商談</span><span>待ち時間対策</span><span>省スペース</span></div>
           <div class="price"><b>¥90,000</b><small>／日（税別）</small></div>
           <a class="more" href="punilab.html">詳しく見る <span aria-hidden="true">→</span></a>
@@ -556,6 +683,13 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
           <h3>シールデコ ワークショップ</h3>
           <p class="desc">振ると中が揺れる「シャカシャカシール」を制作。はさみを使わず小さなお子様も安心です。</p>
           <div class="spec">所要 約20分・1組／道具不要／6畳程度から</div>
+          <div class="specrow">
+            <span class="sc space"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>必要スペース 6畳〜</span>
+            <span class="sc">対象 3歳〜</span>
+            <span class="sc">約20分/組</span>
+            <span class="sc">電源 不要</span>
+            <span class="sc">屋内向き</span>
+          </div>
           <div class="tags"><span>着座・商談</span><span>待ち時間対策</span><span>省スペース</span></div>
           <div class="price"><b>¥90,000</b><small>／日（税別）</small></div>
           <a class="more" href="seal.html">詳しく見る <span aria-hidden="true">→</span></a>
@@ -567,6 +701,22 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
       <div class="cnt"><b><span class="num" data-to="7">0</span><small>車種</small></b><span>本格<strong>EVカー</strong>で、憧れの運転体験</span></div>
       <div class="cnt"><b><span class="num" data-to="20">0</span><small>分</small></b><span>着座ワークショップで<strong>商談タイム</strong>を確保</span></div>
     </div>
+    <div class="reveal" style="margin-top:clamp(34px,5vw,54px)">
+      <div class="sub-label">会場でできる？条件早見表</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>コンテンツ</th><th>必要スペース</th><th>対象年齢</th><th>所要</th><th>実施人数目安</th><th>推奨スタッフ</th><th>電源</th><th>屋内外</th></tr></thead>
+          <tbody>
+            <tr><td class="name">キッズライセンスパーク</td><td class="num">10m×8m目安</td><td>3〜8歳</td><td class="num">8〜12分/組</td><td>応相談</td><td class="num">2〜3名</td><td>必要</td><td>屋内・屋外</td></tr>
+            <tr><td class="name">ぷにラボ（スクイーズ工作）</td><td class="num">6畳〜</td><td>4歳〜</td><td class="num">約20分/組</td><td>応相談</td><td class="num">1〜2名</td><td>一部必要</td><td>屋内向き</td></tr>
+            <tr><td class="name">シールデコ</td><td class="num">6畳〜</td><td>3歳〜</td><td class="num">約20分/組</td><td>応相談</td><td class="num">1〜2名</td><td>不要</td><td>屋内向き</td></tr>
+            <tr><td class="name">エア遊具</td><td class="num">設置寸法＋安全マージン</td><td>目安3歳〜</td><td>常時</td><td>応相談</td><td class="num">1〜2名</td><td>必要(送風機)</td><td>屋内・屋外</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">※目安。会場条件により変動します。詳しくはお問い合わせください。</p>
+    </div>
+    <div class="center-cta reveal"><a class="btn btn-primary" href="#contact">開催について相談する</a></div>
   </div>
 </section>
 
@@ -642,6 +792,7 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
         </ul>
       </div>
     </div>
+    <div class="center-cta reveal"><a class="btn btn-primary" href="#contact">開催について相談する</a></div>
   </div>
 </section>
 
@@ -795,6 +946,22 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
   </div>
 </section>
 
+<!-- ===== ⑤ 開催日程について ===== -->
+<section id="schedule">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kick">SCHEDULE</span>
+      <h2>開催日程について</h2>
+      <p>土日・連休を中心に稼働しています。ご希望日の空き状況はお問い合わせください。目安は開催の1か月前のご相談です。</p>
+    </div>
+    <div class="sched-chips reveal">
+      <span>土日は早めのご相談を</span>
+      <span>直近は要問い合わせ</span>
+    </div>
+    <div class="center-cta reveal" style="margin-top:0"><a class="btn btn-primary" href="#contact">日程を相談する</a></div>
+  </div>
+</section>
+
 <!-- ===== 問い合わせ ===== -->
 <section id="contact" class="contact">
   <div class="wrap">
@@ -835,6 +1002,9 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
     </div>
   </div>
 </section>
+
+<!-- ④ モバイル固定CTA（PCでは非表示） -->
+<a class="mobile-cta" href="#contact">開催について相談する</a>
 
 <footer>
   <div class="wrap foot">

@@ -75,6 +75,14 @@ EXTRA = """
 .eff{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center}
 .eff b{display:block;font-family:var(--mono);font-weight:700;font-size:20px;color:var(--coral)}
 .eff span{font-size:12px;color:var(--ink-soft)}
+/* 必要スペースの強調ブロック */
+.spacehl{display:flex;flex-wrap:wrap;gap:16px 20px;align-items:center;background:var(--cream);border:2px solid var(--orange);
+  border-radius:var(--r);padding:22px 26px;margin-bottom:16px}
+.spacehl .sh-ic{width:52px;height:52px;flex:none;color:var(--coral)}
+.spacehl .sh-main{min-width:180px}
+.spacehl .sh-t{font-family:var(--round);font-size:12px;letter-spacing:.12em;color:var(--blue-d);font-weight:700}
+.spacehl .sh-v{font-family:var(--display);font-weight:900;font-size:clamp(24px,4.5vw,36px);color:var(--ink);line-height:1.15}
+.spacehl .sh-n{font-size:12.5px;color:var(--ink-soft);flex:1;min-width:200px;line-height:1.7}
 </style>
 """
 
@@ -139,6 +147,17 @@ def keypts(items):
 
 def specbox(pairs):
     return '<div class="specbox">'+''.join(f'<div><b>{k}</b>{v}</div>' for k,v in pairs)+'</div>'
+
+def spec_section(space_val, space_note, pairs):
+    """会場で実施可能か判断できるスペック表。必要スペースを大きく図示的に強調。"""
+    ic=('<svg class="sh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" '
+        'stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>')
+    hl=(f'<div class="spacehl">{ic}'
+        f'<div class="sh-main"><div class="sh-t">SPACE ／ 必要スペース</div><div class="sh-v">{space_val}</div></div>'
+        f'<div class="sh-n">{space_note}</div></div>')
+    return ('<section><div class="wrap"><div class="sec-head reveal"><span class="kick">SPEC</span>'
+            '<h2>会場でできる？スペック</h2><p>いずれも目安です。会場条件により変動しますので、まずはご相談ください。</p></div>'
+            f'<div class="reveal">{hl}'+specbox(pairs)+'</div></div></section>')
 
 def page(slug, title, desc, hero_photo, kick, h1, lead, keys, price_html, body_mid):
     head=(f'<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8">'
@@ -211,12 +230,12 @@ klp_mid=(
  '<figure><img src="images/klp-event2.jpg" alt="キッズライセンスパーク 運転体験"><figcaption>EVカーで運転体験</figcaption></figure>'
  '<figure><img src="images/klp.jpg" alt="こども免許証と車種"><figcaption>免許証見本＆車種ラインナップ</figcaption></figure>'
  '</div></div></section>'
- '<section><div class="wrap"><div class="sec-head reveal"><span class="kick">SPEC</span><h2>仕様・目安</h2></div>'
- '<div class="specbox reveal">'+specbox([
-   ('対象年齢','3〜8歳（会場により調整）'),('所要時間','1組およそ 8〜12分'),
-   ('必要スペース','コース＋受付で 10m×8m が目安'),('車種','本格EVカー 7タイプ'),
-   ('免許証','顔写真入り・その場で約5分発行'),('電源','発行機材・EVカー充電で必要'),
- ])+'</div></div></section>')
+ +spec_section('10m × 8m 目安',
+   'コース＋受付・発行ブースを含む目安です。会場の形状に合わせてコース配置を調整します。屋内・屋外どちらも対応可能。',
+   [('対象年齢','3〜8歳（会場により調整）'),('所要時間','1組およそ 8〜12分'),
+    ('実施人数目安','応相談'),('推奨スタッフ','2〜3名'),
+    ('車種','本格EVカー 7タイプ'),('免許証','顔写真入り・その場で約5分発行'),
+    ('電源','発行機材・EVカー充電で必要'),('屋内外','屋内・屋外')]))
 klp_price=('<div><div class="p">¥90,000<small>〜／日（税別）</small></div>'
            '<div style="font-size:13px;color:var(--ink-soft);margin-top:6px">スタンダード（車両2台・1コース）／プレミアム ¥135,000（車両3台・フルセット）</div></div>')
 klp=page("klp","キッズライセンスパーク｜こども免許証がもらえる運転体験｜NextVision",
@@ -251,7 +270,12 @@ puni_mid=(
    ('安心・かんたん','安全なシリコン素材＆こぼれにくい薄型モールド'),
    ('省スペース・着座','6畳程度から。着座20分でご案内の時間も確保'),
    ('通信限定ノベルティ','肉球（大）スクイーズ景品で「見積り参加」を後押し'),
- ])+'</div></div></section>')
+ ])+'</div></div></section>'
+ +spec_section('6畳〜',
+   'テーブル＋イスで設置できる省スペース設計。着座20分で、保護者様へのご案内タイムも確保できます。屋内向き。',
+   [('対象年齢','4歳〜'),('所要時間','約20分・1組'),
+    ('実施人数目安','応相談'),('推奨スタッフ','1〜2名'),
+    ('工程','全7工程'),('電源','一部必要'),('屋内外','屋内向き')]))
 puni_price='<div><div class="p">¥90,000<small>／日（税別）</small></div><div style="font-size:13px;color:var(--ink-soft);margin-top:6px">所要 約20分／組・全7工程／6畳程度から</div></div>'
 puni=page("punilab","ぷにラボ｜スクイーズ工作ワークショップ｜NextVision",
  "動物モールド（とら・ぞう・ペンギン）でぷにぷにスクイーズを制作。型のまま持ち帰り、おうちで完成。省スペース・着座20分で集客イベントに。",
@@ -280,7 +304,11 @@ seal_steps=[("材料選び","ビーズやスパンコールを選ぶ"),("封入"
 seal_mid=('<section class="tint"><div class="wrap"><div class="sec-head reveal"><span class="kick">PROCESS</span>'
  '<h2>制作の流れ（全5工程・約25分）</h2><p>「こだわりを選ぶ」工程が集中を生み、テンポの良い5分×5工程設計。</p></div>'
  '<div class="steps reveal">'+''.join(f'<div class="pstep"><div class="n">{i+1}</div><b>{t}</b><p>{d}</p></div>' for i,(t,d) in enumerate(seal_steps))+
- '</div></div></section>')+seal_mid
+ '</div></div></section>')+seal_mid+spec_section('6畳〜',
+   '道具不要・着座で楽しめる省スペース設計。テーブル＋イスがあれば店内スペースにも設置できます。屋内向き。',
+   [('対象年齢','3歳〜'),('所要時間','約20〜25分・1組'),
+    ('実施人数目安','応相談'),('推奨スタッフ','1〜2名'),
+    ('工程','全5工程'),('電源','不要'),('屋内外','屋内向き')])
 seal_price='<div><div class="p">¥90,000<small>／日（税別）</small></div><div style="font-size:13px;color:var(--ink-soft);margin-top:6px">所要 約25分／組・全5工程／6畳程度から</div></div>'
 seal=page("seal","シールデコ ワークショップ｜シャカシャカシール｜NextVision",
  "振ると中が揺れる『シャカシャカシール』を制作するワークショップ。はさみ不要で小さなお子様も安心。省スペース・着座20分で集客イベントに。",
