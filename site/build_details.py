@@ -134,7 +134,7 @@ def cta():
 def related(cur):
     cards = {
       "klp": ('images/klp.jpg','キッズライセンスパーク','EVカー運転体験＋こども免許証','klp.html'),
-      "punilab": ('images/squeeze.jpg','ぷにラボ｜スクイーズ工作','動物モールドでぷにぷに制作','punilab.html'),
+      "punilab": ('images/punilab-paw.jpg','ぷにラボ｜スクイーズ工作','肉球＆アニマル型でぷにぷに制作','punilab.html'),
       "seal": ('images/seal.jpg','シールデコ ワークショップ','シャカシャカシールを制作','seal.html'),
     }
     items="".join(f'<a href="{h}"><img src="{img}" alt="{t}"><span><b>{t}</b><span>{d}</span></span></a>'
@@ -246,42 +246,43 @@ klp=page("klp","キッズライセンスパーク｜こども免許証がもら�
  klp_price, klp_mid)
 
 # ---------- PUNILAB ----------
-puni_steps=[("型と色を選ぶ","お気に入りの動物型（とら・ぞう・ペンギン）とカラーを選択"),
+puni_steps=[("型と色を選ぶ","お気に入りの型（肉球・とら・ぞう・ペンギン）とカラーを選ぶ"),
  ("計量＆混ぜる","カップに液を入れ、色を付けて混ぜる"),
- ("型に流し込む","こぼれないよう静かにモールドへ"),
- ("会場作業はここまで","型のままお持ち帰り袋でお渡し"),
- ("おうちで剥がす","ご自宅で水につけて型から剥がす"),
- ("パウダーで完成","マジックパウダーをかけて完成！")]
+ ("型に流し込む","こぼれないよう静かにモールドへ流し込む"),
+ ("会場作業は終了","ワークショップはここまで（会場作業 約20分）"),
+ ("そのまま持ち帰り","お持ち帰り袋に入れ、型のままお渡し"),
+ ("水につけて剥がす","ご自宅で水につけ、型からそっと剥がす"),
+ ("パウダーで完成","マジックパウダーをかけて、おうちで完成！")]
 puni_mid=(
- '<section><div class="wrap"><div class="sec-head reveal"><span class="kick">SCENE</span>'
- '<h2>実際の開催の様子</h2><p>商業施設・店舗の店頭で、ワークショップブースを設営・運営します。</p></div>'
- '<div class="gallery reveal">'
- '<figure><img src="images/squeeze-event.jpg" alt="スクイーズ作成体験ブース"><figcaption>スクイーズ作成体験ブース（ヨドバシ梅田・docomo）</figcaption></figure>'
- '<figure><img src="images/squeeze.jpg" alt="完成したスクイーズ"><figcaption>完成イメージ（動物モチーフ）</figcaption></figure>'
- '</div></div></section>'
+ '<section><div class="wrap"><div class="sec-head reveal"><span class="kick">POINT</span><h2>ぷにラボの特長</h2>'
+ '<p>「肉球（大）スクイーズ」と「アニマル3種モールド」の2本柱でお届けします。</p></div>'
+ '<div class="specbox reveal">'+specbox([
+   ('肉球（大）スクイーズ｜通信限定景品','縦8×横8×厚さ3cmの極厚・特大ボリューム。安心・安全なシリコン素材の、クセになるぷにぷに触感。「見積もり参加でプレゼント」の設計で、お子様から保護者様への“参加”を強力に後押しします。'),
+   ('アニマル3種モールド｜とら・ぞう・ペンギン','縦3×横4×高さ1cmの安定した薄型シリコン型。男の子も女の子も大好きな人気の3種。液剤を注ぎやすくこぼれにくいので、小さなお子様でも失敗しない簡単オペレーションです。'),
+ ])+'</div></div></section>'
  '<section class="tint"><div class="wrap"><div class="sec-head reveal"><span class="kick">PROCESS</span>'
- '<h2>制作の流れ（全7工程）</h2><p>「型のまま持ち帰る」設計で、おうちで完成させるワクワクまで。ご家庭での体験価値と満足度を高めます。</p></div>'
+ '<h2>制作の流れ（全7工程）</h2><p>会場作業は約20分。仕上げはご自宅で。「型のまま持ち帰る」設計で、おうちで完成させるワクワクまで。</p></div>'
  '<div class="steps reveal">'+''.join(
    f'<div class="pstep"><div class="n">{i+1}</div><b>{t}</b><p>{d}</p></div>' for i,(t,d) in enumerate(puni_steps))+
  '</div></div></section>'
- '<section><div class="wrap"><div class="sec-head reveal"><span class="kick">POINT</span><h2>ぷにラボの特長</h2></div>'
- '<div class="specbox reveal">'+specbox([
-   ('人気のアニマル3種','とら・ぞう・ペンギン。「どれ作る？」のワクワク'),
-   ('安心・かんたん','安全なシリコン素材＆こぼれにくい薄型モールド'),
-   ('省スペース・着座','6畳程度から。着座20分でご案内の時間も確保'),
-   ('通信限定ノベルティ','肉球（大）スクイーズ景品で「見積り参加」を後押し'),
- ])+'</div></div></section>'
+ '<section><div class="wrap"><div class="sec-head reveal"><span class="kick">GALLERY</span>'
+ '<h2>作れるアイテム</h2><p>手元で何度も触りたくなる、癒しのぷにぷにアイテム。サイズ感もチェックしてください。</p></div>'
+ '<div class="gallery reveal">'
+ '<figure><img src="images/punilab-paw.jpg" alt="肉球（大）スクイーズ 通信限定景品"><figcaption>肉球スクイーズ（8×8×3cm・通信限定景品）</figcaption></figure>'
+ '<figure><img src="images/punilab-animals.jpg" alt="アニマル型スクイーズ とら・ぞう・ペンギン"><figcaption>アニマル3種モールド（3×4×1cm）</figcaption></figure>'
+ '<figure><img src="images/squeeze.jpg" alt="デコレーション完成品"><figcaption>デコ完成イメージ（ハート・星など）</figcaption></figure>'
+ '</div></div></section>'
  +spec_section('6畳〜',
-   'テーブル＋イスで設置できる省スペース設計。着座20分で、保護者様へのご案内タイムも確保できます。屋内向き。',
-   [('対象年齢','4歳〜'),('所要時間','約20分・1組'),
+   'テーブル＋イスで設置できる省スペース設計。会場作業は約20分で、保護者様へのご案内タイムも確保。仕上げはご自宅で。屋内向き。',
+   [('対象年齢','4歳〜'),('所要時間','約20分・1組（＋自宅仕上げ）'),
     ('実施人数目安','応相談'),('推奨スタッフ','1〜2名'),
     ('工程','全7工程'),('電源','一部必要'),('屋内外','屋内向き')]))
-puni_price='<div><div class="p">¥90,000<small>／日（税別）</small></div><div style="font-size:13px;color:var(--ink-soft);margin-top:6px">所要 約20分／組・全7工程／6畳程度から</div></div>'
+puni_price='<div><div class="p">¥90,000<small>／日（税別）</small></div><div style="font-size:13px;color:var(--ink-soft);margin-top:6px">所要 約20分／組（＋自宅仕上げ）・全7工程／6畳程度から</div></div>'
 puni=page("punilab","ぷにラボ｜スクイーズ工作ワークショップ｜NextVision",
- "動物モールド（とら・ぞう・ペンギン）でぷにぷにスクイーズを制作。型のまま持ち帰り、おうちで完成。省スペース・着座20分で集客イベントに。",
- "images/squeeze.jpg","PUNI-LABO","ぷにラボ｜スクイーズ工作",
- "動物モールドから、自分だけのぷにぷにスクイーズを制作。「型のまま持ち帰り、おうちで完成させる」ワクワクまで設計したワークショップです。",
- ["動物モールド（とら・ぞう・ペンギン）から制作","型のまま持ち帰り→おうちで完成のワクワク","安全なシリコン素材で小さなお子様も安心","6畳〜の省スペース・着座20分で商談タイムも"],
+ "肉球（大）スクイーズと、とら・ぞう・ペンギンのアニマル3種モールドを制作。型のまま持ち帰り、おうちで完成。省スペース・着座20分で集客イベントに。",
+ "images/punilab-paw.jpg","PUNI-LABO","ぷにラボ｜スクイーズ工作",
+ "極厚の肉球（大）スクイーズと、とら・ぞう・ペンギンのアニマル3種モールドが作れる、ぷにぷにスクイーズ作成体験。「型のまま持ち帰り、おうちで完成させる」ワクワクまで設計したワークショップです。",
+ ["肉球（大）スクイーズ＋アニマル3種の2本柱","型のまま持ち帰り→おうちで完成のワクワク","安心・安全なシリコン素材で小さなお子様も安心","6畳〜の省スペース・会場作業20分で商談タイムも"],
  puni_price, puni_mid)
 
 # ---------- SEAL ----------
