@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>位置共有 (Web版・動作確認用)</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#0f1115">
+<style>
+  :root {
+    --bg:#0f1115; --panel:#171a21; --line:#262b36; --text:#e6e9ef;
+    --muted:#8b93a7; --live:#3ddc84; --stop:#ff6b6b;
+    font-family: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); padding:20px 16px 40px; max-width:520px; margin-inline:auto; }
+  h1 { font-size:18px; margin:0 0 4px; }
+  .sub { color:var(--muted); font-size:12px; margin-bottom:20px; line-height:1.7; }
+  fieldset { border:1px solid var(--line); border-radius:10px; padding:14px; margin:0 0 16px; background:var(--panel); }
+  legend { font-size:12px; color:var(--muted); padding:0 6px; }
+  label { display:block; font-size:12px; color:var(--muted); margin:10px 0 4px; }
+  input, select {
+    width:100%; background:#10131a; color:var(--text); border:1px solid var(--line);
+    border-radius:8px; padding:10px 12px; font-size:15px; font-family:inherit;
+  }
+  button {
+    width:100%; border:none; border-radius:10px; padding:16px; font-size:16px;
+    font-weight:700; font-family:inherit; cursor:pointer; margin-top:8px;
+  }
+  #toggle { background:var(--live); color:#06240f; }
+  #toggle.on { background:var(--stop); color:#fff; }
+  #toggle:disabled { background:#2a2f3a; color:var(--muted); cursor:not-allowed; }
+  #forget { background:transparent; color:var(--stop); border:1px solid var(--stop); font-size:13px; padding:11px; }
+  .banner {
+    border-radius:10px; padding:14px; margin-bottom:16px; font-size:13px; line-height:1.7;
+    background:#1a2a1c; border:1px solid #2c4a30; display:none;
+  }
+  .banner.on { display:block; }
+  .notice { background:#1c2029; border:1px solid var(--line); border-radius:10px; padding:14px; font-size:12px; color:var(--muted); line-height:1.8; margin-bottom:16px; }
+  .notice b { color:var(--text); }
+  dl { display:grid; grid-template-columns:auto 1fr; gap:6px 12px; font-size:13px; margin:0; }
+  dt { color:var(--muted); }
+  dd { margin:0; font-variant-numeric:tabular-nums; }
+  #log { font-size:11px; color:var(--muted); white-space:pre-wrap; max-height:140px; overflow-y:auto; line-height:1.7; }
+</style>
+</head>
+<body>
+<h1>位置共有 (Web版)</h1>
+<p class="sub">
+  動作確認用の簡易クライアントです。<strong>この画面を開いている間だけ</strong>位置を送ります。<br>
+  画面を閉じる・別アプリに切り替えると送信は止まります (ブラウザのOS制約)。<br>
+  バックグラウンドで継続的に収集したい場合はネイティブ版 (mobile/) を使ってください。
+</p>
+
+<div class="banner" id="live">
+  📍 <b>位置を共有中です。</b><span id="liveDetail"></span>
+</div>
+
+<div class="notice">
+  <b>送信される内容</b>: 緯度・経度・精度・速度・時刻・電池残量。<br>
+  <b>送信先</b>: 下に入力したサーバーのみ。<br>
+  <b>保存期間</b>: サーバー設定の期間を過ぎたデータは自動削除されます。<br>
+  <b>削除</b>: 「自分のデータを削除」でいつでも全消去できます。
+</div>
+
+<fieldset>
+  <legend>接続設定</legend>
+  <label for="server">サーバーURL</label>
+  <input id="server" type="url" placeholder="https://example.ngrok.app" autocomplete="off">
+  <label for="token">端末トークン (INGEST_TOKEN)</label>
+  <input id="token" type="password" autocomplete="off">
+  <label for="name">端末名</label>
+  <input id="name" type="text" placeholder="例: 竹村スマホ">
+  <label for="interval">送信間隔</label>
+  <select id="interval">
+    <option value="5000">5秒</option>
+    <option value="10000" selected>10秒</option>
+    <option value="30000">30秒</option>
+    <option value="60000">60秒</option>
+  </select>
+</fieldset>
+
+<button id="toggle">位置の共有を開始</button>
+
+<fieldset style="margin-top:16px">
+  <legend>状態</legend>
+  <dl>
+    <dt>状態</dt><dd id="stState">停止中</dd>
+    <dt>現在地</dt><dd id="stPos">—</dd>
+    <dt>精度</dt><dd id="stAcc">—</dd>
+    <dt>送信済み</dt><dd id="stSent">0 点</dd>
+    <dt>未送信</dt><dd id="stQueue">0 点</dd>
+    <dt>最終送信</dt><dd id="stLast">—</dd>
+  </dl>
+</fieldset>
+
+<fieldset>
+  <legend>ログ</legend>
+  <div id="log">待機中...</div>
+</fieldset>
+
+<button id="forget">この端末のデータをサーバーから全削除</button>
+
+<script>
+(() => {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const LS = 'locdemo.web.v1';
+
+  const state = {
+    on: false, watchId: null, timer: null, wakeLock: null,
+    queue: [], sent: 0, last: null, deviceId: null,
+  };
+
+  // 端末ID: この端末だけの固定ID。消せば別端末として扱われる。
+  function deviceId() {
+    let id = localStorage.getItem(LS + '.deviceId');
+    if (!id) {
+      id = 'web-' + (crypto.randomUUID?.() || Math.random().toString(36).slice(2)).slice(0, 12);
+      localStorage.setItem(LS + '.deviceId', id);
+    }
+    return id;
+  }
+
+  function loadSettings() {
+    const saved = JSON.parse(localStorage.getItem(LS) || '{}');
+    $('server').value = saved.server || location.origin;
+    $('token').value = saved.token || '';
+    $('name').value = saved.name || '';
+    if (saved.interval) $('interval').value = saved.interval;
+  }
+  function saveSettings() {
+    localStorage.setItem(LS, JSON.stringify({
+      server: $('server').value.trim().replace(/\/+$/, ''),
+      token: $('token').value.trim(),
+      name: $('name').value.trim(),
+      interval: $('interval').value,
+    }));
+  }
+
+  function log(msg) {
+    const t = new Date().toLocaleTimeString('ja-JP');
+    $('log').textContent = `[${t}] ${msg}\n` + $('log').textContent.split('\n').slice(0, 40).join('\n');
+  }
+
+  async function post(pathname, body, method = 'POST') {
+    const { server, token } = JSON.parse(localStorage.getItem(LS) || '{}');
+    const res = await fetch(server + pathname, {
+      method,
+      headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+    return data;
+  }
+
+  async function battery() {
+    try {
+      const b = await navigator.getBattery?.();
+      return b ? b.level : null;
+    } catch { return null; }
+  }
+
+  function updateUI() {
+    $('stState').textContent = state.on ? '共有中' : '停止中';
+    $('stSent').textContent = `${state.sent} 点`;
+    $('stQueue').textContent = `${state.queue.length} 点`;
+    $('stLast').textContent = state.last ? new Date(state.last).toLocaleTimeString('ja-JP') : '—';
+    $('toggle').textContent = state.on ? '共有を停止' : '位置の共有を開始';
+    $('toggle').classList.toggle('on', state.on);
+    $('live').classList.toggle('on', state.on);
+    $('liveDetail').textContent = state.on ? ` 送信済み ${state.sent} 点。` : '';
+  }
+
+  // ---- 送信キュー。圏外でも点を貯めて、復帰時にまとめて送る。
+  async function flush() {
+    if (!state.queue.length) return;
+    const batch = state.queue.slice(0, 100);
+    try {
+      const r = await post('/api/v1/locations', {
+        deviceId: state.deviceId,
+        deviceName: $('name').value.trim() || state.deviceId,
+        platform: 'web',
+        points: batch,
+      });
+      state.queue = state.queue.slice(batch.length);
+      state.sent += r.accepted;
+      state.last = Date.now();
+      log(`送信 ${r.accepted} 点 (重複 ${r.duplicated})`);
+    } catch (err) {
+      log(`送信失敗: ${err.message} — ${state.queue.length} 点を保持`);
+      if (state.queue.length > 2000) state.queue = state.queue.slice(-2000);
+    }
+    updateUI();
+  }
+
+  async function start() {
+    saveSettings();
+    if (!$('server').value.trim() || !$('token').value.trim()) {
+      return alert('サーバーURLと端末トークンを入れてください');
+    }
+    if (!navigator.geolocation) return alert('この端末は位置情報に対応していません');
+    if (!window.isSecureContext) {
+      return alert('位置情報は HTTPS (または localhost) でのみ使えます。トンネル経由のURLを使ってください。');
+    }
+
+    state.deviceId = deviceId();
+    try {
+      const s = await post('/api/v1/sessions/start', {
+        deviceId: state.deviceId,
+        deviceName: $('name').value.trim() || state.deviceId,
+        platform: 'web',
+        purpose: '技術デモ (Web版)',
+      });
+      log(`共有セッション開始 (id=${s.sessionId})`);
+    } catch (err) {
+      return alert(`サーバーに接続できません: ${err.message}`);
+    }
+
+    state.on = true;
+    state.watchId = navigator.geolocation.watchPosition(
+      async (pos) => {
+        const c = pos.coords;
+        $('stPos').textContent = `${c.latitude.toFixed(6)}, ${c.longitude.toFixed(6)}`;
+        $('stAcc').textContent = `±${Math.round(c.accuracy)}m`;
+        state.queue.push({
+          lat: c.latitude, lon: c.longitude, accuracy: c.accuracy,
+          altitude: c.altitude, speed: c.speed, heading: c.heading,
+          recordedAt: pos.timestamp, battery: await battery(), source: 'web',
+        });
+        updateUI();
+      },
+      (err) => log(`位置取得エラー: ${err.message}`),
+      { enableHighAccuracy: true, maximumAge: 0, timeout: 20000 }
+    );
+
+    state.timer = setInterval(flush, Number($('interval').value));
+    // 画面が消えると送信も止まるので、可能ならスリープを抑止する
+    try { state.wakeLock = await navigator.wakeLock?.request('screen'); } catch {}
+    document.addEventListener('visibilitychange', reacquireWakeLock);
+    updateUI();
+    log('共有を開始しました');
+  }
+
+  async function reacquireWakeLock() {
+    if (state.on && document.visibilityState === 'visible' && !state.wakeLock) {
+      try { state.wakeLock = await navigator.wakeLock?.request('screen'); } catch {}
+    }
+  }
+
+  async function stop() {
+    state.on = false;
+    if (state.watchId != null) navigator.geolocation.clearWatch(state.watchId);
+    clearInterval(state.timer);
+    try { await state.wakeLock?.release(); } catch {}
+    state.wakeLock = null;
+    document.removeEventListener('visibilitychange', reacquireWakeLock);
+    await flush();
+    try {
+      await post('/api/v1/sessions/stop', { deviceId: state.deviceId, reason: 'user_stop' });
+      log('共有を停止しました');
+    } catch (err) {
+      log(`停止の通知に失敗: ${err.message}`);
+    }
+    updateUI();
+  }
+
+  $('toggle').addEventListener('click', () => (state.on ? stop() : start()));
+  $('forget').addEventListener('click', async () => {
+    if (!confirm('この端末がこれまで送った位置情報をサーバーから全て削除します。よろしいですか？')) return;
+    try {
+      const r = await post('/api/v1/me', { deviceId: deviceId() }, 'DELETE');
+      state.sent = 0; state.queue = []; updateUI();
+      alert(`削除しました (位置 ${r.deleted.points} 点)`);
+      log(`サーバー側のデータを削除 (${r.deleted.points} 点)`);
+    } catch (err) {
+      alert(`削除に失敗: ${err.message}`);
+    }
+  });
+  window.addEventListener('beforeunload', () => { if (state.on) navigator.sendBeacon?.(''); });
+
+  loadSettings();
+  state.deviceId = deviceId();
+  updateUI();
+  log(`端末ID: ${state.deviceId}`);
+})();
+</script>
+</body>
+</html>

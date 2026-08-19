@@ -1,0 +1,11 @@
+{
+  "name": "location-demo-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "位置情報リアルタイム収集デモの収集サーバー (npm 依存ゼロ)",
+  "engines": { "node": ">=22.5.0" },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env --no-warnings server.js",
+    "smoke": "node --no-warnings smoke-test.js"
+  }
+}

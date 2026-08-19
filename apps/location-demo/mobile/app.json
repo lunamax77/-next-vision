@@ -1,0 +1,50 @@
+{
+  "expo": {
+    "name": "位置共有デモ",
+    "slug": "location-demo",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "scheme": "locationdemo",
+    "backgroundColor": "#0f1115",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "jp.co.nextvision.locationdemo",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "現在地をあなたが指定したサーバーへ共有するために使います。共有を開始したときだけ取得します。",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "アプリを閉じている間も位置を共有し続けるために使います。共有中は画面上部にインジケータが表示され、アプリ内でいつでも停止できます。",
+        "NSLocationAlwaysUsageDescription": "アプリを閉じている間も位置を共有し続けるために使います。",
+        "UIBackgroundModes": ["location", "fetch"],
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "jp.co.nextvision.locationdemo",
+      "adaptiveIcon": { "backgroundColor": "#0f1115" },
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE",
+        "FOREGROUND_SERVICE_LOCATION",
+        "POST_NOTIFICATIONS",
+        "WAKE_LOCK"
+      ],
+      "usesCleartextTraffic": true,
+      "edgeToEdgeEnabled": true
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "アプリを閉じている間も位置を共有し続けるために使います。共有中は常駐通知が表示され、アプリ内でいつでも停止できます。",
+          "locationWhenInUsePermission": "現在地をあなたが指定したサーバーへ共有するために使います。",
+          "isIosBackgroundLocationEnabled": true,
+          "isAndroidBackgroundLocationEnabled": true,
+          "isAndroidForegroundServiceEnabled": true
+        }
+      ]
+    ]
+  }
+}

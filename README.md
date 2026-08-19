@@ -26,3 +26,4 @@
 | `docs/org/00-charter.md` | 経営憲章(意思決定権限・承認ルールの詳細) |
 | `docs/org/01-org-structure.md` | 組織図と各役割 |
 | `docs/org/departments/` | 各部署(5部署)の定義 |
+| `apps/location-demo/` | 位置情報リアルタイム収集デモ(技術検証・社内用) |
