@@ -1,0 +1,497 @@
+<title>AIルーティン運用盤</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600;700&display=swap">
+
+<style>
+:root{
+  --ground:#F2F4F7; --surface:#FFFFFF; --surface-2:#E9EDF2; --sunken:#EDF0F4;
+  --ink:#111823; --ink-2:#3D4B5C; --muted:#6B7A8C; --line:#D6DDE5; --line-2:#C2CCD8;
+  --accent:#1D5C86; --accent-soft:#E1EBF3;
+  --ok:#2C7A57; --ok-soft:#E0F0E8; --warn:#A8681B; --warn-soft:#F6EBDA;
+  --t-morning:#C98A16; --t-noon:#2A7FB8; --t-dusk:#C2622C; --t-night:#4B4E9B; --t-invoice:#2C7A57; --t-ledger:#17706E;
+  --shadow:0 1px 2px rgba(17,24,35,.06), 0 6px 20px -12px rgba(17,24,35,.24);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E131A; --surface:#161D27; --surface-2:#1E2732; --sunken:#101720;
+    --ink:#E8EDF3; --ink-2:#B6C2D0; --muted:#8695A6; --line:#2A3542; --line-2:#384656;
+    --accent:#74B6DE; --accent-soft:#172936;
+    --ok:#5FC095; --ok-soft:#132C22; --warn:#DFA85A; --warn-soft:#2E2413;
+    --t-morning:#E0AA43; --t-noon:#5AAADD; --t-dusk:#DE8B54; --t-night:#8A8DD6; --t-invoice:#5FC095; --t-ledger:#5FBDBA;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E131A; --surface:#161D27; --surface-2:#1E2732; --sunken:#101720;
+  --ink:#E8EDF3; --ink-2:#B6C2D0; --muted:#8695A6; --line:#2A3542; --line-2:#384656;
+  --accent:#74B6DE; --accent-soft:#172936;
+  --ok:#5FC095; --ok-soft:#132C22; --warn:#DFA85A; --warn-soft:#2E2413;
+  --t-morning:#E0AA43; --t-noon:#5AAADD; --t-dusk:#DE8B54; --t-night:#8A8DD6; --t-invoice:#5FC095; --t-ledger:#5FBDBA;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"Noto Sans JP",system-ui,-apple-system,"Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+  font-size:15px; line-height:1.75; -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:720px; margin:0 auto; padding:28px 16px 72px}
+h1,h2,h3{font-family:"Zen Kaku Gothic New","Noto Sans JP",sans-serif; text-wrap:balance; margin:0}
+
+/* ---- header ---- */
+.masthead{display:flex; flex-direction:column; gap:12px; margin-bottom:26px}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--muted);
+}
+h1{font-size:29px; font-weight:900; line-height:1.3; letter-spacing:.01em}
+.lede{color:var(--ink-2); font-size:14px; margin:0; max-width:60ch}
+
+.rulecard{
+  background:var(--surface); border:1px solid var(--line); border-radius:12px;
+  padding:14px 16px; display:flex; gap:12px; align-items:flex-start; box-shadow:var(--shadow);
+}
+.rulecard .mark{font-size:16px; line-height:1.5; flex-shrink:0}
+.rulecard p{margin:0; font-size:13.5px; color:var(--ink-2)}
+.rulecard strong{color:var(--ink); font-weight:700}
+
+/* ---- section ---- */
+section{margin-top:38px}
+.sec-head{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:6px}
+h2{font-size:19px; font-weight:700; letter-spacing:.01em}
+.sec-note{font-size:12.5px; color:var(--muted); margin:0 0 18px; max-width:60ch}
+
+/* ---- timeline ---- */
+.rail{position:relative; display:flex; flex-direction:column; gap:14px}
+.rail::before{
+  content:""; position:absolute; left:26px; top:16px; bottom:16px; width:2px;
+  background:linear-gradient(to bottom,var(--t-morning),var(--t-noon),var(--t-dusk),var(--t-night));
+  opacity:.35; border-radius:2px;
+}
+@media (max-width:520px){ .rail::before{left:20px} }
+
+.card{
+  position:relative; background:var(--surface); border:1px solid var(--line);
+  border-radius:14px; box-shadow:var(--shadow); overflow:hidden;
+}
+.card::before{content:""; position:absolute; inset:0 auto 0 0; width:4px; background:var(--key)}
+.card-top{display:flex; gap:14px; align-items:flex-start; padding:15px 16px 15px 20px}
+
+.clock{flex-shrink:0; width:56px; text-align:center; padding-top:2px}
+@media (max-width:520px){ .clock{width:48px} }
+.clock .hh{
+  font-family:"IBM Plex Mono",monospace; font-weight:700; font-size:21px;
+  font-variant-numeric:tabular-nums; color:var(--key); line-height:1.1; display:block;
+}
+.clock .lbl{font-size:11px; color:var(--muted); font-weight:500; letter-spacing:.04em}
+
+.meat{flex:1; min-width:0}
+.title-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+h3{font-size:15.5px; font-weight:700; line-height:1.5}
+.card p{margin:5px 0 0; font-size:13px; color:var(--ink-2)}
+.basis{
+  margin-top:8px; font-family:"IBM Plex Mono",monospace; font-size:11px;
+  color:var(--muted); letter-spacing:.02em;
+}
+
+.chip{
+  font-size:10.5px; font-weight:700; letter-spacing:.04em; padding:2.5px 8px;
+  border-radius:999px; white-space:nowrap; border:1px solid transparent;
+}
+.chip.reset{background:var(--warn-soft); color:var(--warn); border-color:currentColor}
+.chip.stack{background:var(--accent-soft); color:var(--accent); border-color:currentColor}
+
+/* ---- structure of a report ---- */
+.shape{
+  display:flex; flex-direction:column; gap:8px; margin-top:12px;
+  padding:12px; background:var(--sunken); border-radius:10px; border:1px solid var(--line);
+}
+.step{display:flex; gap:9px; align-items:flex-start; font-size:12.5px; line-height:1.6}
+.step .n{
+  font-family:"IBM Plex Mono",monospace; font-size:10.5px; font-weight:700; color:var(--key);
+  border:1.5px solid var(--key); border-radius:5px; padding:0 5px; flex-shrink:0; margin-top:2px;
+}
+.step b{font-weight:700; color:var(--ink)}
+.step span{color:var(--ink-2); min-width:0}
+
+/* ---- prompt disclosure ---- */
+details{border-top:1px solid var(--line); background:var(--surface-2)}
+summary{
+  cursor:pointer; padding:11px 16px 11px 20px; font-size:12.5px; font-weight:700;
+  color:var(--accent); display:flex; align-items:center; gap:7px; list-style:none;
+  font-family:"Zen Kaku Gothic New",sans-serif;
+}
+summary::-webkit-details-marker{display:none}
+summary .caret{
+  display:inline-block; transition:transform .18s ease; font-size:10px; color:var(--muted);
+}
+details[open] summary .caret{transform:rotate(90deg)}
+summary:focus-visible{outline:2px solid var(--accent); outline-offset:-2px; border-radius:6px}
+.prompt-body{padding:0 12px 14px 16px}
+pre{
+  margin:0; background:var(--sunken); border:1px solid var(--line); border-radius:9px;
+  padding:12px; overflow-x:auto; max-height:270px; overflow-y:auto;
+  font-family:"IBM Plex Mono","Noto Sans JP",monospace; font-size:11.5px; line-height:1.85;
+  color:var(--ink-2); white-space:pre-wrap; word-break:break-word;
+}
+.copy{
+  margin:10px 0 0; width:100%; padding:11px 14px; border-radius:9px; cursor:pointer;
+  background:var(--accent); color:#fff; border:none; font-weight:700; font-size:13px;
+  font-family:"Zen Kaku Gothic New",sans-serif; letter-spacing:.03em;
+}
+:root[data-theme="dark"] .copy, :root:not([data-theme="light"]) .copy{color:var(--ground)}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]) .copy{color:#fff} }
+.copy:hover{filter:brightness(1.08)}
+.copy:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
+.copy.done{background:var(--ok)}
+
+/* ---- settings / reference ---- */
+.panel{
+  background:var(--surface); border:1px solid var(--line); border-radius:14px;
+  box-shadow:var(--shadow); overflow:hidden;
+}
+.row{
+  display:flex; gap:12px; padding:12px 16px; border-bottom:1px solid var(--line);
+  align-items:baseline; font-size:13px;
+}
+.row:last-child{border-bottom:none}
+.row dt{flex:0 0 92px; color:var(--muted); font-size:12px; font-weight:700; margin:0}
+.row dd{margin:0; flex:1; min-width:0; color:var(--ink-2)}
+dl{margin:0}
+code{
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; background:var(--sunken);
+  border:1px solid var(--line); border-radius:5px; padding:1px 5px; word-break:break-all; color:var(--ink);
+}
+.idrow{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+.mini{
+  flex-shrink:0; padding:5px 10px; border-radius:7px; cursor:pointer; font-size:11px; font-weight:700;
+  background:transparent; color:var(--accent); border:1px solid var(--line-2);
+  font-family:"Zen Kaku Gothic New",sans-serif;
+}
+.mini:hover{background:var(--accent-soft)}
+.mini:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+.mini.done{color:var(--ok); border-color:var(--ok)}
+
+/* ---- pipeline ---- */
+.flow{display:flex; flex-direction:column; gap:0; margin-top:14px}
+.flow-step{display:flex; gap:12px; align-items:flex-start; font-size:12.5px}
+.flow-step .dot{
+  flex-shrink:0; width:9px; height:9px; border-radius:50%; background:var(--t-invoice);
+  margin-top:7px; position:relative;
+}
+.flow-step:not(:last-child) .dot::after{
+  content:""; position:absolute; left:50%; top:13px; width:2px; height:30px;
+  background:var(--line-2); transform:translateX(-50%);
+}
+.flow-step .txt{padding-bottom:20px; color:var(--ink-2)}
+.flow-step:last-child .txt{padding-bottom:0}
+.flow-step b{color:var(--ink)}
+
+footer{
+  margin-top:42px; padding-top:18px; border-top:1px solid var(--line);
+  font-size:11.5px; color:var(--muted); line-height:1.8;
+}
+footer code{font-size:10.5px}
+
+#toast{
+  position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(14px);
+  background:var(--ink); color:var(--ground); padding:10px 20px; border-radius:999px;
+  font-size:13px; font-weight:700; opacity:0; pointer-events:none; transition:opacity .2s, transform .2s;
+  font-family:"Zen Kaku Gothic New",sans-serif; z-index:50; box-shadow:var(--shadow);
+}
+#toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important} }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">竹村代表グループ — DreamCreation / NextVision</div>
+    <h1>AIルーティン運用盤</h1>
+    <p class="lede">毎日の定時報告と請求書チェックの中身。設定用の文面はここから直接コピーできます。</p>
+    <div class="rulecard">
+      <span class="mark">🔒</span>
+      <p><strong>すべて「読むだけ」のルーティンです。</strong>メールの送信・返信、ファイルの編集・削除、予定の変更は一切しません。支払い可否など重要な判断は必ず代表が行います(憲章 4-1 原本不可侵 / 4-2 対外承認)。</p>
+    </div>
+  </header>
+
+  <section>
+    <div class="sec-head"><h2>定時報告</h2></div>
+    <p class="sec-note">朝8時がその日の起点(リセット)。昼・夕・夜は「前回からの変化」を上に、「本日の積み上げ」を下に置く2段構成。翌朝またリセットされます。</p>
+
+    <div class="rail">
+
+      <article class="card" style="--key:var(--t-morning)">
+        <div class="card-top">
+          <div class="clock"><span class="hh">8:00</span><span class="lbl">朝</span></div>
+          <div class="meat">
+            <div class="title-row"><h3>朝の定時報告</h3><span class="chip reset">リセット</span></div>
+            <p>その日のベースラインを丸ごと作成。今日の予定・未読メール・Drive新着に加え、<b>売掛・買掛の前日対比</b>も載せます。</p>
+            <div class="basis">基準 — 本日の起点</div>
+          </div>
+        </div>
+        <details>
+          <summary><span class="caret">▶</span>登録用プロンプトを見る</summary>
+          <div class="prompt-body">
+<pre>あなたは竹村代表グループ(ドリームクリエーション/ネクストビジョン)の秘書AIです。日本時間の朝8時、「朝の定時報告(本日のリセット/ベースライン)」を作成します。これが今日一日の起点。現状を丸ごとまとめてください。Gmail・Googleカレンダー・Google Driveのコネクタを使い、"読むだけ"(送信・返信・編集・削除・予定変更はしない=原本不可侵・対外承認)。
+冒頭に一言サマリー。続けて【本日のベースライン】として:
+1. 📅 今日の予定(時系列)
+2. 📧 未読・重要メール(要点。販促・通知系のノイズは件数のみ)
+3. 📁 Drive「AI専用/00_受信箱」(ID: 1BT7vro-nFQpMfXVrVtFW9hoQAbtvXxaq)の新着議事録
+4. 💰 売掛・買掛の前日対比: Drive「AI専用/10_売掛買掛スナップショット」フォルダ内で、ファイル名が「_前日対比_」で始まるファイルのうち最新のものを読み、その内容を要約して報告する。増減の大きい順に、前日から動いた取引先だけを挙げる(増・減・新規・消滅)。売掛・買掛それぞれの合計と前日比も出す。ファイルが無い場合は「前日対比データなし」と書く(勝手に自分で計算しない)。
+要対応・期限は先頭に⚠️と期限を明記。金額が動くものは必ず出す。無ければ「特になし」。迷う点は「要確認」。
+※これが本日の起点。昼・夕・夜はこのベースラインからの変化を積み上げていく。</pre>
+            <button class="copy" type="button">プロンプトをコピー</button>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" style="--key:var(--t-noon)">
+        <div class="card-top">
+          <div class="clock"><span class="hh">12:00</span><span class="lbl">昼</span></div>
+          <div class="meat">
+            <div class="title-row"><h3>昼の定時報告</h3><span class="chip stack">変化＋積み上げ</span></div>
+            <div class="shape">
+              <div class="step"><span class="n">1</span><span><b>前回(今朝8時)からの変化</b> — 8時以降の新着メール・予定の変更・新規議事録</span></div>
+              <div class="step"><span class="n">2</span><span><b>本日の積み上げまとめ</b> — 今日の予定全体 / 重要メール一覧 / 議事録一覧 / 未対応・期限</span></div>
+            </div>
+            <div class="basis">基準 — 今朝 8:00 以降</div>
+          </div>
+        </div>
+        <details>
+          <summary><span class="caret">▶</span>登録用プロンプトを見る</summary>
+          <div class="prompt-body">
+<pre>あなたは竹村代表グループ(ドリームクリエーション/ネクストビジョン)の秘書AIです。日本時間の昼12時、「昼の定時報告」を作成します。必ず2段構成(【1】を上、【2】を下)。Gmail・カレンダー・Driveを"読むだけ"(送信・返信・編集・削除・予定変更はしない=原本不可侵・対外承認)。冒頭に一言サマリー。
+
+【1】🔄 前回(今朝8時)からの変化 ※8時以降に増減した分だけ。無ければ「変化なし」
+- 📧 新着・未読メール(8時以降着): 要点。販促・通知系はノイズ件数のみ
+- 📅 予定の変更・追加(今日の午後を含む)
+- 📁 Drive受信箱の新規議事録(8時以降)
+
+【2】📊 本日の積み上げまとめ(今朝のリセット以降ぜんぶ)
+- 今日の予定全体 / 今日届いた重要メール一覧 / 今日の新着議事録一覧 / ⚠️未対応・期限の残タスク
+
+要対応・期限は⚠️と期限、金額が動くものは必ず明記。迷う点は「要確認」。</pre>
+            <button class="copy" type="button">プロンプトをコピー</button>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" style="--key:var(--t-dusk)">
+        <div class="card-top">
+          <div class="clock"><span class="hh">18:00</span><span class="lbl">夕方</span></div>
+          <div class="meat">
+            <div class="title-row"><h3>夕方の定時報告</h3><span class="chip stack">変化＋積み上げ</span></div>
+            <div class="shape">
+              <div class="step"><span class="n">1</span><span><b>前回(昼12時)からの変化</b> — 12時以降の新着メール・予定の変更・新規議事録</span></div>
+              <div class="step"><span class="n">2</span><span><b>本日の積み上げまとめ</b> — 上記に加えて<b>明日の予定</b>まで</span></div>
+            </div>
+            <div class="basis">基準 — 昼 12:00 以降</div>
+          </div>
+        </div>
+        <details>
+          <summary><span class="caret">▶</span>登録用プロンプトを見る</summary>
+          <div class="prompt-body">
+<pre>あなたは竹村代表グループ(ドリームクリエーション/ネクストビジョン)の秘書AIです。日本時間の夕方18時、「夕方の定時報告」を作成します。必ず2段構成(【1】を上、【2】を下)。Gmail・カレンダー・Driveを"読むだけ"(送信・返信・編集・削除・予定変更はしない=原本不可侵・対外承認)。冒頭に一言サマリー。
+
+【1】🔄 前回(昼12時)からの変化 ※12時以降に増減した分だけ。無ければ「変化なし」
+- 📧 新着・未読メール(12時以降着): 要点。ノイズは件数のみ
+- 📅 予定の変更・追加
+- 📁 Drive受信箱の新規議事録(12時以降)
+
+【2】📊 本日の積み上げまとめ(今朝のリセット以降ぜんぶ)
+- 今日の予定全体 / 今日届いた重要メール一覧 / 今日の新着議事録一覧 / ⚠️未対応・期限の残タスク / 明日の予定
+
+要対応・期限は⚠️と期限、金額が動くものは必ず明記。迷う点は「要確認」。</pre>
+            <button class="copy" type="button">プロンプトをコピー</button>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" style="--key:var(--t-night)">
+        <div class="card-top">
+          <div class="clock"><span class="hh">21:00</span><span class="lbl">夜</span></div>
+          <div class="meat">
+            <div class="title-row"><h3>夜の定時報告</h3><span class="chip stack">1日の締め</span></div>
+            <div class="shape">
+              <div class="step"><span class="n">1</span><span><b>前回(夕方18時)からの変化</b> — 18時以降の新着＋今日中に返信が必要で未対応のもの</span></div>
+              <div class="step"><span class="n">2</span><span><b>1日の総括</b> — 予定の実績 / 未対応・持ち越し / <b>明日の予定と必要な準備・持ち物</b></span></div>
+            </div>
+            <div class="basis">基準 — 夕方 18:00 以降</div>
+          </div>
+        </div>
+        <details>
+          <summary><span class="caret">▶</span>登録用プロンプトを見る</summary>
+          <div class="prompt-body">
+<pre>あなたは竹村代表グループ(ドリームクリエーション/ネクストビジョン)の秘書AIです。日本時間の夜21時、「夜の定時報告(1日の締め)」を作成します。必ず2段構成(【1】を上、【2】を下)。Gmail・カレンダー・Driveを"読むだけ"(送信・返信・編集・削除・予定変更はしない=原本不可侵・対外承認)。冒頭に一言サマリー。
+
+【1】🔄 前回(夕方18時)からの変化 ※18時以降に増減した分だけ。無ければ「変化なし」
+- 📧 新着・未読メール(18時以降着)＋今日中に返信が必要で未対応のもの
+- 📅 予定の変更・追加
+- 📁 Drive受信箱の新規議事録(18時以降)
+
+【2】📊 本日の積み上げまとめ(1日の総括/今朝のリセット以降ぜんぶ)
+- 今日の予定の実績 / 今日届いた重要メール一覧 / 今日の新着議事録一覧 / ⚠️未対応・持ち越し / 📅明日の予定と必要な準備・持ち物
+
+要対応・期限・金額が動くものは必ず明記。迷う点は「要確認」。</pre>
+            <button class="copy" type="button">プロンプトをコピー</button>
+          </div>
+        </details>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>売掛・買掛 前日対比</h2></div>
+    <p class="sec-note">参照シートは月タブが上書きされるため「昨日の値」が残りません。毎朝スクリプトがその日の値を別ファイルに記録し、前日と突き合わせて増減を出します。結果は朝8時の報告に載ります。</p>
+
+    <article class="card" style="--key:var(--t-ledger)">
+      <div class="card-top">
+        <div class="clock"><span class="hh">6–7</span><span class="lbl">毎朝</span></div>
+        <div class="meat">
+          <h3>日次スナップショット</h3>
+          <div class="flow">
+            <div class="flow-step"><span class="dot" style="background:var(--t-ledger)"></span><span class="txt">参照シートの全月タブから売掛・買掛を<b>読み取り</b>(原本は変更しない)</span></div>
+            <div class="flow-step"><span class="dot" style="background:var(--t-ledger)"></span><span class="txt">Drive「AI専用/10_売掛買掛スナップショット」に<b>その日の値を新規保存</b></span></div>
+            <div class="flow-step"><span class="dot" style="background:var(--t-ledger)"></span><span class="txt"><b>前日の記録と突き合わせ</b>、増減額の大きい順に差分レポートを出力</span></div>
+            <div class="flow-step"><span class="dot" style="background:var(--t-ledger)"></span><span class="txt">朝8時の報告がそれを読んで要約 → 通知</span></div>
+          </div>
+          <div class="shape" style="--key:var(--t-ledger)">
+            <div class="step"><span class="n">例</span><span><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.9;display:block;color:var(--ink-2)">【8月】売掛 合計 28,366,695 (前日比 +995,506)<br>&nbsp;&nbsp;[増] ネクセル 15,071,645 → 15,925,745 (+854,100)<br>&nbsp;&nbsp;[新規] 新通 484,000<br>&nbsp;&nbsp;[減] エディオン 1,242,594 → 900,000 (-342,594)</span></span></div>
+          </div>
+          <div class="basis">区分 — 増 / 減 / 新規 / 消滅　※動いた先だけ表示</div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>請求書チェック</h2></div>
+    <p class="sec-note">下請けから届いた請求書PDFを、参照シートの「買掛」金額と突き合わせ、ズレを通知します。2〜3時間ごと(例: 平日 9・12・15・18時)。</p>
+
+    <article class="card" style="--key:var(--t-invoice)">
+      <div class="card-top">
+        <div class="clock"><span class="hh">2–3h</span><span class="lbl">ごと</span></div>
+        <div class="meat">
+          <h3>請求書チェック</h3>
+          <div class="flow">
+            <div class="flow-step"><span class="dot"></span><span class="txt">請求書メールの添付PDFを、<b>Apps Scriptが1時間ごと</b>に Drive「AI専用/受信請求書」へ自動保存</span></div>
+            <div class="flow-step"><span class="dot"></span><span class="txt">ルーティンが<b>直近4時間の新着PDF</b>を読み、請求元・対象期間・金額・支払期日を抽出</span></div>
+            <div class="flow-step"><span class="dot"></span><span class="txt">参照シートの<b>該当月のタブ</b>の「買掛」と突き合わせ(タブ＝何月分)</span></div>
+            <div class="flow-step"><span class="dot"></span><span class="txt"><b>✅ 一致 / ⚠️ ズレ(差額を明記) / ❓ 要確認</b> を判定して通知</span></div>
+          </div>
+        </div>
+      </div>
+      <details>
+        <summary><span class="caret">▶</span>登録用プロンプトを見る</summary>
+        <div class="prompt-body">
+<pre>あなたは竹村代表グループ(ドリームクリエーション)の経理チェックAIです。下請けから届いた請求書を、参照スプレッドシートの「買掛」金額と突き合わせ、ズレを報告します。すべて"読むだけ"(スプレッドシート・PDF・メールを編集/削除しない=原本不可侵)。送信もしない。支払い可否は代表が判断する。
+
+手順:
+1. Google Driveの「受信請求書」フォルダ(AI専用フォルダ ID 1e3g5RB9DjsAu_83KUbIqgf13VIr5dAC8 の直下、タイトル『受信請求書』)を探し、直近4時間以内に追加・更新されたPDFを対象にする。無ければ「新着の請求書なし」と報告して終了。
+2. 各PDFを読み、①請求元(会社名)②件名/対象(店舗・案件)③対象期間 ④請求金額(税込)⑤消費税 ⑥支払期日 を抽出する。
+3. 参照スプレッドシート(ID 1rdPmp9wKzktUh8QcZ4ydXOrU4nfcjwOEfqz55UFUp98)を開く。このシートは【タブ(シート)が月ごと】に分かれている。請求書の対象月(例: 7月度 → 7月のタブ)に対応するタブを選び、その月タブの「買掛」列から請求元に対応する想定金額を探す(社名の表記ゆれに注意。例: エグボック=325000)。対象月が読み取れない/該当タブが無い場合は最新月のタブで判定し、その旨を「要確認」に記す。
+4. 突き合わせて判定する:
+   - ✅ 一致: 請求元・金額が表の想定どおり
+   - ⚠️ ズレ: どこが違うかを具体的に(例: 請求額350,000 vs 表325,000 → 差+25,000 / 対象期間の相違 / 消費税率 / 支払期日 など)
+   - ❓ 要確認: 表に該当社が無い / 候補が複数で確定できない / PDFが読めない
+5. 形式: 冒頭に一言サマリー(対象件数・うちズレ○件)。請求書ごとに「請求元 / 対象 / 請求額 / 表の想定額 / 判定」を箇条書き。金額は必ず明記。
+
+注意: これは確認用の下書き。表・PDF・メールへの書き込みは一切しない。判断に迷う点は「要確認」として残す。</pre>
+          <button class="copy" type="button">プロンプトをコピー</button>
+        </div>
+      </details>
+    </article>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>事前セットアップ</h2></div>
+    <p class="sec-note">2本のApps Scriptを Googleアカウント側で設定します(script.google.com)。どちらも元のメール・シートは変更しません。</p>
+    <div class="panel">
+      <dl>
+        <div class="row"><dt>請求書<br>PDF保存</dt><dd><b>gmail-to-drive-invoice-saver.gs</b> — 請求書メールの添付PDFを「AI専用/受信請求書」へ1時間ごとに保存。処理済みメールには <code>invoice-saved</code> ラベルが付きます。</dd></div>
+        <div class="row"><dt>売掛買掛<br>記録</dt><dd><b>daily-ledger-snapshot.gs</b> — 毎朝6〜7時に売掛・買掛を記録し前日対比を生成。<b>先に <code>inspectLedger</code> を実行</b>して、拾えている項目をログで確認してから本番トリガーを設定します。</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>登録時の共通設定</h2></div>
+    <p class="sec-note">Routines(定期実行)画面で作成するとき、5本すべてに共通して設定する項目です。</p>
+    <div class="panel">
+      <dl>
+        <div class="row"><dt>時刻</dt><dd>日本時間で入力</dd></div>
+        <div class="row"><dt>実行方法</dt><dd>新しいセッションで実行</dd></div>
+        <div class="row"><dt>コネクタ</dt><dd><b>Gmail / Googleカレンダー / Google Drive を必ずON。</b>これが無いと中身を読めず、報告が空になります。</dd></div>
+        <div class="row"><dt>通知</dt><dd>プッシュ通知 ＋ メール(<code>lunamax77@gmail.com</code>)</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>参照ID</h2></div>
+    <p class="sec-note">設定時に貼り付けるIDです。タップでコピーできます。</p>
+    <div class="panel">
+      <dl>
+        <div class="row"><dt>AI専用<br>フォルダ</dt><dd><div class="idrow"><code>1e3g5RB9DjsAu_83KUbIqgf13VIr5dAC8</code><button class="mini" type="button" data-copy="1e3g5RB9DjsAu_83KUbIqgf13VIr5dAC8">コピー</button></div></dd></div>
+        <div class="row"><dt>00_受信箱<br>(議事録)</dt><dd><div class="idrow"><code>1BT7vro-nFQpMfXVrVtFW9hoQAbtvXxaq</code><button class="mini" type="button" data-copy="1BT7vro-nFQpMfXVrVtFW9hoQAbtvXxaq">コピー</button></div></dd></div>
+        <div class="row"><dt>参照シート<br>(買掛)</dt><dd><div class="idrow"><code>1rdPmp9wKzktUh8QcZ4ydXOrU4nfcjwOEfqz55UFUp98</code><button class="mini" type="button" data-copy="1rdPmp9wKzktUh8QcZ4ydXOrU4nfcjwOEfqz55UFUp98">コピー</button></div></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <footer>
+    原典はリポジトリの <code>docs/routines/</code> にあります(<code>daily-report-routines.md</code> / <code>invoice-check-automation.md</code> / <code>gmail-to-drive-invoice-saver.gs</code>)。内容を変えたときは、そちらとこのページの両方を更新してください。
+  </footer>
+
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var toast = document.getElementById('toast'), timer;
+  function flash(msg){
+    toast.textContent = msg; toast.classList.add('show');
+    clearTimeout(timer); timer = setTimeout(function(){ toast.classList.remove('show'); }, 1600);
+  }
+  function put(text, done){
+    function fallback(){
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.setAttribute('readonly','');
+      ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+      document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
+      var ok = false; try { ok = document.execCommand('copy'); } catch(e){}
+      document.body.removeChild(ta);
+      done(ok);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function(){ done(true); }, fallback);
+    } else { fallback(); }
+  }
+  document.querySelectorAll('.copy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var pre = btn.parentElement.querySelector('pre');
+      put(pre.textContent, function(ok){
+        if (!ok) { flash('コピーできませんでした'); return; }
+        var was = btn.textContent;
+        btn.textContent = 'コピーしました'; btn.classList.add('done');
+        flash('プロンプトをコピーしました');
+        setTimeout(function(){ btn.textContent = was; btn.classList.remove('done'); }, 1800);
+      });
+    });
+  });
+  document.querySelectorAll('.mini').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      put(btn.getAttribute('data-copy'), function(ok){
+        if (!ok) { flash('コピーできませんでした'); return; }
+        btn.textContent = '完了'; btn.classList.add('done'); flash('IDをコピーしました');
+        setTimeout(function(){ btn.textContent = 'コピー'; btn.classList.remove('done'); }, 1600);
+      });
+    });
+  });
+})();
+</script>
