@@ -129,3 +129,4 @@
 - 原本不可侵とデータの扱い: `docs/org/03-data-protection.md`
 - 各部署の定義(ネクストビジョン): `docs/org/departments/`
 - CEO(ジョブズ)スキル: `.claude/skills/jobs/SKILL.md`
+- ブラウザ自動化スキル: `.claude/skills/browser/SKILL.md`(送信の一歩手前で必ず代表承認)
