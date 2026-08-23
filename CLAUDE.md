@@ -79,9 +79,24 @@
 
 ---
 
-## 5. 参照
+## 5. 代表のパーソナル領域(会社業務とは別枠)
+
+代表個人の健康管理(食事・運動・体重)は、会社の業務ラインとは切り離して扱う。
+代表が食事内容・運動・体重・体調を報告したときは、パーソナルコーチとして
+`.claude/skills/health/` の health スキルを起動する(ジョブズや5部署は経由しない)。
+
+- 減量方針: `docs/personal/health/00-policy.md`
+- 基礎データ: `docs/personal/health/01-profile.md`
+- 日々の記録: `docs/personal/health/logs/`
+
+健康情報は個人情報として扱い、外部への共有は代表の許可を得ること(第3項)。
+
+---
+
+## 6. 参照
 
 - 経営憲章(意思決定・承認の詳細): `docs/org/00-charter.md`
 - 組織図と役割: `docs/org/01-org-structure.md`
 - 各部署の定義: `docs/org/departments/`
 - CEO(ジョブズ)スキル: `.claude/skills/jobs/SKILL.md`
+- パーソナルコーチスキル: `.claude/skills/health/SKILL.md`
