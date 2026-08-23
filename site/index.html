@@ -320,7 +320,7 @@ h2{font-size:clamp(24px,3.4vw,36px)}
 /* ===== price table ===== */
 .table-wrap{overflow-x:auto;border:2px solid var(--line);border-radius:var(--r);background:var(--card)}
 table{width:100%;border-collapse:collapse;min-width:600px}
-th,td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line);font-size:14px}
+th,td{padding:13px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:14px;white-space:nowrap}
 thead th{background:var(--navy);color:#fff;font-family:var(--display);font-weight:700;font-size:13px}
 tbody tr:last-child td{border-bottom:0}
 tbody tr:hover{background:var(--cream)}
@@ -418,7 +418,7 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
   vertical-align:middle;margin-right:10px}
 
 /* ===== ① 開催実績ゾーン ===== */
-.rz-cats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+.rz-cats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
 @media(max-width:820px){.rz-cats{grid-template-columns:repeat(2,1fr)}}
 .rz-cat{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:16px 13px;text-align:center;
   font-family:var(--display);font-weight:700;font-size:14px;color:var(--ink);line-height:1.5}
@@ -567,7 +567,9 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
       <div class="rz-cat">大手家電量販店<small>ELECTRONICS</small></div>
       <div class="rz-cat">大型商業施設<small>SHOPPING MALL</small></div>
       <div class="rz-cat">携帯キャリアイベント<small>MOBILE CARRIER</small></div>
-      <div class="rz-cat">関西・北陸ほか<br>全国対応<small>NATIONWIDE</small></div>
+      <div class="rz-cat">住宅展示場<small>HOUSING PARK</small></div>
+<div class="rz-cat">カーディーラー<small>CAR DEALER</small></div>
+<div class="rz-cat">関西・北陸ほか全国<small>NATIONWIDE</small></div>
     </div>
     <!-- ロゴ画像を入れる場合はここ（現在は上品にテキストチップで表示。公式ロゴ提供後に差し替え可能） -->
     <p class="rz-brands-lead reveal">導入・取引先（一例）</p>
@@ -578,8 +580,8 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
       <span>イオンモール</span>
     </div>
     <div class="gallery reveal" style="margin-top:8px">
-      <figure><img src="images/klp-event1.jpg" alt="大手企業イベントでの開催の様子1" loading="lazy"><figcaption>キッズライセンスパーク（店頭イベント）</figcaption></figure>
-      <figure><img src="images/klp-event2.jpg" alt="大手企業イベントでの開催の様子2" loading="lazy"><figcaption>EVカーで運転体験</figcaption></figure>
+      <figure><img src="images/event-klp-scene.svg" alt="大手企業イベントでの開催の様子1" loading="lazy"><figcaption>キッズライセンスパーク（店頭イベント）</figcaption></figure>
+      <figure><img src="images/event-klp-drive.svg" alt="大手企業イベントでの開催の様子2" loading="lazy"><figcaption>EVカーで運転体験</figcaption></figure>
     </div>
     <p class="note" style="text-align:center">※掲載は開催実績に基づく一例です。</p>
     <div class="center-cta reveal"><a class="btn btn-primary" href="#contact">開催について相談する</a></div>
@@ -606,7 +608,7 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
         <p>EVカーの運転体験＋顔写真入りの「こども免許証」をその場で発行。写真が撮れて持ち帰れる、来店の動機になる看板コンテンツ。</p></div>
       </div>
       <div class="pillar reveal">
-        <div class="pillar-photo"><img src="images/klp-event1.jpg" alt="設営・運営代行の様子" loading="lazy"><span class="badge" style="background:var(--coral)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 11a4 4 0 1 0-8 0"/><circle cx="12" cy="7" r="0"/><path d="M3 21v-1a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v1"/><circle cx="12" cy="6" r="3"/></svg></span></div>
+        <div class="pillar-photo"><img src="images/event-klp-scene.svg" alt="設営・運営代行の様子" loading="lazy"><span class="badge" style="background:var(--coral)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 11a4 4 0 1 0-8 0"/><circle cx="12" cy="7" r="0"/><path d="M3 21v-1a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v1"/><circle cx="12" cy="6" r="3"/></svg></span></div>
         <div class="pillar-body"><div class="no">03</div><h3>設営〜運営代行</h3>
         <p>設営・装飾から受付・安全管理・撤収・原状回復まで。店舗スタッフ様は接客・商談に専念。機材レンタルだけでも対応します。</p></div>
       </div>
@@ -699,22 +701,22 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
     <div class="counters reveal" style="margin-top:clamp(30px,4.5vw,48px)">
       <div class="cnt"><b><span class="num" data-to="5">0</span><small>分で</small></b><span>こども免許証を<strong>その場で発行・お渡し</strong></span></div>
       <div class="cnt"><b><span class="num" data-to="7">0</span><small>車種</small></b><span>本格<strong>EVカー</strong>で、憧れの運転体験</span></div>
-      <div class="cnt"><b><span class="num" data-to="20">0</span><small>分</small></b><span>着座ワークショップで<strong>商談タイム</strong>を確保</span></div>
+      <div class="cnt"><b><span class="num" data-to="20">0</span><small>分</small></b><span>着座体験で<strong>商談タイム</strong>を確保</span></div>
     </div>
     <div class="reveal" style="margin-top:clamp(34px,5vw,54px)">
       <div class="sub-label">会場でできる？条件早見表</div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>コンテンツ</th><th>必要スペース</th><th>対象年齢</th><th>所要</th><th>実施人数目安</th><th>推奨スタッフ</th><th>電源</th><th>屋内外</th></tr></thead>
+          <thead><tr><th>コンテンツ</th><th>スペース</th><th>対象年齢</th><th>所要</th><th>人数目安</th><th>スタッフ</th><th>電源</th><th>屋内外</th></tr></thead>
           <tbody>
             <tr><td class="name">キッズライセンスパーク</td><td class="num">10m×8m目安</td><td>3〜8歳</td><td class="num">8〜12分/組</td><td>応相談</td><td class="num">2〜3名</td><td>必要</td><td>屋内・屋外</td></tr>
-            <tr><td class="name">ぷにラボ（スクイーズ工作）</td><td class="num">6畳〜</td><td>4歳〜</td><td class="num">約20分/組</td><td>応相談</td><td class="num">1〜2名</td><td>一部必要</td><td>屋内向き</td></tr>
+            <tr><td class="name">ぷにラボ</td><td class="num">6畳〜</td><td>4歳〜</td><td class="num">約20分/組</td><td>応相談</td><td class="num">1〜2名</td><td>一部必要</td><td>屋内向き</td></tr>
             <tr><td class="name">シールデコ</td><td class="num">6畳〜</td><td>3歳〜</td><td class="num">約20分/組</td><td>応相談</td><td class="num">1〜2名</td><td>不要</td><td>屋内向き</td></tr>
-            <tr><td class="name">エア遊具</td><td class="num">設置寸法＋安全マージン</td><td>目安3歳〜</td><td>常時</td><td>応相談</td><td class="num">1〜2名</td><td>必要(送風機)</td><td>屋内・屋外</td></tr>
+            <tr><td class="name">エア遊具</td><td class="num">設置寸法＋余裕</td><td>3歳〜</td><td>常時</td><td>応相談</td><td class="num">1〜2名</td><td>必要</td><td>屋内・屋外</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="note">※目安。会場条件により変動します。詳しくはお問い合わせください。</p>
+      <p class="note">※目安。会場条件により変動します。詳しくはお問い合わせください。<br>※「ぷにラボ」はスクイーズ工作ワークショップです。エア遊具の電源は送風機用です。</p>
     </div>
     <div class="center-cta reveal"><a class="btn btn-primary" href="#contact">開催について相談する</a></div>
   </div>
@@ -725,13 +727,13 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="kick">SCENE</span>
-      <h2>実際の開催の様子</h2>
-      <p>商業施設・店舗の店頭で、設営から運営までワンストップ。実際のイベントの様子です。</p>
+      <h2>開催イメージ</h2>
+      <p>商業施設・店舗の店頭で、設営から運営までワンストップ。<br>※画像は開催内容をもとにしたイメージイラストです。</p>
     </div>
     <div class="gallery reveal">
-      <figure><img src="images/klp-event1.jpg" alt="キッズライセンスパークの会場" loading="lazy"><figcaption>キッズライセンスパーク（ドコモ × ヨドバシ梅田）</figcaption></figure>
-      <figure><img src="images/squeeze-event.jpg" alt="スクイーズ作成体験ブース" loading="lazy"><figcaption>スクイーズ作成体験（ヨドバシ梅田）</figcaption></figure>
-      <figure><img src="images/klp-event2.jpg" alt="EVカーで運転体験" loading="lazy"><figcaption>EVカーで運転体験</figcaption></figure>
+      <figure><img src="images/event-klp-scene.svg" alt="キッズライセンスパークの会場" loading="lazy"><figcaption>キッズライセンスパーク（大手キャリアショップ 店頭）</figcaption></figure>
+      <figure><img src="images/event-squeeze.svg" alt="スクイーズ作成体験ブース" loading="lazy"><figcaption>スクイーズ作成体験（大型家電量販店 店頭）</figcaption></figure>
+      <figure><img src="images/event-klp-drive.svg" alt="EVカーで運転体験" loading="lazy"><figcaption>EVカーで運転体験</figcaption></figure>
     </div>
   </div>
 </section>
@@ -872,8 +874,11 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
           <tr><td class="name">ぷにラボ｜スクイーズ工作</td><td>約20分／組・全7工程</td><td class="num">¥90,000</td><td class="num">—</td></tr>
           <tr><td class="name">シールデコ ワークショップ</td><td>約20分／組</td><td class="num">¥90,000</td><td class="num">—</td></tr>
           <tr><td class="name">エアリズム</td><td>W2800×D1000×H1750mm</td><td class="num">¥60,000</td><td class="num">¥360,000</td></tr>
-          <tr><td class="name">エアリズム トランポリン</td><td>W2800×D1000×H1750mm</td><td class="num">¥80,000</td><td class="num">¥360,000</td></tr>
-          <tr><td class="name">カーニバルA / B</td><td>ゲーム型エア遊具</td><td class="num">¥60,000</td><td class="num">¥330,000</td></tr>
+          <tr><td class="name">エアリズム トランポリン</td><td>W2800×D1000×H1750mm</td><td class="num">¥80,000</td><td class="num">¥560,000</td></tr>
+          <tr><td class="name">カーニバルA</td><td>W2700×D2000×H3000mm</td><td class="num">¥60,000</td><td class="num">¥330,000</td></tr>
+          <tr><td class="name">カーニバルB</td><td>W1260×D485×H1460mm</td><td class="num">¥90,000</td><td class="num">¥510,000</td></tr>
+          <tr><td class="name">2 GAME in 1</td><td>W1500×D1450×H2000mm</td><td class="num">¥60,000</td><td class="num">¥330,000</td></tr>
+          <tr><td class="name">電撃チャレンジ</td><td>W1500×D1450×H2000mm</td><td class="num">¥60,000</td><td class="num">¥330,000</td></tr>
           <tr><td class="name">ゲーム遊具ほか</td><td>ユニコーン／フープショット 等</td><td class="num">お見積り</td><td class="num">—</td></tr>
           <tr style="background:var(--pink-soft)"><td class="name">運営代行オプション</td><td>設営・受付・安全管理・撤収／スタッフ常駐</td><td class="num" colspan="2">別途お見積り</td></tr>
         </tbody>
@@ -895,7 +900,9 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
             <label class="est-row"><input type="checkbox" class="est-check" data-price="80000">エアリズム トランポリン<span class="est-price">￥80,000／日</span></label>
             <label class="est-row"><input type="checkbox" class="est-check" data-price="60000">エアリズム<span class="est-price">￥60,000／日</span></label>
             <label class="est-row"><input type="checkbox" class="est-check" data-price="60000">カーニバルA<span class="est-price">￥60,000／日</span></label>
-            <label class="est-row"><input type="checkbox" class="est-check" data-price="60000">カーニバルB<span class="est-price">￥60,000／日</span></label>
+            <label class="est-row"><input type="checkbox" class="est-check" data-price="90000">カーニバルB<span class="est-price">￥90,000／日</span></label>
+            <label class="est-row"><input type="checkbox" class="est-check" data-price="60000">2 GAME in 1<span class="est-price">￥60,000／日</span></label>
+            <label class="est-row"><input type="checkbox" class="est-check" data-price="60000">電撃チャレンジ<span class="est-price">￥60,000／日</span></label>
             <label class="est-row est-row-quote"><input type="checkbox" class="est-check-quote">ゲーム遊具（ユニコーン等）<span class="est-price">個別見積り</span></label>
           </div>
         </div>

@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 908" role="img" aria-label="シールデコ ワークショップを体験する子どものイラスト">
+  <defs>
+    <linearGradient id="sl-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FEE9DC"/><stop offset=".5" stop-color="#FFF3E0"/><stop offset="1" stop-color="#E8F4FB"/>
+    </linearGradient>
+    <linearGradient id="sl-table" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F3DFB8"/><stop offset="1" stop-color="#E0C795"/>
+    </linearGradient>
+    <clipPath id="sl-frame"><rect width="640" height="908"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#sl-frame)">
+    <rect width="640" height="908" fill="url(#sl-bg)"/>
+
+    <!-- ===== 背景の虹アーチ ===== -->
+    <g fill="none" stroke-linecap="round" opacity=".55">
+      <path d="M-40 300 A360 360 0 0 1 680 300" stroke="#FBC9B2" stroke-width="30"/>
+      <path d="M-40 336 A324 324 0 0 1 680 336" stroke="#F2E39A" stroke-width="30"/>
+      <path d="M-40 372 A288 288 0 0 1 680 372" stroke="#BFE7CE" stroke-width="30"/>
+      <path d="M-40 408 A252 252 0 0 1 680 408" stroke="#BFE3F5" stroke-width="30"/>
+    </g>
+
+    <!-- ===== 装飾（星・ハート・シャボン） ===== -->
+    <g opacity=".8">
+      <circle cx="66" cy="96" r="26" fill="#BFE3F5" opacity=".55"/>
+      <circle cx="58" cy="88" r="7" fill="#FFFFFF" opacity=".8"/>
+      <circle cx="586" cy="150" r="18" fill="#BFE3F5" opacity=".5"/>
+      <g fill="#F5A623">
+        <path d="M552 60l8 18 18 8-18 8-8 18-8-18-18-8 18-8z"/>
+        <path d="M96 232l6 13 13 6-13 6-6 13-6-13-13-6 13-6z"/>
+        <path d="M600 400l6 13 13 6-13 6-6 13-6-13-13-6 13-6z"/>
+      </g>
+      <g fill="#F5A0B8">
+        <path d="M40 400c-8-10-24-6-24 6 0 10 14 18 24 26 10-8 24-16 24-26 0-12-16-16-24-6z"/>
+        <path d="M580 268c-7-9-21-5-21 5 0 9 12 16 21 23 9-7 21-14 21-23 0-10-14-14-21-5z"/>
+      </g>
+      <g fill="#8CC97A">
+        <path d="M116 500l5 11 11 5-11 5-5 11-5-11-11-5 11-5z"/>
+      </g>
+    </g>
+
+    <!-- ===== タイトル ===== -->
+    <g transform="translate(320 132)">
+      <rect x="-266" y="-64" width="532" height="128" rx="64" fill="#FFFFFF" opacity=".82"/>
+      <text y="-12" text-anchor="middle" font-family="'Zen Maru Gothic','Hiragino Maru Gothic ProN',sans-serif" font-size="44" font-weight="700" fill="#E5624C" stroke="#FFFFFF" stroke-width="8" paint-order="stroke">ふにふにシール作り</text>
+      <text y="40" text-anchor="middle" font-family="'Zen Maru Gothic','Hiragino Maru Gothic ProN',sans-serif" font-size="36" font-weight="700" fill="#2C7CBF" stroke="#FFFFFF" stroke-width="8" paint-order="stroke">体験ワークショップ</text>
+    </g>
+
+    <!-- ===== 情報カード ===== -->
+    <g transform="translate(112 224)">
+      <rect width="416" height="176" rx="28" fill="#FFFFFF" opacity=".9" stroke="#FBC9B2" stroke-width="4"/>
+      <!-- 行1 -->
+      <g transform="translate(34 34)">
+        <rect width="40" height="40" rx="10" fill="#FEE9DC"/>
+        <rect x="8" y="14" width="24" height="18" rx="3" fill="#E5624C"/>
+        <rect x="12" y="8" width="4" height="10" rx="2" fill="#E5624C"/>
+        <rect x="24" y="8" width="4" height="10" rx="2" fill="#E5624C"/>
+        <text x="58" y="29" font-family="'Zen Maru Gothic','Hiragino Maru Gothic ProN',sans-serif" font-size="24" font-weight="700" fill="#22384F">所要 約20分 / 組</text>
+      </g>
+      <!-- 行2 -->
+      <g transform="translate(34 94)">
+        <rect width="40" height="40" rx="10" fill="#E8F4FB"/>
+        <circle cx="20" cy="20" r="13" fill="none" stroke="#3E9BD8" stroke-width="4"/>
+        <path d="M20 12v9l7 5" stroke="#3E9BD8" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <text x="58" y="29" font-family="'Zen Maru Gothic','Hiragino Maru Gothic ProN',sans-serif" font-size="24" font-weight="700" fill="#22384F">対象 3歳〜 / 6畳〜</text>
+      </g>
+    </g>
+
+    <!-- ===== 吹き出し ===== -->
+    <g transform="translate(26 442)">
+      <rect width="278" height="116" rx="36" fill="#FFFFFF" stroke="#F5A0B8" stroke-width="4"/>
+      <path d="M196 112l16 36 24-34z" fill="#FFFFFF" stroke="#F5A0B8" stroke-width="4"/>
+      <path d="M198 112h38l-5 7h-31z" fill="#FFFFFF"/>
+      <text x="139" y="48" text-anchor="middle" font-family="'Zen Maru Gothic','Hiragino Maru Gothic ProN',sans-serif" font-size="26" font-weight="700" fill="#E5624C">オリジナル</text>
+      <text x="139" y="88" text-anchor="middle" font-family="'Zen Maru Gothic','Hiragino Maru Gothic ProN',sans-serif" font-size="23" font-weight="700" fill="#2C7CBF">シールをつくろう！</text>
+    </g>
+
+    <!-- ===== 子ども 左（女の子・シールを掲げる） ===== -->
+    <g transform="translate(196 508)">
+      <!-- 体 -->
+      <path d="M20 176c0-40 32-72 72-72h20c40 0 72 32 72 72v96H20z" fill="#F5A0B8"/>
+      <!-- 腕（掲げる） -->
+      <path d="M40 186 L4 130" stroke="#F5A0B8" stroke-width="30" stroke-linecap="round"/>
+      <circle cx="2" cy="124" r="16" fill="#FBC9B2"/>
+      <!-- 掲げたクマのシール -->
+      <g transform="translate(-46 40)">
+        <rect width="88" height="88" rx="16" fill="#FFFFFF" stroke="#F5A0B8" stroke-width="4"/>
+        <g transform="translate(44 48)">
+          <circle cx="-18" cy="-22" r="10" fill="#D9A46C"/><circle cx="18" cy="-22" r="10" fill="#D9A46C"/>
+          <circle cx="0" cy="0" r="24" fill="#E9BA85"/>
+          <ellipse cx="0" cy="8" rx="12" ry="9" fill="#FFF3E0"/>
+          <circle cx="-9" cy="-5" r="3" fill="#22384F"/><circle cx="9" cy="-5" r="3" fill="#22384F"/>
+          <ellipse cx="0" cy="5" rx="4" ry="3" fill="#22384F"/>
+        </g>
+      </g>
+      <!-- 頭 -->
+      <circle cx="102" cy="64" r="62" fill="#FBC9B2"/>
+      <path d="M40 58C40 20 68-6 102-6s62 26 62 64c0-20-26-32-62-32S40 38 40 58z" fill="#8A6141"/>
+      <path d="M40 58c-10 26-8 56 2 74 6-24 4-52-2-74z" fill="#8A6141"/>
+      <path d="M164 58c10 26 8 56-2 74-6-24-4-52 2-74z" fill="#8A6141"/>
+      <!-- リボン -->
+      <g transform="translate(46 34)">
+        <path d="M0 0c-14-10-30 0-26 14 3 12 18 14 26 6z" fill="#E5624C"/>
+        <path d="M2 4c10-14 28-8 28 6 0 12-16 18-26 10z" fill="#E5624C"/>
+        <circle cx="4" cy="12" r="7" fill="#C24E3A"/>
+      </g>
+      <circle cx="80" cy="72" r="6.5" fill="#22384F"/><circle cx="124" cy="72" r="6.5" fill="#22384F"/>
+      <circle cx="82.4" cy="69.6" r="2.4" fill="#FFFFFF"/><circle cx="126.4" cy="69.6" r="2.4" fill="#FFFFFF"/>
+      <path d="M88 96q14 14 28 0" stroke="#22384F" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="58" cy="88" rx="11" ry="8" fill="#E5624C" opacity=".35"/>
+      <ellipse cx="146" cy="88" rx="11" ry="8" fill="#E5624C" opacity=".35"/>
+    </g>
+
+    <!-- ===== 子ども 右（男の子・ペンでデコ） ===== -->
+    <g transform="translate(396 528)">
+      <path d="M16 168c0-38 30-68 68-68h18c38 0 68 30 68 68v90H16z" fill="#45C4E8"/>
+      <!-- 腕（左・テーブルへ） -->
+      <path d="M40 182 L10 214" stroke="#45C4E8" stroke-width="28" stroke-linecap="round"/>
+      <circle cx="6" cy="218" r="15" fill="#FBC9B2"/>
+      <!-- 腕（右・ペンを持つ） -->
+      <path d="M154 182 L196 206" stroke="#45C4E8" stroke-width="28" stroke-linecap="round"/>
+      <g transform="translate(186 156) rotate(24)">
+        <rect width="20" height="70" rx="9" fill="#F5A623"/>
+        <path d="M10 76l-10-16h20z" fill="#E5624C"/>
+        <rect x="3" y="12" width="14" height="10" rx="4" fill="#FFF3E0"/>
+      </g>
+      <circle cx="200" cy="210" r="15" fill="#FBC9B2"/>
+      <!-- 頭 -->
+      <circle cx="96" cy="62" r="58" fill="#FBC9B2"/>
+      <path d="M38 56C38 20 64-4 96-4s58 24 58 60c0-18-24-30-58-30S38 38 38 56z" fill="#5A4634"/>
+      <circle cx="76" cy="70" r="6" fill="#22384F"/><circle cx="118" cy="70" r="6" fill="#22384F"/>
+      <circle cx="78.2" cy="67.8" r="2.2" fill="#FFFFFF"/><circle cx="120.2" cy="67.8" r="2.2" fill="#FFFFFF"/>
+      <path d="M82 92q14 14 28 0" stroke="#22384F" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="56" cy="86" rx="10" ry="7" fill="#E5624C" opacity=".35"/>
+      <ellipse cx="138" cy="86" rx="10" ry="7" fill="#E5624C" opacity=".35"/>
+    </g>
+
+    <!-- ===== テーブル ===== -->
+    <g transform="translate(0 748)">
+      <path d="M-20 0h680v160H-20z" fill="url(#sl-table)"/>
+      <path d="M-20 0h680v18H-20z" fill="#F7ECD5"/>
+
+      <!-- シール台紙 左 -->
+      <g transform="translate(64 30) rotate(-5)">
+        <rect width="150" height="106" rx="10" fill="#FFFFFF" stroke="#E3D6C0" stroke-width="3"/>
+        <g>
+          <circle cx="34" cy="30" r="15" fill="#F5A0B8"/>
+          <circle cx="76" cy="30" r="15" fill="#F2C94C"/>
+          <circle cx="118" cy="30" r="15" fill="#BFE3F5"/>
+          <path d="M34 60l5 11 12 2-9 8 2 12-10-6-10 6 2-12-9-8 12-2z" fill="#8CC97A"/>
+          <path d="M76 58c-6-7-16-4-16 4 0 7 9 12 16 18 7-6 16-11 16-18 0-8-10-11-16-4z" fill="#E5624C"/>
+          <ellipse cx="118" cy="72" rx="16" ry="13" fill="#C9A7E8"/>
+        </g>
+      </g>
+
+      <!-- シール台紙 右 -->
+      <g transform="translate(400 26) rotate(4)">
+        <rect width="176" height="112" rx="10" fill="#FFFFFF" stroke="#E3D6C0" stroke-width="3"/>
+        <g>
+          <ellipse cx="40" cy="34" rx="18" ry="14" fill="#BFE7CE"/>
+          <circle cx="90" cy="32" r="16" fill="#FBC9B2"/>
+          <path d="M140 16l5 12 13 2-9 9 2 13-11-6-11 6 2-13-9-9 13-2z" fill="#F2C94C"/>
+          <circle cx="42" cy="80" r="16" fill="#F5A0B8"/>
+          <path d="M90 66c-7-8-18-4-18 5 0 8 10 14 18 20 8-6 18-12 18-20 0-9-11-13-18-5z" fill="#45C4E8"/>
+          <ellipse cx="140" cy="80" rx="18" ry="14" fill="#8CC97A"/>
+        </g>
+      </g>
+
+      <!-- パウダー瓶 -->
+      <g transform="translate(244 22)">
+        <rect x="0" y="24" width="34" height="60" rx="10" fill="#BFE3F5"/>
+        <rect x="6" y="10" width="22" height="18" rx="6" fill="#3E9BD8"/>
+        <circle cx="17" cy="60" r="4" fill="#FFFFFF" opacity=".7"/>
+        <rect x="50" y="24" width="34" height="60" rx="10" fill="#FBC9B2"/>
+        <rect x="56" y="10" width="22" height="18" rx="6" fill="#E5624C"/>
+        <rect x="100" y="24" width="34" height="60" rx="10" fill="#F2E39A"/>
+        <rect x="106" y="10" width="22" height="18" rx="6" fill="#F5A623"/>
+      </g>
+    </g>
+
+    <!-- ===== 下部の帯 ===== -->
+    <g transform="translate(0 856)">
+      <rect width="640" height="52" fill="#26576E"/>
+      <text x="320" y="34" text-anchor="middle" font-family="'Zen Maru Gothic','Hiragino Maru Gothic ProN',sans-serif" font-size="21" font-weight="700" letter-spacing="2" fill="#FFF3E0">シールデコ ワークショップ</text>
+    </g>
+  </g>
+</svg>

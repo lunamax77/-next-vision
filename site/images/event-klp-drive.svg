@@ -1,0 +1,194 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 820" role="img" aria-label="EVカーでコースを運転体験する子どものイラスト">
+  <defs>
+    <linearGradient id="kd-floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EAE3D7"/><stop offset="1" stop-color="#D9D0C1"/>
+    </linearGradient>
+    <linearGradient id="kd-turf" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8CC97A"/><stop offset="1" stop-color="#6AAE58"/>
+    </linearGradient>
+    <linearGradient id="kd-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFF3E0"/><stop offset="1" stop-color="#F3E6D2"/>
+    </linearGradient>
+    <clipPath id="kd-frame"><rect width="1100" height="820"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#kd-frame)">
+    <rect width="1100" height="820" fill="url(#kd-sky)"/>
+
+    <!-- ===== 奥の壁・什器 ===== -->
+    <rect width="1100" height="96" fill="#31414E"/>
+    <g fill="#F7F2E6" opacity=".8">
+      <rect x="90" y="30" width="170" height="10" rx="5"/>
+      <rect x="420" y="24" width="210" height="10" rx="5"/>
+      <rect x="800" y="30" width="180" height="10" rx="5"/>
+    </g>
+    <rect y="96" width="1100" height="196" fill="#E5624C"/>
+    <rect y="96" width="1100" height="12" fill="#B94331"/>
+    <g fill="#FFFFFF" opacity=".13">
+      <rect x="30" y="132" width="180" height="120" rx="10"/>
+      <rect x="242" y="132" width="120" height="120" rx="10"/>
+    </g>
+
+
+    <!-- ===== 床 ===== -->
+    <rect y="292" width="1100" height="528" fill="url(#kd-floor)"/>
+
+    <!-- ===== コース（人工芝の縁取り） ===== -->
+    <path d="M-40 760 L200 400 H980 L1140 760 Z" fill="url(#kd-turf)"/>
+    <path d="M40 736 L252 428 H930 L1064 736 Z" fill="#D7D0C3"/>
+    <g stroke="#C8BFB0" stroke-width="3" opacity=".7">
+      <path d="M90 660H1010M150 570H960M198 496H918"/>
+    </g>
+    <!-- センターライン -->
+    <path d="M560 440 L560 740" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" stroke-dasharray="34 40" opacity=".75"/>
+
+    <!-- ===== バナー（右奥） ===== -->
+    <g transform="translate(748 112)">
+      <rect width="252" height="222" rx="10" fill="#FFFFFF" stroke="#E3D6C0" stroke-width="3"/>
+      <rect width="252" height="14" rx="7" fill="#26576E"/>
+      <g>
+        <rect x="12" y="28" width="228" height="16" fill="#FFFFFF"/>
+        <g fill="#22384F">
+          <rect x="12" y="28" width="19" height="8"/><rect x="50" y="28" width="19" height="8"/>
+          <rect x="88" y="28" width="19" height="8"/><rect x="126" y="28" width="19" height="8"/>
+          <rect x="164" y="28" width="19" height="8"/><rect x="202" y="28" width="19" height="8"/>
+          <rect x="31" y="36" width="19" height="8"/><rect x="69" y="36" width="19" height="8"/>
+          <rect x="107" y="36" width="19" height="8"/><rect x="145" y="36" width="19" height="8"/>
+          <rect x="183" y="36" width="19" height="8"/><rect x="221" y="36" width="19" height="8"/>
+        </g>
+      </g>
+      <text x="126" y="80" text-anchor="middle" font-family="'Zen Maru Gothic','Hiragino Maru Gothic ProN',sans-serif" font-size="26" font-weight="700" fill="#E5624C">キッズ</text>
+      <text x="126" y="112" text-anchor="middle" font-family="'Zen Maru Gothic','Hiragino Maru Gothic ProN',sans-serif" font-size="26" font-weight="700" fill="#2C7CBF">ライセンスパーク</text>
+      <text x="126" y="134" text-anchor="middle" font-family="'Baloo 2','Zen Maru Gothic',sans-serif" font-size="12" letter-spacing="2.4" fill="#7E8A96">KIDS LICENSE PARK</text>
+      <g transform="translate(30 150)">
+        <rect width="80" height="50" rx="6" fill="#FFF9E9" stroke="#F5A623" stroke-width="3"/>
+        <circle cx="22" cy="24" r="12" fill="#FBC9B2"/>
+        <circle cx="18" cy="22" r="1.8" fill="#22384F"/><circle cx="26" cy="22" r="1.8" fill="#22384F"/>
+        <g fill="#C9BCA6"><rect x="40" y="12" width="32" height="4.5" rx="2.2"/><rect x="40" y="23" width="26" height="4.5" rx="2.2"/><rect x="40" y="34" width="30" height="4.5" rx="2.2"/></g>
+      </g>
+      <g transform="translate(136 156)">
+        <path d="M4 30c0-8 7-14 14-16l9-10h26l11 10c8 2 14 8 14 16v7H4z" fill="#3E9BD8"/>
+        <path d="M31 10h20l7 8H26z" fill="#BFE3F5"/>
+        <circle cx="23" cy="37" r="7" fill="#31414E"/><circle cx="61" cy="37" r="7" fill="#31414E"/>
+      </g>
+      <rect x="120" y="222" width="10" height="120" fill="#B4A893"/>
+    </g>
+
+    <!-- ===== コーン列（左） ===== -->
+    <g>
+      <path d="M62 700 L100 700 L86 634 L78 634 Z" fill="#F5A623"/>
+      <path d="M76 652h12l3 13H73z" fill="#FFF3E0"/>
+      <ellipse cx="81" cy="702" rx="25" ry="7" fill="#E5624C"/>
+      <path d="M170 622 L204 622 L192 566 L184 566 Z" fill="#F5A623"/>
+      <path d="M182 582h12l3 11h-18z" fill="#FFF3E0"/>
+      <ellipse cx="187" cy="624" rx="22" ry="6" fill="#E5624C"/>
+      <path d="M254 562 L284 562 L274 512 L266 512 Z" fill="#F5A623"/>
+      <path d="M264 526h11l3 10h-17z" fill="#FFF3E0"/>
+      <ellipse cx="269" cy="564" rx="20" ry="5.5" fill="#E5624C"/>
+      <path d="M79 640 L269 518" stroke="#F2C94C" stroke-width="9" stroke-linecap="round"/>
+      <path d="M79 640 L269 518" stroke="#E5624C" stroke-width="9" stroke-linecap="round" stroke-dasharray="24 24"/>
+    </g>
+
+    <!-- ===== コーン（右） ===== -->
+    <g>
+      <path d="M986 690 L1024 690 L1010 626 L1002 626 Z" fill="#F5A623"/>
+      <path d="M1000 644h12l3 12h-18z" fill="#FFF3E0"/>
+      <ellipse cx="1005" cy="692" rx="24" ry="7" fill="#E5624C"/>
+    </g>
+
+    <!-- ===== チェッカーフラッグ（左手前） ===== -->
+    <g transform="translate(24 508)">
+      <rect x="0" y="0" width="7" height="200" rx="3.5" fill="#8B7F6C"/>
+      <g>
+        <rect x="7" y="6" width="86" height="60" fill="#FFFFFF"/>
+        <g fill="#22384F">
+          <rect x="7" y="6" width="21.5" height="15"/><rect x="50" y="6" width="21.5" height="15"/>
+          <rect x="28.5" y="21" width="21.5" height="15"/><rect x="71.5" y="21" width="21.5" height="15"/>
+          <rect x="7" y="36" width="21.5" height="15"/><rect x="50" y="36" width="21.5" height="15"/>
+          <rect x="28.5" y="51" width="21.5" height="15"/><rect x="71.5" y="51" width="21.5" height="15"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- ===== スタッフ（撮影しゃがみ） ===== -->
+    <g transform="translate(714 384)">
+      <ellipse cx="70" cy="248" rx="86" ry="16" fill="#22384F" opacity=".15"/>
+      <!-- 脚 -->
+      <path d="M16 176c0-10 8-18 18-18h22v58H34c-10 0-18-8-18-18z" fill="#4E6274"/>
+      <path d="M56 216h64c10 0 18 8 18 18v14H56z" fill="#4E6274"/>
+      <!-- 靴 -->
+      <path d="M14 232h52v18H8c0-10 3-18 6-18z" fill="#FFFFFF" stroke="#D8CEBE" stroke-width="2"/>
+      <path d="M116 232h34c10 0 16 8 16 18h-50z" fill="#FFFFFF" stroke="#D8CEBE" stroke-width="2"/>
+      <!-- 胴 -->
+      <path d="M22 92c0-22 16-38 38-38h14c22 0 38 16 38 38v78H22z" fill="#9FD3EC"/>
+      <!-- 腕＋スマホ -->
+      <path d="M96 108c14-6 26-16 30-30" stroke="#9FD3EC" stroke-width="22" stroke-linecap="round" fill="none"/>
+      <g transform="translate(114 50) rotate(-14)">
+        <rect width="30" height="52" rx="5" fill="#31414E"/>
+        <rect x="3" y="4" width="24" height="42" rx="3" fill="#9FD3EC"/>
+      </g>
+      <!-- 頭 -->
+      <circle cx="67" cy="34" r="28" fill="#FBC9B2"/>
+      <path d="M39 30c0-18 12-30 28-30s28 12 28 30c0-9-12-15-28-15S39 21 39 30z" fill="#31414E"/>
+      <circle cx="57" cy="38" r="2.8" fill="#22384F"/><circle cx="77" cy="38" r="2.8" fill="#22384F"/>
+      <path d="M59 50q8 6 16 0" stroke="#22384F" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- ===== EVカー＋運転する子ども（主役・手前中央） ===== -->
+    <g transform="translate(268 470)">
+      <ellipse cx="286" cy="290" rx="290" ry="30" fill="#22384F" opacity=".18"/>
+
+      <!-- 車体 後部 -->
+      <path d="M22 224c0-40 30-68 72-76l50-56c14-16 34-24 56-24h134c22 0 42 8 56 24l50 56c42 8 72 36 72 76v42H22z" fill="#E5624C"/>
+      <path d="M22 224c0-40 30-68 72-76l50-56c14-16 34-24 56-24h134c22 0 42 8 56 24l50 56c42 8 72 36 72 76v42H22z" fill="none" stroke="#C24E3A" stroke-width="4"/>
+      <!-- コックピット開口 -->
+      <path d="M168 76h150c14 0 26 8 32 20l16 34H120l16-34c6-12 18-20 32-20z" fill="#3B4B58"/>
+      <path d="M178 88h130l30 34H148z" fill="#22384F"/>
+
+      <!-- 子ども（運転） -->
+      <g transform="translate(196 -46)">
+        <!-- 体 -->
+        <path d="M14 118c0-26 20-46 46-46h20c26 0 46 20 46 46v46H14z" fill="#F5A623"/>
+        <!-- 腕（ハンドルへ） -->
+        <path d="M26 126 L40 188" stroke="#F5A623" stroke-width="24" stroke-linecap="round"/>
+        <path d="M118 126 L100 188" stroke="#F5A623" stroke-width="24" stroke-linecap="round"/>
+        <!-- 頭 -->
+        <circle cx="70" cy="46" r="44" fill="#FBC9B2"/>
+        <path d="M26 40C26 12 46-6 70-6s44 18 44 46c0-14-18-22-44-22S26 26 26 40z" fill="#5A4634"/>
+        <circle cx="54" cy="50" r="4.6" fill="#22384F"/><circle cx="86" cy="50" r="4.6" fill="#22384F"/>
+        <circle cx="55.6" cy="48.4" r="1.6" fill="#FFFFFF"/><circle cx="87.6" cy="48.4" r="1.6" fill="#FFFFFF"/>
+        <path d="M58 66q12 10 24 0" stroke="#22384F" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <circle cx="36" cy="58" r="8" fill="#E5624C" opacity=".4"/>
+        <circle cx="104" cy="58" r="8" fill="#E5624C" opacity=".4"/>
+      </g>
+
+      <!-- ハンドル -->
+      <g transform="translate(212 120)">
+        <circle cx="54" cy="30" r="32" fill="none" stroke="#22384F" stroke-width="12"/>
+        <path d="M22 30h64M54 30v28" stroke="#22384F" stroke-width="10" stroke-linecap="round"/>
+      </g>
+      <!-- ハンドルを握る手 -->
+      <circle cx="236" cy="150" r="13" fill="#FBC9B2"/>
+      <circle cx="296" cy="150" r="13" fill="#FBC9B2"/>
+
+      <!-- ボンネット・ライト -->
+      <rect x="40" y="212" width="492" height="14" rx="7" fill="#FFF3E0"/>
+      <rect x="56" y="238" width="60" height="24" rx="10" fill="#F2C94C"/>
+      <rect x="456" y="238" width="60" height="24" rx="10" fill="#F2C94C"/>
+      <rect x="222" y="240" width="128" height="20" rx="9" fill="#26576E"/>
+      <!-- ナンバー -->
+      <text x="286" y="256" text-anchor="middle" font-family="'Baloo 2','Zen Maru Gothic',sans-serif" font-size="15" font-weight="700" letter-spacing="2" fill="#FFF3E0">NEXT</text>
+
+      <!-- タイヤ -->
+      <circle cx="112" cy="268" r="44" fill="#31414E"/><circle cx="112" cy="268" r="18" fill="#EFE6D6"/>
+      <circle cx="460" cy="268" r="44" fill="#31414E"/><circle cx="460" cy="268" r="18" fill="#EFE6D6"/>
+    </g>
+
+    <!-- ===== きらめき ===== -->
+    <g fill="#F5A623" opacity=".7">
+      <path d="M660 352l7 17 17 7-17 7-7 17-7-17-17-7 17-7z"/>
+      <path d="M180 336l5 12 12 5-12 5-5 12-5-12-12-5 12-5z"/>
+      <path d="M1012 430l6 14 14 6-14 6-6 14-6-14-14-6 14-6z"/>
+    </g>
+  </g>
+</svg>
