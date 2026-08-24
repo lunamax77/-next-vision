@@ -100,3 +100,4 @@
 - 各部署の定義: `docs/org/departments/`
 - CEO(ジョブズ)スキル: `.claude/skills/jobs/SKILL.md`
 - パーソナルコーチスキル: `.claude/skills/health/SKILL.md`
+- 日時確認スキル: `.claude/skills/now/SKILL.md`(日付を扱う作業の前に必ず参照)
