@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""詳細ページ(klp/punilab/seal).html を index.html と同じデザインで生成する。
+"""詳細ページ(klp/punilab/seal/air).html を index.html と同じデザインで生成する。
 index.html の <style> を共有し、各ページ固有の内容を差し込む。再実行で再生成。"""
 import re, os
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -202,6 +202,8 @@ def page(slug, title, desc, hero_photo, kick, h1, lead, keys, price_html, body_m
           f'<meta name="viewport" content="width=device-width, initial-scale=1">'
           f'<title>{title}</title><meta name="description" content="{desc}">'
           f'<meta name="theme-color" content="#3E9BD8">'
+          f'<link rel="icon" href="images/logo.png" type="image/png">'
+          f'<link rel="apple-touch-icon" href="images/logo.png">'
           f'{social(slug, h1, title, desc, og_image)}'
           f'{jsonld(slug, h1, desc, og_image)}'
           f'{FONTS}{STYLE}{EXTRA}</head><body>')
