@@ -49,7 +49,7 @@ EXTRA = """
   border:2px solid var(--line);border-radius:var(--r);padding:24px 28px;margin-top:8px}
 .pricebar .p{font-family:var(--mono);font-weight:700;font-size:clamp(28px,4vw,38px);color:var(--coral);line-height:1}
 .pricebar .p small{font-size:15px;color:var(--ink);font-family:var(--display)}
-.rel{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rel{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
 @media(max-width:640px){.rel{grid-template-columns:1fr}}
 .rel a{display:flex;gap:13px;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:14px;
   padding:12px;text-decoration:none;transition:.16s}
@@ -136,6 +136,7 @@ def related(cur):
       "klp": ('images/klp.jpg','キッズライセンスパーク','EVカー運転体験＋こども免許証','klp.html'),
       "punilab": ('images/punilab-paw.jpg','ぷにラボ｜スクイーズ工作','肉球＆アニマル型でぷにぷに制作','punilab.html'),
       "seal": ('images/seal.jpg','シールデコ ワークショップ','シャカシャカシールを制作','seal.html'),
+      "air": ('images/airizm.jpg','エア遊具・ゲーム遊具','会場の空きスペースを賑わいに','air.html'),
     }
     items="".join(f'<a href="{h}"><img src="{img}" alt="{t}"><span><b>{t}</b><span>{d}</span></span></a>'
                   for k,(img,t,d,h) in cards.items() if k!=cur)
@@ -159,11 +160,50 @@ def spec_section(space_val, space_note, pairs):
             '<h2>会場でできる？スペック</h2><p>いずれも目安です。会場条件により変動しますので、まずはご相談ください。</p></div>'
             f'<div class="reveal">{hl}'+specbox(pairs)+'</div></div></section>')
 
-def page(slug, title, desc, hero_photo, kick, h1, lead, keys, price_html, body_mid):
+SITE = "https://nextvision.fun/"
+
+def social(slug, h1, title, desc, og_image):
+    """OGP / Twitter カード。SNS拡散時に商材ごとの正しいカードが出るようにする。"""
+    url = f'{SITE}{slug}.html'
+    img = f'{SITE}{og_image}'
+    return (f'<meta name="robots" content="index,follow">'
+            f'<link rel="canonical" href="{url}">'
+            f'<meta property="og:type" content="article">'
+            f'<meta property="og:url" content="{url}">'
+            f'<meta property="og:site_name" content="株式会社NextVision">'
+            f'<meta property="og:locale" content="ja_JP">'
+            f'<meta property="og:title" content="{title}">'
+            f'<meta property="og:description" content="{desc}">'
+            f'<meta property="og:image" content="{img}">'
+            f'<meta property="og:image:alt" content="{h1}">'
+            f'<meta name="twitter:card" content="summary_large_image">'
+            f'<meta name="twitter:title" content="{title}">'
+            f'<meta name="twitter:description" content="{desc}">'
+            f'<meta name="twitter:image" content="{img}">')
+
+def jsonld(slug, h1, desc, og_image):
+    """パンくず＋サービスの構造化データ。index.html の LocalBusiness を提供者として参照。"""
+    url = f'{SITE}{slug}.html'
+    img = f'{SITE}{og_image}'
+    crumbs = ('{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":['
+              f'{{"@type":"ListItem","position":1,"name":"ホーム","item":"{SITE}"}},'
+              f'{{"@type":"ListItem","position":2,"name":"体験コンテンツ","item":"{SITE}#contents"}},'
+              f'{{"@type":"ListItem","position":3,"name":"{h1}","item":"{url}"}}]}}')
+    service = ('{"@context":"https://schema.org","@type":"Service","serviceType":"キッズ体験イベント",'
+               f'"name":"{h1}","description":"{desc}","image":"{img}","url":"{url}",'
+               '"areaServed":"JP","provider":{"@type":"LocalBusiness","name":"株式会社NextVision",'
+               f'"url":"{SITE}","telephone":"+81-70-1319-2126","email":"data@nextvision.fun"}}}}')
+    return (f'<script type="application/ld+json">{crumbs}</script>'
+            f'<script type="application/ld+json">{service}</script>')
+
+def page(slug, title, desc, hero_photo, kick, h1, lead, keys, price_html, body_mid, og_image=None):
+    og_image = og_image or hero_photo
     head=(f'<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8">'
           f'<meta name="viewport" content="width=device-width, initial-scale=1">'
           f'<title>{title}</title><meta name="description" content="{desc}">'
-          f'<meta name="theme-color" content="#3E9BD8"><link rel="canonical" href="https://nextvision.fun/{slug}.html">'
+          f'<meta name="theme-color" content="#3E9BD8">'
+          f'{social(slug, h1, title, desc, og_image)}'
+          f'{jsonld(slug, h1, desc, og_image)}'
           f'{FONTS}{STYLE}{EXTRA}</head><body>')
     crumb=(f'<div class="wrap crumb"><a href="index.html">ホーム</a> ／ <a href="index.html#contents">体験コンテンツ</a> ／ {h1}</div>')
     dhero=(f'<section class="dhero"><div class="wrap dhero-grid">'
@@ -318,6 +358,67 @@ seal=page("seal","シールデコ ワークショップ｜シャカシャカシ�
  ["振ると中で揺れるキラキラの“シャカシャカ”シール","パーツを選んで組み合わせる、唯一無二のデザイン","6畳〜の省スペース・着座 約25分で商談タイムも","その場で完成、当日お持ち帰り"],
  seal_price, seal_mid)
 
-for slug,html in [("klp",klp),("punilab",puni),("seal",seal)]:
+# ---------- AIR（エア遊具・ゲーム遊具） ----------
+# ※内容は index.html の記載（オプション一覧・料金表・条件早見表・安心安全）のみを根拠にすること。
+air_items=[
+ ("images/airizm-tramp.jpg","エアリズム トランポリン","¥80,000",'／日'),
+ ("images/airizm.jpg","エアリズム","¥60,000",'／日'),
+ ("images/carnival-a.jpg","カーニバルA","¥60,000",'／日'),
+ ("images/carnival-b.jpg","カーニバルB","¥60,000",'／日'),
+ ("images/unicorn.jpg","ユニコーンターゲット","お見積り",''),
+ ("images/placeholder-game.svg","フープショット","お見積り",''),
+ ("images/placeholder-game.svg","ウエスタンフープ","お見積り",''),
+ ("images/placeholder-game.svg","チックタックトゥ","お見積り",''),
+]
+air_mid=(
+ # ラインアップ
+ '<section id="lineup" class="tint"><div class="wrap"><div class="sec-head reveal"><span class="kick">LINE-UP</span>'
+ '<h2>ラインアップ</h2><p>エア遊具とゲーム遊具をご用意。会場の広さやご予算に合わせてお選びいただけます。</p></div>'
+ '<div class="opt-grid reveal">'+''.join(
+   '<div class="opt"><div class="othumb"><img src="%s" alt="%s" loading="lazy"></div>'
+   '<div class="ob"><h4>%s</h4><span class="op">%s%s</span></div></div>'
+   % (img, n, n, p, ('<span class="os">%s</span>' % u) if u else '')
+   for img,n,p,u in air_items)+
+ '</div>'
+ '<div class="callout reveal" style="margin-top:20px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-3V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H4a1 1 0 0 0-1 1v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a1 1 0 0 0-1-1z"/><path d="M9 7V5h6v2"/></svg>'
+ '<div><b>単体レンタルもOK。</b>体験コンテンツとのセットはもちろん、<b>エア遊具・ゲームだけ</b>のレンタルにも対応します。会場の広さやご予算に合わせてお選びください。</div></div>'
+ '</div></section>'
+ # 3つのポイント
+ '<section><div class="wrap"><div class="sec-head reveal"><span class="kick">POINT</span>'
+ '<h2>エア遊具が効く3つの場面</h2></div><div class="uses reveal">'
+ '<div class="use"><div class="u-ic" style="background:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div><h3>空きスペースを賑わいに</h3><p>会場の空きスペースに置くだけで、そのまま賑わいに変えられます。屋内・屋外どちらにも対応します。</p></div>'
+ '<div class="use"><div class="u-ic" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></div><h3>回遊の起点をつくる</h3><p>複数コンテンツやエア遊具を組み合わせ、館内に回遊の起点をつくります。フロア横断の導線設計もご提案します。</p></div>'
+ '<div class="use"><div class="u-ic" style="background:var(--coral)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-3V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H4a1 1 0 0 0-1 1v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a1 1 0 0 0-1-1z"/><path d="M9 7V5h6v2"/></svg></div><h3>単体レンタルでも</h3><p>体験コンテンツとのセットはもちろん、エア遊具・ゲームだけのレンタルにも対応します。</p></div>'
+ '</div></div></section>'
+ # 料金表（index.html の料金表と同一の内容）
+ '<section class="tint"><div class="wrap"><div class="sec-head reveal"><span class="kick">RENTAL</span>'
+ '<h2>日額・月額レンタル</h2><p>下記は機材レンタル費用（税別）です。運営スタッフの人件費は含まれません。</p></div>'
+ '<div class="table-wrap reveal"><table>'
+ '<thead><tr><th>コンテンツ</th><th>プラン・仕様</th><th>機材費／日</th><th>機材費／月</th></tr></thead><tbody>'
+ '<tr><td class="name">エアリズム</td><td>W2800×D1000×H1750mm</td><td class="num">¥60,000</td><td class="num">¥360,000</td></tr>'
+ '<tr><td class="name">エアリズム トランポリン</td><td>W2800×D1000×H1750mm</td><td class="num">¥80,000</td><td class="num">¥360,000</td></tr>'
+ '<tr><td class="name">カーニバルA / B</td><td>ゲーム型エア遊具</td><td class="num">¥60,000</td><td class="num">¥330,000</td></tr>'
+ '<tr><td class="name">ゲーム遊具ほか</td><td>ユニコーン／フープショット 等</td><td class="num">お見積り</td><td class="num">—</td></tr>'
+ '</tbody></table></div>'
+ '<div class="callout reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11z"/><path d="M9 12l2 2 4-4"/></svg>'
+ '<div><b>使用のたびに点検します。</b>エア遊具は使用のたびに点検し、破損や劣化がないことを確認してから出荷します。</div></div>'
+ '</div></section>'
+ +spec_section('設置寸法＋安全マージン',
+   'エアリズム／エアリズム トランポリンは W2800×D1000×H1750mm。設置寸法に加えて周囲の安全マージンを確保できれば設置できます。屋内・屋外どちらも対応可能です。',
+   [('対象年齢','目安3歳〜'),('所要時間','常時（開催時間中いつでも）'),
+    ('実施人数目安','応相談'),('推奨スタッフ','1〜2名'),
+    ('電源','必要（送風機）'),('屋内外','屋内・屋外')]))
+air_price=('<div><div class="p">¥60,000<small>〜／日（税別）</small></div>'
+           '<div style="font-size:13px;color:var(--ink-soft);margin-top:6px">'
+           'エアリズム ¥60,000／日・エアリズム トランポリン ¥80,000／日・カーニバルA / B ¥60,000／日／月額レンタルは ¥330,000〜／月</div></div>')
+air=page("air","エア遊具・ゲーム遊具レンタル｜イベント・商業施設の集客に｜NextVision",
+ "エアリズム／エアリズム トランポリン／カーニバルA・Bなどのエア遊具と、ユニコーンターゲットほかのゲーム遊具をレンタル。会場の空きスペースを賑わいに。単体レンタルにも対応、日額・月額プランをご用意しています。",
+ "images/airizm.jpg","AIR PLAY","エア遊具・ゲーム遊具",
+ "会場の空きスペースを、そのまま賑わいに。エア遊具とゲーム遊具を日額・月額でレンタルいただけます。体験コンテンツとの組み合わせはもちろん、単体レンタルにも対応します。",
+ ["会場の空きスペースを、そのまま賑わいに","エア遊具・ゲームだけの単体レンタルにも対応",
+  "屋内・屋外どちらも設置可能（対象年齢の目安は3歳〜）","使用のたびに点検し、確認してから出荷します"],
+ air_price, air_mid)
+
+for slug,html in [("klp",klp),("punilab",puni),("seal",seal),("air",air)]:
     open(os.path.join(HERE,f"{slug}.html"),"w",encoding="utf-8").write(html)
     print("wrote",slug+".html",len(html),"bytes")
