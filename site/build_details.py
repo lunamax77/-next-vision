@@ -330,9 +330,9 @@ puni=page("punilab","ぷにラボ｜スクイーズ工作ワークショップ�
 # ---------- SEAL ----------
 seal_mid=(
  '<section><div class="wrap"><div class="sec-head reveal"><span class="kick">RECORD</span>'
- '<h2>開催実績</h2><p>楽天モバイル・ドコモなど、通信キャリアの店頭イベントで多数開催しています。</p></div>'
+ '<h2>開催実績</h2><p>大手通信キャリアの店頭イベントで多数開催しています。</p></div>'
  '<div class="gallery contain reveal">'
- '<figure><img src="images/seal-event.jpg" alt="ふにふにシール作り体験会 告知"><figcaption>ふにふにシール作り体験会（楽天モバイル イオンモール高岡店）</figcaption></figure>'
+ '<figure><img src="images/seal-event.jpg" alt="ふにふにシール作り体験会 告知"><figcaption>ふにふにシール作り体験会（通信キャリアショップ／大型商業施設内・北陸）</figcaption></figure>'
  '<figure><img src="images/seal.jpg" alt="シールデコ 制作イメージ"><figcaption>制作イメージ（シャカシャカシール）</figcaption></figure>'
  '</div></div></section>'
  '<section class="tint"><div class="wrap"><div class="sec-head reveal"><span class="kick">POINT</span><h2>シールデコの特長</h2></div>'

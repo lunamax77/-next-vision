@@ -22,7 +22,11 @@
 ## 3. Instagram アカウント設計
 
 - **アカウント名**：株式会社NextVision｜キッズイベント遊具レンタル
-- **@ユーザー名（案）**：@nextvision_event / @nextvision_kids（要空き確認）
+- **@ユーザー名**：✅ **`@nv.kidslab`（開設済み・確定）**
+  - Instagram：https://www.instagram.com/nv.kidslab/
+  - TikTok：https://www.tiktok.com/@nv.kidslab
+  - ※当初の案（@nextvision_event / @nextvision_kids）は不採用。**実アカウントは `@nv.kidslab` に統一**
+  - ※**ログイン情報はこのリポジトリに一切記載しない。** パスワードマネージャー等で別途管理する
 - **プロフィール文（案）**：
   > 機材だけでも、運営ごとでも。🎪
   > こども免許証がもらえる運転体験／ワークショップ／エア遊具のレンタル・運営代行。
@@ -55,6 +59,6 @@
 
 ## 7. 進め方（承認フロー）
 
-1. アカウント名・@・プロフィールを代表が承認
+1. ~~アカウント名・@・プロフィールを代表が承認~~ → ✅ **完了。`@nv.kidslab` で開設済み**
 2. 初期投稿9本（launch）のドラフトを承認（`02-launch-posts.md`）
 3. 承認後にアカウント開設・投稿（＝対外行為）
