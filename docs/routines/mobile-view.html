@@ -244,7 +244,7 @@ footer code{font-size:10.5px}
 1. 📅 今日の予定(時系列)
 2. 📧 未読・重要メール(要点。販促・通知系のノイズは件数のみ)
 3. 📁 Drive「AI専用/00_受信箱」(ID: 1BT7vro-nFQpMfXVrVtFW9hoQAbtvXxaq)の新着議事録
-4. 💰 売掛・買掛の前日対比: Drive「AI専用/10_売掛買掛スナップショット」フォルダ内で、ファイル名が「_前日対比_」で始まるファイルのうち最新のものを読み、その内容を要約して報告する。増減の大きい順に、前日から動いた取引先だけを挙げる(増・減・新規・消滅)。売掛・買掛それぞれの合計と前日比も出す。ファイルが無い場合は「前日対比データなし」と書く(勝手に自分で計算しない)。
+4. 💰 売掛・買掛の変化: Drive「AI専用/10_売掛買掛スナップショット」フォルダ内で、ファイル名が「_売掛買掛レポート_」で始まるファイルのうち最新のものを読み、その内容を要約して報告する(この時間帯は基本的に前日比の内容)。増減の大きい順に、動いた取引先だけを挙げる(増・減・新規・消滅)。売掛・買掛それぞれの合計と前回比も出す。ファイルが無い場合は「データなし」と書く(勝手に自分で計算しない)。
 要対応・期限は先頭に⚠️と期限を明記。金額が動くものは必ず出す。無ければ「特になし」。迷う点は「要確認」。
 ※これが本日の起点。昼・夕・夜はこのベースラインからの変化を積み上げていく。
 
@@ -275,9 +275,11 @@ footer code{font-size:10.5px}
 - 📧 新着・未読メール(8時以降着): 要点。販促・通知系はノイズ件数のみ
 - 📅 予定の変更・追加(今日の午後を含む)
 - 📁 Drive受信箱の新規議事録(8時以降)
+- 💰 売掛・買掛: Drive「AI専用/10_売掛買掛スナップショット」で最新の `_売掛買掛レポート_` ファイルを読み、その中の【前回からの変化】セクションを要約する(増・減・新規・消滅、合計と前回比)。ファイルが無ければ「データなし」。
 
 【2】📊 本日の積み上げまとめ(今朝のリセット以降ぜんぶ)
 - 今日の予定全体 / 今日届いた重要メール一覧 / 今日の新着議事録一覧 / ⚠️未対応・期限の残タスク
+- 💰 売掛・買掛の本日累計変化(同じレポートファイルに【本日の累計変化】セクションがあればそれを使う。無ければ【1】の内容がそのまま本日累計)。
 
 要対応・期限は⚠️と期限、金額が動くものは必ず明記。迷う点は「要確認」。
 
@@ -308,9 +310,11 @@ footer code{font-size:10.5px}
 - 📧 新着・未読メール(12時以降着): 要点。ノイズは件数のみ
 - 📅 予定の変更・追加
 - 📁 Drive受信箱の新規議事録(12時以降)
+- 💰 売掛・買掛: Drive「AI専用/10_売掛買掛スナップショット」で最新の `_売掛買掛レポート_` ファイルを読み、その中の【前回からの変化】セクションを要約する(増・減・新規・消滅、合計と前回比)。ファイルが無ければ「データなし」。
 
 【2】📊 本日の積み上げまとめ(今朝のリセット以降ぜんぶ)
 - 今日の予定全体 / 今日届いた重要メール一覧 / 今日の新着議事録一覧 / ⚠️未対応・期限の残タスク / 明日の予定
+- 💰 売掛・買掛の本日累計変化(同じレポートファイルに【本日の累計変化】セクションがあればそれを使う。無ければ【1】の内容がそのまま本日累計)。
 
 要対応・期限は⚠️と期限、金額が動くものは必ず明記。迷う点は「要確認」。
 
@@ -341,9 +345,11 @@ footer code{font-size:10.5px}
 - 📧 新着・未読メール(18時以降着)＋今日中に返信が必要で未対応のもの
 - 📅 予定の変更・追加
 - 📁 Drive受信箱の新規議事録(18時以降)
+- 💰 売掛・買掛: Drive「AI専用/10_売掛買掛スナップショット」で最新の `_売掛買掛レポート_` ファイルを読み、その中の【前回からの変化】セクションを要約する(増・減・新規・消滅、合計と前回比)。ファイルが無ければ「データなし」。
 
 【2】📊 本日の積み上げまとめ(1日の総括/今朝のリセット以降ぜんぶ)
 - 今日の予定の実績 / 今日届いた重要メール一覧 / 今日の新着議事録一覧 / ⚠️未対応・持ち越し / 📅明日の予定と必要な準備・持ち物
+- 💰 売掛・買掛の本日累計変化(同じレポートファイルに【本日の累計変化】セクションがあればそれを使う。無ければ【1】の内容がそのまま本日累計)。
 
 要対応・期限・金額が動くものは必ず明記。迷う点は「要確認」。
 
@@ -357,22 +363,27 @@ footer code{font-size:10.5px}
   </section>
 
   <section>
-    <div class="sec-head"><h2>売掛・買掛 前日対比</h2></div>
-    <p class="sec-note">参照シートは月タブが上書きされるため「昨日の値」が残りません。毎朝スクリプトがその日の値を別ファイルに記録し、前日と突き合わせて増減を出します。結果は朝8時の報告に載ります。</p>
+    <div class="sec-head"><h2>売掛・買掛 変化トラッキング</h2></div>
+    <p class="sec-note">参照シートは月タブが上書きされるため「前回の値」が残りません。<b>1日4回</b>(各定時報告の少し前)スクリプトがその時点の値を別ファイルに記録し、直前の記録と突き合わせて増減を出します。結果は朝・昼・夕・夜すべての報告に載ります。</p>
 
     <article class="card" style="--key:var(--t-ledger)">
       <div class="card-top">
-        <div class="clock"><span class="hh">6–7</span><span class="lbl">毎朝</span></div>
+        <div class="clock"><span class="hh">×4</span><span class="lbl">毎日</span></div>
         <div class="meat">
-          <h3>日次スナップショット</h3>
+          <h3>チェックポイント記録</h3>
           <div class="flow">
-            <div class="flow-step"><span class="dot" style="background:var(--t-ledger)"></span><span class="txt">参照シートの全月タブから売掛・買掛を<b>読み取り</b>(原本は変更しない)</span></div>
-            <div class="flow-step"><span class="dot" style="background:var(--t-ledger)"></span><span class="txt">Drive「AI専用/10_売掛買掛スナップショット」に<b>その日の値を新規保存</b></span></div>
-            <div class="flow-step"><span class="dot" style="background:var(--t-ledger)"></span><span class="txt"><b>前日の記録と突き合わせ</b>、増減額の大きい順に差分レポートを出力</span></div>
-            <div class="flow-step"><span class="dot" style="background:var(--t-ledger)"></span><span class="txt">朝8時の報告がそれを読んで要約 → 通知</span></div>
+            <div class="flow-step"><span class="dot" style="background:var(--t-ledger)"></span><span class="txt">7–8時 / 11–12時 / 17–18時 / 20–21時の4回、参照シートの全月タブから売掛・買掛を<b>読み取り</b>(原本は変更しない)</span></div>
+            <div class="flow-step"><span class="dot" style="background:var(--t-ledger)"></span><span class="txt">Drive「AI専用/10_売掛買掛スナップショット」に<b>その時点の値を新規保存</b></span></div>
+            <div class="flow-step"><span class="dot" style="background:var(--t-ledger)"></span><span class="txt"><b>直前の記録と突き合わせ</b>、増減額の大きい順に変化レポートを出力</span></div>
+            <div class="flow-step"><span class="dot" style="background:var(--t-ledger)"></span><span class="txt">各定時報告がそれを読んで要約 → 通知</span></div>
           </div>
           <div class="shape" style="--key:var(--t-ledger)">
-            <div class="step"><span class="n">例</span><span><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.9;display:block;color:var(--ink-2)">【8月】売掛 合計 28,366,695 (前日比 +995,506)<br>&nbsp;&nbsp;[増] ネクセル 15,071,645 → 15,925,745 (+854,100)<br>&nbsp;&nbsp;[新規] 新通 484,000<br>&nbsp;&nbsp;[減] エディオン 1,242,594 → 900,000 (-342,594)</span></span></div>
+            <div class="step"><span class="n">朝</span><span>直前は前日の記録 → <b>前日比</b>を1セクション</span></div>
+            <div class="step"><span class="n">昼</span><span>直前は今朝の記録 → <b>前回比＝本日累計</b>を1セクション</span></div>
+            <div class="step"><span class="n">夕/夜</span><span><b>前回比</b>と<b>本日累計(今朝比)</b>の2セクション</span></div>
+          </div>
+          <div class="shape" style="--key:var(--t-ledger)">
+            <div class="step"><span class="n">例</span><span><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.9;display:block;color:var(--ink-2)">【前回(1200)からの変化】<br>&nbsp;&nbsp;[8月/売掛] 合計 16,481,754 (-718,392)<br>&nbsp;&nbsp;&nbsp;&nbsp;[減] エディオン 1,618,392 → 900,000<br>【本日の累計変化(今朝0800比)】<br>&nbsp;&nbsp;[8月/売掛] 合計 16,481,754 (+135,708)<br>&nbsp;&nbsp;&nbsp;&nbsp;[増] ネクセル 14,217,545 → 15,071,645</span></span></div>
           </div>
           <div class="basis">区分 — 増 / 減 / 新規 / 消滅　※動いた先だけ表示</div>
         </div>
@@ -427,7 +438,7 @@ footer code{font-size:10.5px}
     <div class="panel">
       <dl>
         <div class="row"><dt>請求書<br>PDF保存</dt><dd><b>gmail-to-drive-invoice-saver.gs</b> — 請求書メールの添付PDFを「AI専用/受信請求書」へ1時間ごとに保存。処理済みメールには <code>invoice-saved</code> ラベルが付きます。</dd></div>
-        <div class="row"><dt>売掛買掛<br>記録</dt><dd><b>daily-ledger-snapshot.gs</b> — 毎朝6〜7時に売掛・買掛を記録し前日対比を生成。<b>先に <code>inspectLedger</code> を実行</b>して、拾えている項目をログで確認してから本番トリガーを設定します。</dd></div>
+        <div class="row"><dt>売掛買掛<br>記録</dt><dd><b>daily-ledger-snapshot.gs</b> — 1日4回(7–8/11–12/17–18/20–21時)に売掛・買掛を記録し変化レポートを生成(関数は <code>ledgerCheckpoint</code>、トリガーを4つ登録)。<b>先に <code>inspectLedger</code> を実行</b>して、拾えている項目をログで確認してから本番トリガーを設定します。</dd></div>
       </dl>
     </div>
   </section>
