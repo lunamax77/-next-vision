@@ -1,0 +1,4 @@
+config.php
+google-service-account.json
+uploads/*
+!uploads/.gitkeep
