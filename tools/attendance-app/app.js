@@ -34,8 +34,9 @@ function saveEntries(entries) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
 }
 
-function setStatus(text) {
+function setStatus(text, isError = false) {
   statusEl.textContent = text || "";
+  statusEl.classList.toggle("is-error", Boolean(isError));
 }
 
 function formatTime(iso) {
@@ -71,7 +72,7 @@ function getLocation() {
 async function openCamera(type, label) {
   const staffName = staffNameInput.value.trim();
   if (!staffName) {
-    setStatus("先に氏名を入力してください");
+    setStatus("先に氏名を入力してください", true);
     staffNameInput.focus();
     return;
   }
@@ -79,7 +80,12 @@ async function openCamera(type, label) {
   pendingType = type;
   pendingLabel = label;
   setStatus(`${label}: 位置情報を取得中...`);
-  pendingLocation = await getLocation();
+  const location = await getLocation();
+  if (!location) {
+    setStatus("位置情報を取得できませんでした。GPSを有効にして再度お試しください。", true);
+    return;
+  }
+  pendingLocation = location;
   setStatus("");
 
   try {
@@ -90,8 +96,7 @@ async function openCamera(type, label) {
     video.srcObject = stream;
     modal.classList.add("open");
   } catch (err) {
-    setStatus("カメラを使用できませんでした。位置情報のみ記録します。");
-    addEntry(type, label, pendingLocation, null);
+    setStatus("カメラを使用できませんでした。カメラへのアクセスを許可してから再度お試しください。", true);
   }
 }
 
@@ -166,7 +171,7 @@ async function syncEntry(entry, storedRef) {
       renderLog();
     }
   } catch (err) {
-    setStatus(`${entry.label}: サーバー送信に失敗(端末内には保存済み)`);
+    setStatus(`${entry.label}: サーバー送信に失敗(端末内には保存済み)`, true);
   }
 }
 
@@ -185,14 +190,20 @@ function renderLog() {
         : "位置情報なし";
       const img = e.photo
         ? `<img src="${e.photo}" alt="">`
-        : `<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='52' height='52'/>" alt="">`;
-      const syncText = CONFIG.API_URL ? (e.synced ? "・送信済み" : "・未送信") : "";
+        : `<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='44' height='44'/>" alt="">`;
+      const syncEl = CONFIG.API_URL
+        ? `<span class="sync ${e.synced ? "ok" : "pending"}">${e.synced ? "送信済み" : "未送信"}</span>`
+        : "";
       return `
         <div class="entry">
           ${img}
           <div class="info">
-            <div class="label"><span class="badge ${e.type}">${e.label}</span>${e.staffName || ""}</div>
-            <div class="meta">${formatTime(e.time)} ・ ${locText}${syncText}</div>
+            <div class="row1">
+              <span class="type-label">${e.label}</span>
+              <span class="staff">${e.staffName || ""}</span>
+              ${syncEl}
+            </div>
+            <div class="meta">${formatTime(e.time)} ・ ${locText}</div>
           </div>
         </div>`;
     })
