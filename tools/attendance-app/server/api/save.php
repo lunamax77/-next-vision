@@ -58,7 +58,7 @@ try {
 
 $photoPath = null;
 $photoUrl = null;
-if (is_string($photoDataUrl) && str_starts_with($photoDataUrl, 'data:image/')) {
+if (is_string($photoDataUrl) && strncmp($photoDataUrl, 'data:image/', 11) === 0) {
     if (strlen($photoDataUrl) > 4_000_000) {
         respond(400, ['ok' => false, 'error' => 'photo too large']);
     }
