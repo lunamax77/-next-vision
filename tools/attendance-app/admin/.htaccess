@@ -1,6 +1,6 @@
 AuthType Basic
 AuthName "Attendance Admin"
-AuthUserFile "SERVER_ABSOLUTE_PATH/attendance/admin/.htpasswd"
+AuthUserFile "/virtual/dcreation/public_html/attendance/admin/.htpasswd"
 Require valid-user
 
 <Files ".ht*">

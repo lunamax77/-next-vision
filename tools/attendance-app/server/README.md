@@ -55,8 +55,9 @@ public_html/
 
 ## 5. 管理画面(Basic認証)
 
-`admin/.htaccess` と `server/admin_api/.htaccess` の `AuthUserFile` に、実際のサーバー上の
-絶対パス(例: `/virtual/dcreation/public_html/attendance/admin/.htpasswd`)を設定する。
+`admin/.htaccess` と `server/admin_api/.htaccess` の `AuthUserFile` には、現行の本番サーバー
+(`/virtual/dcreation/public_html/...`)向けの絶対パスを設定済み。別サーバーに移す場合はパスを
+書き換えること。
 `.htpasswd` はそれぞれのディレクトリに同じ内容を設置する(git管理外のため、代表から個別に共有された
 ファイルを使う)。
 
