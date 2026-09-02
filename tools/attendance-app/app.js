@@ -1,16 +1,27 @@
 const STORAGE_KEY = "attendance-app-entries";
-const NAME_KEY = "attendance-app-staff-name";
+const SESSION_KEY = "attendance-app-session";
 
 const CONFIG = window.ATTENDANCE_CONFIG || { API_URL: "", APP_TOKEN: "" };
 
+function loginApiUrl() {
+  return CONFIG.API_URL.replace(/\/save\.php$/, "/login.php");
+}
+
 const statusEl = document.getElementById("status");
-const logListEl = document.getElementById("logList");
 const modal = document.getElementById("cameraModal");
 const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const camShot = document.getElementById("camShot");
 const camCancel = document.getElementById("camCancel");
-const staffNameInput = document.getElementById("staffName");
+
+const loginBox = document.getElementById("loginBox");
+const appBody = document.getElementById("appBody");
+const loginIdInput = document.getElementById("loginId");
+const loginPasswordInput = document.getElementById("loginPassword");
+const loginBtn = document.getElementById("loginBtn");
+const loginError = document.getElementById("loginError");
+const sessionNameEl = document.getElementById("sessionName");
+const logoutBtn = document.getElementById("logoutBtn");
 
 const extraBox = document.getElementById("extraBox");
 const extraTitle = document.getElementById("extraTitle");
@@ -27,10 +38,78 @@ let pendingType = null;
 let pendingLabel = null;
 let pendingLocation = null;
 let pendingExtra = null;
+let session = null;
 
-staffNameInput.value = localStorage.getItem(NAME_KEY) || "";
-staffNameInput.addEventListener("change", () => {
-  localStorage.setItem(NAME_KEY, staffNameInput.value.trim());
+function loadSession() {
+  try {
+    return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+  } catch {
+    return null;
+  }
+}
+
+function applySession(s) {
+  session = s;
+  if (session) {
+    loginBox.hidden = true;
+    appBody.hidden = false;
+    sessionNameEl.textContent = session.display_name;
+  } else {
+    loginBox.hidden = false;
+    appBody.hidden = true;
+  }
+}
+
+applySession(loadSession());
+
+loginBtn.addEventListener("click", async () => {
+  const loginId = loginIdInput.value.trim();
+  const password = loginPasswordInput.value;
+  loginError.textContent = "";
+  loginError.classList.remove("is-error");
+
+  if (!loginId || !password) {
+    loginError.textContent = "IDとパスワードを入力してください";
+    loginError.classList.add("is-error");
+    return;
+  }
+  if (!CONFIG.API_URL) {
+    loginError.textContent = "サーバーが設定されていないため、ログインできません";
+    loginError.classList.add("is-error");
+    return;
+  }
+
+  loginBtn.disabled = true;
+  try {
+    const res = await fetch(loginApiUrl(), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-App-Token": CONFIG.APP_TOKEN || "",
+      },
+      body: JSON.stringify({ login_id: loginId, password }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.ok) {
+      throw new Error(data.error || "ログインに失敗しました");
+    }
+    const newSession = { login_id: data.login_id, display_name: data.display_name };
+    localStorage.setItem(SESSION_KEY, JSON.stringify(newSession));
+    loginPasswordInput.value = "";
+    applySession(newSession);
+  } catch (err) {
+    loginError.textContent = err.message;
+    loginError.classList.add("is-error");
+  } finally {
+    loginBtn.disabled = false;
+  }
+});
+
+logoutBtn.addEventListener("click", () => {
+  localStorage.removeItem(SESSION_KEY);
+  applySession(null);
+  loginIdInput.value = "";
+  loginPasswordInput.value = "";
 });
 
 function loadEntries() {
@@ -48,16 +127,6 @@ function saveEntries(entries) {
 function setStatus(text, isError = false) {
   statusEl.textContent = text || "";
   statusEl.classList.toggle("is-error", Boolean(isError));
-}
-
-function formatTime(iso) {
-  const d = new Date(iso);
-  return d.toLocaleString("ja-JP", {
-    month: "numeric",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
 }
 
 function getLocation() {
@@ -108,10 +177,8 @@ extraNext.addEventListener("click", () => {
 });
 
 async function openCamera(type, label, extra) {
-  const staffName = staffNameInput.value.trim();
-  if (!staffName) {
-    setStatus("先に氏名を入力してください", true);
-    staffNameInput.focus();
+  if (!session) {
+    setStatus("ログインしてください", true);
     return;
   }
 
@@ -162,7 +229,8 @@ function takeShot() {
 
 function addEntry(type, label, location, photo, extra) {
   const entry = {
-    staffName: staffNameInput.value.trim(),
+    loginId: session.login_id,
+    staffName: session.display_name,
     type,
     label,
     time: new Date().toISOString(),
@@ -176,7 +244,6 @@ function addEntry(type, label, location, photo, extra) {
   const entries = loadEntries();
   entries.unshift(entry);
   saveEntries(entries);
-  renderLog();
   setStatus(`${label} を記録しました`);
 
   syncEntry(entry);
@@ -193,7 +260,7 @@ async function syncEntry(entry) {
         "X-App-Token": CONFIG.APP_TOKEN || "",
       },
       body: JSON.stringify({
-        staff_name: entry.staffName,
+        login_id: entry.loginId,
         type: entry.type,
         label: entry.label,
         time: entry.time,
@@ -206,63 +273,19 @@ async function syncEntry(entry) {
         amount: entry.amount,
       }),
     });
-    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || "HTTP " + res.status);
 
     const entries = loadEntries();
     const target = entries.find((e) => e.time === entry.time && e.type === entry.type);
     if (target) {
       target.synced = true;
+      target.address = data.address || null;
       saveEntries(entries);
-      renderLog();
     }
   } catch (err) {
     setStatus(`${entry.label}: サーバー送信に失敗(端末内には保存済み)`, true);
   }
-}
-
-function renderLog() {
-  const entries = loadEntries();
-  if (entries.length === 0) {
-    logListEl.innerHTML = '<div class="empty">まだ記録がありません</div>';
-    return;
-  }
-  logListEl.innerHTML = entries
-    .map((e) => {
-      const locText = e.location
-        ? `${e.location.lat.toFixed(5)}, ${e.location.lng.toFixed(5)} (±${Math.round(
-            e.location.accuracy || 0
-          )}m)`
-        : "位置情報なし";
-      const img = e.photo
-        ? `<img src="${e.photo}" alt="">`
-        : `<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='44' height='44'/>" alt="">`;
-      const syncEl = CONFIG.API_URL
-        ? `<span class="sync ${e.synced ? "ok" : "pending"}">${e.synced ? "送信済み" : "未送信"}</span>`
-        : "";
-      const tripParts = [];
-      if (e.transportMethod) tripParts.push(e.transportMethod);
-      if (e.route) tripParts.push(e.route);
-      if (e.amount !== null && e.amount !== undefined && e.amount !== "") {
-        tripParts.push(`¥${Number(e.amount).toLocaleString("ja-JP")}`);
-      }
-      const tripMeta = tripParts.length
-        ? `<div class="meta">${tripParts.join(" ・ ")}</div>`
-        : "";
-      return `
-        <div class="entry">
-          ${img}
-          <div class="info">
-            <div class="row1">
-              <span class="type-label">${e.label}</span>
-              <span class="staff">${e.staffName || ""}</span>
-              ${syncEl}
-            </div>
-            <div class="meta">${formatTime(e.time)} ・ ${locText}</div>
-            ${tripMeta}
-          </div>
-        </div>`;
-    })
-    .join("");
 }
 
 document.querySelectorAll(".action-btn").forEach((btn) => {
@@ -279,5 +302,3 @@ document.querySelectorAll(".action-btn").forEach((btn) => {
 
 camShot.addEventListener("click", takeShot);
 camCancel.addEventListener("click", closeCamera);
-
-renderLog();

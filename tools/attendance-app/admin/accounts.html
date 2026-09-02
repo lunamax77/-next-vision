@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>アカウント管理 | 勤怠管理</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+  <header>
+    <div>
+      <span class="eyebrow">NEXT VISION Inc. / Admin</span>
+      <h1>アカウント管理</h1>
+    </div>
+    <nav>
+      <a href="index.html">本日の状況</a>
+      <a href="accounts.html" class="active">アカウント管理</a>
+    </nav>
+  </header>
+
+  <div class="form-row">
+    <div class="field">
+      <label for="newName">新規スタッフの氏名</label>
+      <input type="text" id="newName" placeholder="山田太郎">
+    </div>
+    <button type="button" class="btn" id="createBtn">アカウント発行</button>
+  </div>
+
+  <div class="status" id="status">読み込み中...</div>
+
+  <div style="overflow-x:auto;">
+    <table id="table" hidden>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>氏名</th>
+          <th>状態</th>
+          <th>作成日</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="overlay-box">
+    <h2 id="overlayTitle">アカウントを発行しました</h2>
+    <div class="kv"><span>ID</span><span class="v" id="overlayLoginId"></span></div>
+    <div class="kv"><span>パスワード</span><span class="v" id="overlayPassword"></span></div>
+    <p class="note">この画面を閉じるともう一度確認できません。スクリーンショットを撮るか、この場で本人に伝えてください。</p>
+    <button type="button" class="btn close-btn" id="overlayClose">閉じる</button>
+  </div>
+</div>
+
+<script>
+const statusEl = document.getElementById("status");
+const table = document.getElementById("table");
+const tbody = document.getElementById("tbody");
+const overlay = document.getElementById("overlay");
+
+function formatDate(iso) {
+  const d = new Date(iso.replace(" ", "T") + "Z");
+  return d.toLocaleString("ja-JP", { year: "numeric", month: "numeric", day: "numeric" });
+}
+
+function showOverlay(title, loginId, password) {
+  document.getElementById("overlayTitle").textContent = title;
+  document.getElementById("overlayLoginId").textContent = loginId;
+  document.getElementById("overlayPassword").textContent = password;
+  overlay.classList.add("open");
+}
+document.getElementById("overlayClose").addEventListener("click", () => {
+  overlay.classList.remove("open");
+  load();
+});
+
+async function api(body) {
+  const res = await fetch("../server/admin_api/accounts.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json();
+  if (!res.ok || !data.ok) throw new Error(data.error || "HTTP " + res.status);
+  return data;
+}
+
+async function load() {
+  try {
+    const res = await fetch("../server/admin_api/accounts.php");
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || "unknown error");
+
+    if (data.accounts.length === 0) {
+      statusEl.textContent = "まだアカウントがありません。上のフォームから発行してください。";
+      table.hidden = true;
+      return;
+    }
+
+    tbody.innerHTML = data.accounts
+      .map((a) => {
+        const badge = a.is_active
+          ? '<span class="badge active">有効</span>'
+          : '<span class="badge inactive">無効</span>';
+        const toggleLabel = a.is_active ? "無効化" : "有効化";
+        const toggleClass = a.is_active ? "danger" : "";
+        return `
+          <tr>
+            <td>${a.login_id}</td>
+            <td>${a.display_name}</td>
+            <td>${badge}</td>
+            <td>${formatDate(a.created_at)}</td>
+            <td style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn small" data-action="reset" data-id="${a.id}" data-name="${a.display_name}" data-login="${a.login_id}">PW再発行</button>
+              <button type="button" class="btn small ${toggleClass}" data-action="toggle" data-id="${a.id}" data-active="${a.is_active ? 0 : 1}">${toggleLabel}</button>
+            </td>
+          </tr>`;
+      })
+      .join("");
+
+    statusEl.textContent = "";
+    table.hidden = false;
+  } catch (err) {
+    statusEl.textContent = "読み込みに失敗しました: " + err.message;
+    statusEl.classList.add("is-error");
+  }
+}
+
+document.getElementById("createBtn").addEventListener("click", async () => {
+  const nameInput = document.getElementById("newName");
+  const displayName = nameInput.value.trim();
+  if (!displayName) {
+    statusEl.textContent = "氏名を入力してください";
+    statusEl.classList.add("is-error");
+    return;
+  }
+  try {
+    const data = await api({ action: "create", display_name: displayName });
+    nameInput.value = "";
+    showOverlay(`${displayName} さんのアカウントを発行しました`, data.login_id, data.password);
+  } catch (err) {
+    statusEl.textContent = "発行に失敗しました: " + err.message;
+    statusEl.classList.add("is-error");
+  }
+});
+
+tbody.addEventListener("click", async (e) => {
+  const btn = e.target.closest("button[data-action]");
+  if (!btn) return;
+  const action = btn.dataset.action;
+  const id = Number(btn.dataset.id);
+
+  if (action === "reset") {
+    try {
+      const data = await api({ action: "reset_password", id });
+      showOverlay(`${btn.dataset.name} さんのパスワードを再発行しました`, btn.dataset.login, data.password);
+    } catch (err) {
+      statusEl.textContent = "再発行に失敗しました: " + err.message;
+      statusEl.classList.add("is-error");
+    }
+    return;
+  }
+
+  if (action === "toggle") {
+    const isActive = Number(btn.dataset.active);
+    try {
+      await api({ action: "set_active", id, is_active: isActive });
+      load();
+    } catch (err) {
+      statusEl.textContent = "更新に失敗しました: " + err.message;
+      statusEl.classList.add("is-error");
+    }
+  }
+});
+
+load();
+</script>
+</body>
+</html>

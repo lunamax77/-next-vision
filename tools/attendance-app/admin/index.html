@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>本日の状況 | 勤怠管理</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+  <header>
+    <div>
+      <span class="eyebrow">NEXT VISION Inc. / Admin</span>
+      <h1 id="pageTitle">本日の出勤状況</h1>
+    </div>
+    <nav>
+      <a href="index.html" class="active">本日の状況</a>
+      <a href="accounts.html">アカウント管理</a>
+    </nav>
+  </header>
+
+  <div class="status" id="status">読み込み中...</div>
+
+  <div style="overflow-x:auto;">
+    <table id="table" hidden>
+      <thead>
+        <tr>
+          <th>氏名</th>
+          <th>起床確認</th>
+          <th>出勤確認</th>
+          <th>移動確認</th>
+          <th>退勤確認</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const TYPES = ["wakeup", "checkin", "move", "checkout"];
+
+function formatTime(iso) {
+  if (!iso) return "";
+  const d = new Date(iso.replace(" ", "T") + "Z");
+  return d.toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" });
+}
+
+function renderCell(entry, type) {
+  if (!entry) {
+    return '<div class="empty-cell">-</div>';
+  }
+  const img = entry.photo_url
+    ? `<img src="${entry.photo_url}" alt="">`
+    : '<div class="placeholder"></div>';
+  const parts = [];
+  if (type === "move" && entry.route) parts.push(entry.route);
+  if (type === "move" && entry.transport_method) parts.push(entry.transport_method);
+  if (entry.amount !== null && entry.amount !== undefined) {
+    parts.push(`&yen;${Number(entry.amount).toLocaleString("ja-JP")}`);
+  }
+  const metaLine = parts.length ? `<div>${parts.join(" ・ ")}</div>` : "";
+  const addressLine = entry.address ? `<div>${entry.address}</div>` : "";
+  const mapLink = entry.maps_url
+    ? `<div><a href="${entry.maps_url}" target="_blank" rel="noopener" style="color:var(--accent);">地図で見る</a></div>`
+    : "";
+  return `
+    <div class="cell">
+      ${img}
+      <div class="meta">
+        <div class="time">${formatTime(entry.time)}</div>
+        ${metaLine}
+        ${addressLine}
+        ${mapLink}
+      </div>
+    </div>`;
+}
+
+async function load() {
+  const statusEl = document.getElementById("status");
+  const table = document.getElementById("table");
+  const tbody = document.getElementById("tbody");
+  try {
+    const res = await fetch("../server/admin_api/today.php");
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || "unknown error");
+
+    document.getElementById("pageTitle").textContent = `本日の出勤状況(${data.date})`;
+
+    if (data.staff.length === 0) {
+      statusEl.textContent = "有効なスタッフアカウントがありません。アカウント管理から発行してください。";
+      return;
+    }
+
+    tbody.innerHTML = data.staff
+      .map((s) => {
+        const cells = TYPES.map((t) => `<td>${renderCell(s[t], t)}</td>`).join("");
+        return `
+          <tr>
+            <td>
+              <div class="staff-name">${s.display_name}</div>
+              <div class="staff-id">${s.login_id}</div>
+            </td>
+            ${cells}
+          </tr>`;
+      })
+      .join("");
+
+    statusEl.textContent = "";
+    table.hidden = false;
+  } catch (err) {
+    statusEl.textContent = "読み込みに失敗しました: " + err.message;
+    statusEl.classList.add("is-error");
+  }
+}
+
+load();
+</script>
+</body>
+</html>

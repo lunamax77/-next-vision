@@ -39,33 +39,18 @@
   }
 
   header{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    padding-bottom:28px;
+    padding-bottom:22px;
     border-bottom:1px solid var(--border-soft);
     margin-bottom:28px;
-  }
-  .eyebrow{
-    font-size:10.5px;
-    letter-spacing:.18em;
-    text-transform:uppercase;
-    color:var(--text-faint);
   }
   header h1{
     font-family:"Shippori Mincho",serif;
     font-weight:600;
-    font-size:23px;
+    font-size:21px;
     letter-spacing:.02em;
-    margin:2px 0 0;
+    margin:0;
     color:var(--text);
     text-wrap:balance;
-  }
-  header p{
-    margin:2px 0 0;
-    color:var(--text-sub);
-    font-size:12.5px;
-    line-height:1.6;
   }
 
   .name-box{
@@ -96,22 +81,66 @@
     border-bottom-color:var(--accent);
   }
 
+  .login-box{
+    margin-top:8px;
+  }
+  .login-box .name-box{
+    margin-bottom:18px;
+  }
+  .login-btn{
+    width:100%;
+    padding:12px;
+    border:1px solid var(--accent-dim);
+    background:transparent;
+    color:var(--accent);
+    font-family:inherit;
+    font-size:13px;
+    font-weight:500;
+    letter-spacing:.03em;
+    cursor:pointer;
+    transition:background-color .15s ease, color .15s ease;
+  }
+  .login-btn:hover{background:var(--accent);color:#161310;}
+  #loginError{margin-top:12px;margin-bottom:0;}
+
+  .session-box{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin:8px 0 22px;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--border-soft);
+  }
+  .session-name{
+    font-size:14px;
+    font-weight:500;
+    color:var(--text);
+  }
+  .logout-btn{
+    color:var(--text-faint);
+    background:none;
+    border:none;
+    font-family:inherit;
+    font-size:11.5px;
+    letter-spacing:.04em;
+    cursor:pointer;
+  }
+  .logout-btn:hover{color:var(--text-sub);}
+
   .grid{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:1px;
-    background:var(--border-soft);
-    border:1px solid var(--border-soft);
+    gap:12px;
     margin-bottom:22px;
   }
   .action-btn{
     display:flex;
     flex-direction:column;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:18px;
-    padding:20px 16px;
-    border:none;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:26px 12px;
+    border:1px solid var(--border-soft);
     background:var(--surface);
     color:var(--text);
     font-family:inherit;
@@ -119,31 +148,24 @@
     font-weight:500;
     letter-spacing:.01em;
     cursor:pointer;
-    text-align:left;
-    transition:background-color .15s ease;
+    text-align:center;
+    transition:background-color .15s ease, border-color .15s ease;
   }
   .action-btn:hover,
   .action-btn:focus-visible{
     background:var(--surface-2);
+    border-color:var(--border);
     outline:none;
   }
   .action-btn:active{
     background:var(--surface-2);
   }
   .action-btn svg{
-    width:20px;
-    height:20px;
+    width:22px;
+    height:22px;
     stroke:var(--accent);
     fill:none;
     stroke-width:1.5;
-  }
-  .action-btn .sub{
-    display:block;
-    font-size:10px;
-    color:var(--text-faint);
-    letter-spacing:.08em;
-    margin-top:2px;
-    font-weight:400;
   }
 
   .extra-box{
@@ -229,68 +251,6 @@
   }
   .status.is-error{color:var(--danger);}
 
-  #log h2{
-    font-size:10.5px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:var(--text-faint);
-    margin:0 0 12px;
-    font-weight:500;
-  }
-  #logList{
-    border-top:1px solid var(--border-soft);
-  }
-  .entry{
-    display:flex;
-    gap:14px;
-    align-items:center;
-    padding:14px 2px;
-    border-bottom:1px solid var(--border-soft);
-  }
-  .entry img{
-    width:44px;height:44px;
-    border-radius:2px;
-    object-fit:cover;
-    background:var(--surface-2);
-    flex-shrink:0;
-  }
-  .entry .info{flex:1;min-width:0;}
-  .entry .row1{
-    display:flex;
-    align-items:baseline;
-    gap:8px;
-    font-size:13px;
-  }
-  .entry .type-label{
-    font-weight:500;
-    color:var(--text);
-  }
-  .entry .staff{
-    color:var(--text-sub);
-    font-size:12px;
-  }
-  .entry .meta{
-    font-size:11px;
-    color:var(--text-faint);
-    margin-top:3px;
-    line-height:1.5;
-    word-break:break-all;
-    font-variant-numeric:tabular-nums;
-  }
-  .entry .sync{
-    font-size:10px;
-    letter-spacing:.04em;
-  }
-  .entry .sync.ok{color:var(--ok);}
-  .entry .sync.pending{color:var(--text-faint);}
-
-  .empty{
-    color:var(--text-faint);
-    font-size:12.5px;
-    padding:28px 2px;
-    border-bottom:1px solid var(--border-soft);
-  }
-
   /* camera modal */
   #cameraModal{
     position:fixed;inset:0;background:#000;display:none;
@@ -354,32 +314,45 @@
 
 <div class="app">
   <header>
-    <span class="eyebrow">NEXT VISION Inc.</span>
     <h1>勤怠確認</h1>
-    <p>起床・出勤・移動・退勤を、位置情報と本人写真であわせて記録します</p>
   </header>
 
-  <div class="name-box">
-    <label for="staffName">氏名</label>
-    <input type="text" id="staffName" placeholder="山田太郎" autocomplete="name">
+  <div class="login-box" id="loginBox">
+    <div class="name-box">
+      <label for="loginId">ID</label>
+      <input type="text" id="loginId" placeholder="staff0001" autocomplete="username">
+    </div>
+    <div class="name-box">
+      <label for="loginPassword">パスワード</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button type="button" class="login-btn" id="loginBtn">ログイン</button>
+    <div class="status" id="loginError"></div>
+  </div>
+
+  <div id="appBody" hidden>
+
+  <div class="session-box">
+    <span class="session-name" id="sessionName"></span>
+    <button type="button" class="logout-btn" id="logoutBtn">ログアウト</button>
   </div>
 
   <div class="grid">
     <button class="action-btn" data-type="wakeup" data-label="起床確認">
       <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h16M6 18a6 6 0 0 1 12 0M12 4v3M5 9l2 2M19 9l-2 2"/></svg>
-      <span>起床確認<span class="sub">WAKE UP</span></span>
+      <span>起床確認</span>
     </button>
     <button class="action-btn" data-type="checkin" data-label="出勤確認">
       <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V6l7-3 7 3v15M5 21h14M10 21v-6h4v6M12 9h.01"/></svg>
-      <span>出勤確認<span class="sub">CHECK IN</span></span>
+      <span>出勤確認</span>
     </button>
     <button class="action-btn" data-type="move" data-label="移動確認">
       <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.4 7-11.5A7 7 0 0 0 5 9.5C5 14.6 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.2"/></svg>
-      <span>移動確認<span class="sub">LOCATION</span></span>
+      <span>移動確認</span>
     </button>
     <button class="action-btn" data-type="checkout" data-label="退勤確認">
       <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6"/></svg>
-      <span>退勤確認<span class="sub">CHECK OUT</span></span>
+      <span>退勤確認</span>
     </button>
   </div>
 
@@ -415,13 +388,9 @@
 
   <div class="status" id="status"></div>
 
-  <section id="log">
-    <h2>記録</h2>
-    <div id="logList"><div class="empty">まだ記録がありません</div></div>
-  </section>
+  </div>
 
   <footer>
-    試作版。サーバー未設定の場合は端末内(localStorage)にのみ保存されます。<br>
     位置情報とカメラを許可できない場合、記録は行われません。
   </footer>
 </div>

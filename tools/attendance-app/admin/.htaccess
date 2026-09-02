@@ -1,0 +1,8 @@
+AuthType Basic
+AuthName "Attendance Admin"
+AuthUserFile "SERVER_ABSOLUTE_PATH/attendance/admin/.htpasswd"
+Require valid-user
+
+<Files ".ht*">
+  Require all denied
+</Files>

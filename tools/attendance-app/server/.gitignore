@@ -2,3 +2,4 @@ config.php
 google-service-account.json
 uploads/*
 !uploads/.gitkeep
+admin_api/.htpasswd

@@ -5,6 +5,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 require __DIR__ . '/../lib/db.php';
 require __DIR__ . '/../lib/GoogleSheetsClient.php';
+require __DIR__ . '/../lib/geocode.php';
 
 function respond(int $status, array $body): void
 {
@@ -35,7 +36,7 @@ if (!is_array($input)) {
 }
 
 $allowedTypes = ['wakeup', 'checkin', 'move', 'checkout'];
-$staffName = trim((string)($input['staff_name'] ?? ''));
+$loginId = trim((string)($input['login_id'] ?? ''));
 $type = (string)($input['type'] ?? '');
 $label = trim((string)($input['label'] ?? ''));
 $time = (string)($input['time'] ?? '');
@@ -50,9 +51,26 @@ $amount = isset($input['amount']) && $input['amount'] !== null ? (int)$input['am
 if ($transportMethod === '') $transportMethod = null;
 if ($route === '') $route = null;
 
-if ($staffName === '' || !in_array($type, $allowedTypes, true) || $label === '') {
+if ($loginId === '' || !in_array($type, $allowedTypes, true) || $label === '') {
     respond(400, ['ok' => false, 'error' => 'missing required fields']);
 }
+
+try {
+    $pdo = attendance_db($config);
+    $stmt = $pdo->prepare(
+        'SELECT display_name, is_active FROM staff_accounts WHERE login_id = :login_id'
+    );
+    $stmt->execute(['login_id' => $loginId]);
+    $account = $stmt->fetch();
+} catch (Throwable $e) {
+    error_log('attendance save.php account lookup error: ' . $e->getMessage());
+    respond(500, ['ok' => false, 'error' => 'db error']);
+}
+
+if (!$account || (int)$account['is_active'] !== 1) {
+    respond(401, ['ok' => false, 'error' => 'アカウントが無効です。再度ログインしてください。']);
+}
+$staffName = $account['display_name'];
 
 $recordedAt = date('Y-m-d H:i:s');
 try {
@@ -87,13 +105,25 @@ if (is_string($photoDataUrl) && strncmp($photoDataUrl, 'data:image/', 11) === 0)
     $photoUrl = rtrim($config['uploads_url_base'], '/') . '/' . $subdir . '/' . $filename;
 }
 
+$address = null;
+$mapsUrl = null;
+if ($lat !== null && $lng !== null) {
+    $mapsUrl = maps_link($lat, $lng);
+    try {
+        $address = reverse_geocode($lat, $lng);
+    } catch (Throwable $e) {
+        error_log('attendance save.php geocode error: ' . $e->getMessage());
+        // 住所が取れなくても記録自体は続行する
+    }
+}
+
 try {
-    $pdo = attendance_db($config);
     $stmt = $pdo->prepare(
-        'INSERT INTO attendance_records (staff_name, type, label, transport_method, route, amount, recorded_at, lat, lng, accuracy_m, photo_path)
-         VALUES (:staff_name, :type, :label, :transport_method, :route, :amount, :recorded_at, :lat, :lng, :accuracy_m, :photo_path)'
+        'INSERT INTO attendance_records (login_id, staff_name, type, label, transport_method, route, amount, recorded_at, lat, lng, address, accuracy_m, photo_path)
+         VALUES (:login_id, :staff_name, :type, :label, :transport_method, :route, :amount, :recorded_at, :lat, :lng, :address, :accuracy_m, :photo_path)'
     );
     $stmt->execute([
+        'login_id' => $loginId,
         'staff_name' => $staffName,
         'type' => $type,
         'label' => $label,
@@ -103,6 +133,7 @@ try {
         'recorded_at' => $recordedAt,
         'lat' => $lat,
         'lng' => $lng,
+        'address' => $address,
         'accuracy_m' => $accuracy,
         'photo_path' => $photoPath,
     ]);
@@ -127,8 +158,8 @@ if (!empty($config['google']['enabled'])) {
             $transportMethod,
             $route,
             $amount,
-            $lat,
-            $lng,
+            $address,
+            $mapsUrl,
             $accuracy,
             $photoUrl,
         ]);
@@ -141,4 +172,10 @@ if (!empty($config['google']['enabled'])) {
     }
 }
 
-respond(200, ['ok' => true, 'id' => $id, 'sheet_synced' => $sheetSynced]);
+respond(200, [
+    'ok' => true,
+    'id' => $id,
+    'sheet_synced' => $sheetSynced,
+    'address' => $address,
+    'maps_url' => $mapsUrl,
+]);
