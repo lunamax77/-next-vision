@@ -33,3 +33,12 @@ CREATE TABLE IF NOT EXISTS attendance_records (
   KEY idx_staff_time (staff_name, recorded_at),
   KEY idx_login_time (login_id, recorded_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS push_subscriptions (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  endpoint TEXT NOT NULL,
+  p256dh VARCHAR(255) NOT NULL,
+  auth VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

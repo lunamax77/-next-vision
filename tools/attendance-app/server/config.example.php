@@ -27,4 +27,19 @@ return [
         'spreadsheet_id' => 'YOUR_SPREADSHEET_ID',
         'sheet_range' => 'シート1!A:J',
     ],
+
+    // 打刻通知(メール・プッシュ)。email を空にするとメール送信をスキップする
+    'notify' => [
+        'email' => 'admin@example.com',
+        'types' => ['wakeup', 'checkin', 'checkout'], // 通知する打刻の種類
+        'admin_url' => 'https://your-domain.example.com/attendance/admin/',
+    ],
+
+    // Web Push通知用のVAPID鍵(admin/index.html の「通知を受け取る」ボタンで使用)
+    // public_key は admin/index.html にも同じ値を埋め込む必要がある
+    'vapid' => [
+        'public_key' => 'YOUR_VAPID_PUBLIC_KEY',
+        'private_key_pem' => "-----BEGIN EC PRIVATE KEY-----\n...\n-----END EC PRIVATE KEY-----\n",
+        'subject' => 'mailto:admin@example.com',
+    ],
 ];
