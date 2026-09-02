@@ -302,3 +302,9 @@ document.querySelectorAll(".action-btn").forEach((btn) => {
 
 camShot.addEventListener("click", takeShot);
 camCancel.addEventListener("click", closeCamera);
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}
