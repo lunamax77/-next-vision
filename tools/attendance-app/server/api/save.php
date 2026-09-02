@@ -43,6 +43,12 @@ $lat = isset($input['lat']) ? (float)$input['lat'] : null;
 $lng = isset($input['lng']) ? (float)$input['lng'] : null;
 $accuracy = isset($input['accuracy']) ? (int)round((float)$input['accuracy']) : null;
 $photoDataUrl = $input['photo'] ?? null;
+$transportMethod = isset($input['transport_method']) && $input['transport_method'] !== null
+    ? trim((string)$input['transport_method']) : null;
+$route = isset($input['route']) && $input['route'] !== null ? trim((string)$input['route']) : null;
+$amount = isset($input['amount']) && $input['amount'] !== null ? (int)$input['amount'] : null;
+if ($transportMethod === '') $transportMethod = null;
+if ($route === '') $route = null;
 
 if ($staffName === '' || !in_array($type, $allowedTypes, true) || $label === '') {
     respond(400, ['ok' => false, 'error' => 'missing required fields']);
@@ -84,13 +90,16 @@ if (is_string($photoDataUrl) && strncmp($photoDataUrl, 'data:image/', 11) === 0)
 try {
     $pdo = attendance_db($config);
     $stmt = $pdo->prepare(
-        'INSERT INTO attendance_records (staff_name, type, label, recorded_at, lat, lng, accuracy_m, photo_path)
-         VALUES (:staff_name, :type, :label, :recorded_at, :lat, :lng, :accuracy_m, :photo_path)'
+        'INSERT INTO attendance_records (staff_name, type, label, transport_method, route, amount, recorded_at, lat, lng, accuracy_m, photo_path)
+         VALUES (:staff_name, :type, :label, :transport_method, :route, :amount, :recorded_at, :lat, :lng, :accuracy_m, :photo_path)'
     );
     $stmt->execute([
         'staff_name' => $staffName,
         'type' => $type,
         'label' => $label,
+        'transport_method' => $transportMethod,
+        'route' => $route,
+        'amount' => $amount,
         'recorded_at' => $recordedAt,
         'lat' => $lat,
         'lng' => $lng,
@@ -115,6 +124,9 @@ if (!empty($config['google']['enabled'])) {
             $recordedAt,
             $staffName,
             $label,
+            $transportMethod,
+            $route,
+            $amount,
             $lat,
             $lng,
             $accuracy,

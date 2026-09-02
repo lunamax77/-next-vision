@@ -25,6 +25,6 @@ return [
         'enabled' => false,
         'service_account_json' => __DIR__ . '/google-service-account.json',
         'spreadsheet_id' => 'YOUR_SPREADSHEET_ID',
-        'sheet_range' => 'シート1!A:H',
+        'sheet_range' => 'シート1!A:J',
     ],
 ];

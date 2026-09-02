@@ -6,6 +6,9 @@ CREATE TABLE IF NOT EXISTS attendance_records (
   staff_name VARCHAR(100) NOT NULL,
   type VARCHAR(20) NOT NULL,        -- wakeup / checkin / move / checkout
   label VARCHAR(50) NOT NULL,       -- 表示名(起床確認 等)
+  transport_method VARCHAR(20) NULL, -- 移動手段(徒歩/電車/車 等)
+  route VARCHAR(255) NULL,           -- 経路(自由記述)
+  amount INT NULL,                   -- 金額(円)
   recorded_at DATETIME NOT NULL,    -- 端末側で取得した記録日時(UTC)
   lat DECIMAL(10,6) NULL,
   lng DECIMAL(10,6) NULL,

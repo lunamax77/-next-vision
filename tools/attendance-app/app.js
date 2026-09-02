@@ -12,10 +12,21 @@ const camShot = document.getElementById("camShot");
 const camCancel = document.getElementById("camCancel");
 const staffNameInput = document.getElementById("staffName");
 
+const extraBox = document.getElementById("extraBox");
+const extraTitle = document.getElementById("extraTitle");
+const extraCancel = document.getElementById("extraCancel");
+const extraNext = document.getElementById("extraNext");
+const transportMethodInput = document.getElementById("transportMethod");
+const routeInput = document.getElementById("routeInput");
+const amountInput = document.getElementById("amountInput");
+
+const TYPES_WITH_EXTRA = ["checkin", "move", "checkout"];
+
 let stream = null;
 let pendingType = null;
 let pendingLabel = null;
 let pendingLocation = null;
+let pendingExtra = null;
 
 staffNameInput.value = localStorage.getItem(NAME_KEY) || "";
 staffNameInput.addEventListener("change", () => {
@@ -69,7 +80,34 @@ function getLocation() {
   });
 }
 
-async function openCamera(type, label) {
+function openExtraForm(type, label) {
+  pendingType = type;
+  pendingLabel = label;
+  extraTitle.textContent = label;
+  transportMethodInput.value = "";
+  routeInput.value = "";
+  amountInput.value = "";
+  extraBox.hidden = false;
+  extraBox.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+extraCancel.addEventListener("click", () => {
+  extraBox.hidden = true;
+  pendingType = null;
+  pendingLabel = null;
+});
+
+extraNext.addEventListener("click", () => {
+  const extra = {
+    transportMethod: transportMethodInput.value || null,
+    route: routeInput.value.trim() || null,
+    amount: amountInput.value !== "" ? Number(amountInput.value) : null,
+  };
+  extraBox.hidden = true;
+  openCamera(pendingType, pendingLabel, extra);
+});
+
+async function openCamera(type, label, extra) {
   const staffName = staffNameInput.value.trim();
   if (!staffName) {
     setStatus("先に氏名を入力してください", true);
@@ -79,6 +117,7 @@ async function openCamera(type, label) {
 
   pendingType = type;
   pendingLabel = label;
+  pendingExtra = extra || null;
   setStatus(`${label}: 位置情報を取得中...`);
   const location = await getLocation();
   if (!location) {
@@ -117,11 +156,11 @@ function takeShot() {
   ctx.drawImage(video, 0, 0, w, h);
   const photo = canvas.toDataURL("image/jpeg", 0.7);
 
-  addEntry(pendingType, pendingLabel, pendingLocation, photo);
+  addEntry(pendingType, pendingLabel, pendingLocation, photo, pendingExtra);
   closeCamera();
 }
 
-function addEntry(type, label, location, photo) {
+function addEntry(type, label, location, photo, extra) {
   const entry = {
     staffName: staffNameInput.value.trim(),
     type,
@@ -129,6 +168,9 @@ function addEntry(type, label, location, photo) {
     time: new Date().toISOString(),
     location,
     photo,
+    transportMethod: extra ? extra.transportMethod : null,
+    route: extra ? extra.route : null,
+    amount: extra ? extra.amount : null,
     synced: false,
   };
   const entries = loadEntries();
@@ -137,10 +179,10 @@ function addEntry(type, label, location, photo) {
   renderLog();
   setStatus(`${label} を記録しました`);
 
-  syncEntry(entry, entries[0]);
+  syncEntry(entry);
 }
 
-async function syncEntry(entry, storedRef) {
+async function syncEntry(entry) {
   if (!CONFIG.API_URL) return;
 
   try {
@@ -159,6 +201,9 @@ async function syncEntry(entry, storedRef) {
         lng: entry.location ? entry.location.lng : null,
         accuracy: entry.location ? entry.location.accuracy : null,
         photo: entry.photo,
+        transport_method: entry.transportMethod,
+        route: entry.route,
+        amount: entry.amount,
       }),
     });
     if (!res.ok) throw new Error("HTTP " + res.status);
@@ -194,6 +239,15 @@ function renderLog() {
       const syncEl = CONFIG.API_URL
         ? `<span class="sync ${e.synced ? "ok" : "pending"}">${e.synced ? "送信済み" : "未送信"}</span>`
         : "";
+      const tripParts = [];
+      if (e.transportMethod) tripParts.push(e.transportMethod);
+      if (e.route) tripParts.push(e.route);
+      if (e.amount !== null && e.amount !== undefined && e.amount !== "") {
+        tripParts.push(`¥${Number(e.amount).toLocaleString("ja-JP")}`);
+      }
+      const tripMeta = tripParts.length
+        ? `<div class="meta">${tripParts.join(" ・ ")}</div>`
+        : "";
       return `
         <div class="entry">
           ${img}
@@ -204,6 +258,7 @@ function renderLog() {
               ${syncEl}
             </div>
             <div class="meta">${formatTime(e.time)} ・ ${locText}</div>
+            ${tripMeta}
           </div>
         </div>`;
     })
@@ -212,7 +267,13 @@ function renderLog() {
 
 document.querySelectorAll(".action-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
-    openCamera(btn.dataset.type, btn.dataset.label);
+    const type = btn.dataset.type;
+    const label = btn.dataset.label;
+    if (TYPES_WITH_EXTRA.includes(type)) {
+      openExtraForm(type, label);
+    } else {
+      openCamera(type, label, null);
+    }
   });
 });
 
