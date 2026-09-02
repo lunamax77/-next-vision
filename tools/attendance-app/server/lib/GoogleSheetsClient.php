@@ -3,13 +3,18 @@
  * サービスアカウント(JSON鍵)を使い、外部ライブラリなしで
  * Google Sheets API に1行追記するだけの最小クライアント。
  * composer が使えない共有サーバーでも動作するよう curl + openssl のみで実装。
+ *
+ * Sheets の values:append は「表」の自動検出に失敗すると別の行・列に
+ * ずれて書き込まれることがあるため、A列の件数を数えて次の空き行を
+ * 自分で計算し、values:update でその行に直接書き込む方式にしている。
  */
 class GoogleSheetsClient
 {
     private string $clientEmail;
     private string $privateKey;
     private string $spreadsheetId;
-    private string $range;
+    private string $sheetName;
+    private string $lastColumn;
 
     public function __construct(string $serviceAccountJsonPath, string $spreadsheetId, string $range)
     {
@@ -23,17 +28,25 @@ class GoogleSheetsClient
         $this->clientEmail = $data['client_email'];
         $this->privateKey = $data['private_key'];
         $this->spreadsheetId = $spreadsheetId;
-        $this->range = $range;
+
+        // "シート1!A:J" のような形式から シート名 と 最終列 を取り出す
+        if (!preg_match('/^(.+)!([A-Z]+):([A-Z]+)$/u', $range, $m)) {
+            throw new RuntimeException('invalid sheet range: ' . $range);
+        }
+        $this->sheetName = $m[1];
+        $this->lastColumn = $m[3];
     }
 
     public function appendRow(array $values): void
     {
         $accessToken = $this->fetchAccessToken();
+        $nextRow = $this->findNextRow($accessToken);
 
+        $range = sprintf('%s!A%d:%s%d', $this->sheetName, $nextRow, $this->lastColumn, $nextRow);
         $url = sprintf(
-            'https://sheets.googleapis.com/v4/spreadsheets/%s/values/%s:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS',
+            'https://sheets.googleapis.com/v4/spreadsheets/%s/values/%s?valueInputOption=USER_ENTERED',
             rawurlencode($this->spreadsheetId),
-            rawurlencode($this->range)
+            rawurlencode($range)
         );
 
         $body = json_encode(['values' => [$values]], JSON_UNESCAPED_UNICODE);
@@ -41,7 +54,7 @@ class GoogleSheetsClient
         $ch = curl_init($url);
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
+            CURLOPT_CUSTOMREQUEST => 'PUT',
             CURLOPT_POSTFIELDS => $body,
             CURLOPT_HTTPHEADER => [
                 'Authorization: Bearer ' . $accessToken,
@@ -55,8 +68,36 @@ class GoogleSheetsClient
         curl_close($ch);
 
         if ($response === false || $status >= 300) {
-            throw new RuntimeException('sheets append failed: HTTP ' . $status . ' ' . $err . ' ' . $response);
+            throw new RuntimeException('sheets update failed: HTTP ' . $status . ' ' . $err . ' ' . $response);
         }
+    }
+
+    private function findNextRow(string $accessToken): int
+    {
+        $range = $this->sheetName . '!A:A';
+        $url = sprintf(
+            'https://sheets.googleapis.com/v4/spreadsheets/%s/values/%s',
+            rawurlencode($this->spreadsheetId),
+            rawurlencode($range)
+        );
+
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $accessToken],
+            CURLOPT_TIMEOUT => 10,
+        ]);
+        $response = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($response === false || $status >= 300) {
+            throw new RuntimeException('sheets read failed: HTTP ' . $status . ' ' . $response);
+        }
+
+        $data = json_decode($response, true);
+        $rowCount = isset($data['values']) ? count($data['values']) : 0;
+        return $rowCount + 1;
     }
 
     private function fetchAccessToken(): string
