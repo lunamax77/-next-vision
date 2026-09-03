@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>アカウント管理 | 勤怠管理</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -25,9 +22,23 @@
 
   <div class="form-row">
     <div class="field">
-      <label for="newName">新規スタッフの氏名</label>
+      <label for="newName">氏名 <span class="req">*</span></label>
       <input type="text" id="newName" placeholder="山田太郎">
     </div>
+    <div class="field">
+      <label for="newPhone">電話番号 <span class="req">*</span></label>
+      <input type="tel" id="newPhone" placeholder="090-1234-5678">
+    </div>
+    <div class="field">
+      <label for="newStation">最寄駅 <span class="req">*</span></label>
+      <input type="text" id="newStation" placeholder="香芝">
+    </div>
+    <div class="field">
+      <label for="newGroup">グループ名(任意)</label>
+      <input type="text" id="newGroup" placeholder="営業チーム">
+    </div>
+  </div>
+  <div class="form-row">
     <button type="button" class="btn" id="createBtn">アカウント発行</button>
   </div>
 
@@ -39,6 +50,9 @@
         <tr>
           <th>ID</th>
           <th>氏名</th>
+          <th>グループ</th>
+          <th>電話番号</th>
+          <th>最寄駅</th>
           <th>状態</th>
           <th>作成日</th>
           <th>操作</th>
@@ -116,6 +130,9 @@ async function load() {
           <tr>
             <td>${a.login_id}</td>
             <td>${a.display_name}</td>
+            <td>${a.group_name || "-"}</td>
+            <td>${a.phone_number || "-"}</td>
+            <td>${a.nearest_station || "-"}</td>
             <td>${badge}</td>
             <td>${formatDate(a.created_at)}</td>
             <td style="display:flex;gap:8px;flex-wrap:wrap;">
@@ -136,16 +153,36 @@ async function load() {
 
 document.getElementById("createBtn").addEventListener("click", async () => {
   const nameInput = document.getElementById("newName");
+  const phoneInput = document.getElementById("newPhone");
+  const stationInput = document.getElementById("newStation");
+  const groupInput = document.getElementById("newGroup");
+
   const displayName = nameInput.value.trim();
-  if (!displayName) {
-    statusEl.textContent = "氏名を入力してください";
+  const phoneNumber = phoneInput.value.trim();
+  const nearestStation = stationInput.value.trim();
+  const groupName = groupInput.value.trim();
+
+  if (!displayName || !phoneNumber || !nearestStation) {
+    statusEl.textContent = "氏名・電話番号・最寄駅は必須です";
     statusEl.classList.add("is-error");
     return;
   }
   try {
-    const data = await api({ action: "create", display_name: displayName });
+    const data = await api({
+      action: "create",
+      display_name: displayName,
+      phone_number: phoneNumber,
+      nearest_station: nearestStation,
+      group_name: groupName,
+    });
     nameInput.value = "";
-    showOverlay(`${displayName} さんのアカウントを発行しました`, data.login_id, data.password);
+    phoneInput.value = "";
+    stationInput.value = "";
+    groupInput.value = "";
+    const note = data.station_geocoded
+      ? ""
+      : "(最寄駅の位置情報が自動取得できませんでした。出勤時の位置警告は動作しない場合があります)";
+    showOverlay(`${displayName} さんのアカウントを発行しました ${note}`, data.login_id, data.password);
   } catch (err) {
     statusEl.textContent = "発行に失敗しました: " + err.message;
     statusEl.classList.add("is-error");

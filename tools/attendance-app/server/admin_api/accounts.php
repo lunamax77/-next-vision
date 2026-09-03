@@ -5,6 +5,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 require __DIR__ . '/../lib/db.php';
 require __DIR__ . '/../lib/staff_auth.php';
+require __DIR__ . '/../lib/geocode.php';
 
 function respond(int $status, array $body): void
 {
@@ -30,7 +31,8 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET') {
     $stmt = $pdo->query(
-        'SELECT id, login_id, display_name, is_active, created_at FROM staff_accounts ORDER BY created_at DESC'
+        'SELECT id, login_id, display_name, group_name, phone_number, nearest_station, is_active, created_at
+         FROM staff_accounts ORDER BY created_at DESC'
     );
     respond(200, ['ok' => true, 'accounts' => $stmt->fetchAll()]);
 }
@@ -45,26 +47,51 @@ if ($method === 'POST') {
 
     if ($action === 'create') {
         $displayName = trim((string)($input['display_name'] ?? ''));
-        if ($displayName === '') {
-            respond(400, ['ok' => false, 'error' => '氏名を入力してください']);
+        $phoneNumber = trim((string)($input['phone_number'] ?? ''));
+        $nearestStation = trim((string)($input['nearest_station'] ?? ''));
+        $groupName = trim((string)($input['group_name'] ?? ''));
+
+        if ($displayName === '' || $phoneNumber === '' || $nearestStation === '') {
+            respond(400, ['ok' => false, 'error' => '氏名・電話番号・最寄駅は必須です']);
         }
+
+        $stationCoords = null;
+        try {
+            $stationCoords = forward_geocode($nearestStation . '駅');
+        } catch (Throwable $e) {
+            error_log('accounts.php geocode error: ' . $e->getMessage());
+        }
+
         try {
             $loginId = generate_login_id($pdo);
             $password = generate_temp_password();
             $stmt = $pdo->prepare(
-                'INSERT INTO staff_accounts (login_id, password_hash, display_name, is_active)
-                 VALUES (:login_id, :password_hash, :display_name, 1)'
+                'INSERT INTO staff_accounts
+                    (login_id, password_hash, display_name, group_name, phone_number, nearest_station, nearest_station_lat, nearest_station_lng, is_active)
+                 VALUES
+                    (:login_id, :password_hash, :display_name, :group_name, :phone_number, :nearest_station, :lat, :lng, 1)'
             );
             $stmt->execute([
                 'login_id' => $loginId,
                 'password_hash' => password_hash($password, PASSWORD_BCRYPT),
                 'display_name' => $displayName,
+                'group_name' => $groupName !== '' ? $groupName : null,
+                'phone_number' => $phoneNumber,
+                'nearest_station' => $nearestStation,
+                'lat' => $stationCoords['lat'] ?? null,
+                'lng' => $stationCoords['lng'] ?? null,
             ]);
         } catch (Throwable $e) {
             error_log('accounts.php create error: ' . $e->getMessage());
             respond(500, ['ok' => false, 'error' => 'db error']);
         }
-        respond(200, ['ok' => true, 'login_id' => $loginId, 'password' => $password, 'display_name' => $displayName]);
+        respond(200, [
+            'ok' => true,
+            'login_id' => $loginId,
+            'password' => $password,
+            'display_name' => $displayName,
+            'station_geocoded' => $stationCoords !== null,
+        ]);
     }
 
     if ($action === 'reset_password') {

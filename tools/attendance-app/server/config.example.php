@@ -25,7 +25,7 @@ return [
         'enabled' => false,
         'service_account_json' => __DIR__ . '/google-service-account.json',
         'spreadsheet_id' => 'YOUR_SPREADSHEET_ID',
-        'sheet_range' => 'シート1!A:J',
+        'sheet_range' => 'シート1!A:K',
     ],
 
     // 打刻通知(メール・プッシュ)。email を空にするとメール送信をスキップする

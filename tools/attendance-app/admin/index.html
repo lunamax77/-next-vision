@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>本日の状況 | 勤怠管理</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -30,24 +27,16 @@
 
   <div class="status" id="status">読み込み中...</div>
 
-  <div style="overflow-x:auto;">
-    <table id="table" hidden>
-      <thead>
-        <tr>
-          <th>氏名</th>
-          <th>起床確認</th>
-          <th>出勤確認</th>
-          <th>移動確認</th>
-          <th>退勤確認</th>
-        </tr>
-      </thead>
-      <tbody id="tbody"></tbody>
-    </table>
-  </div>
+  <div id="groups"></div>
 </div>
 
 <script>
-const TYPES = ["wakeup", "checkin", "move", "checkout"];
+const TYPES = [
+  { key: "wakeup", label: "起床確認" },
+  { key: "checkin", label: "出勤確認" },
+  { key: "move", label: "移動確認" },
+  { key: "checkout", label: "退勤確認" },
+];
 
 function formatTime(iso) {
   if (!iso) return "";
@@ -55,40 +44,67 @@ function formatTime(iso) {
   return d.toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" });
 }
 
-function renderCell(entry, type) {
+function renderChip(entry, typeInfo) {
   if (!entry) {
-    return '<div class="empty-cell">-</div>';
+    return `
+      <div class="status-chip empty">
+        <div class="status-chip-label">${typeInfo.label}</div>
+        <div class="status-chip-empty">未記録</div>
+      </div>`;
   }
   const img = entry.photo_url
-    ? `<img src="${entry.photo_url}" alt="">`
-    : '<div class="placeholder"></div>';
-  const parts = [];
-  if (type === "move" && entry.route) parts.push(entry.route);
-  if (type === "move" && entry.transport_method) parts.push(entry.transport_method);
-  if (entry.amount !== null && entry.amount !== undefined) {
-    parts.push(`&yen;${Number(entry.amount).toLocaleString("ja-JP")}`);
-  }
-  const metaLine = parts.length ? `<div>${parts.join(" ・ ")}</div>` : "";
-  const addressLine = entry.address ? `<div>${entry.address}</div>` : "";
-  const mapLink = entry.maps_url
-    ? `<div><a href="${entry.maps_url}" target="_blank" rel="noopener" style="color:var(--accent);">地図で見る</a></div>`
+    ? `<img class="status-chip-photo" src="${entry.photo_url}" alt="">`
+    : '<div class="status-chip-photo placeholder"></div>';
+  const warn = entry.location_mismatch
+    ? '<div class="warn-badge">⚠ 最寄駅から離れています</div>'
     : "";
+  const mapLink = entry.maps_url
+    ? `<a href="${entry.maps_url}" target="_blank" rel="noopener">地図</a>`
+    : "";
+  const tripParts = [];
+  if (entry.route) tripParts.push(entry.route);
+  if (entry.transport_method) tripParts.push(entry.transport_method);
+  if (entry.amount !== null && entry.amount !== undefined) {
+    tripParts.push(`&yen;${Number(entry.amount).toLocaleString("ja-JP")}`);
+  }
   return `
-    <div class="cell">
+    <div class="status-chip ${entry.location_mismatch ? "mismatch" : ""}">
+      <div class="status-chip-label">${typeInfo.label}</div>
       ${img}
-      <div class="meta">
-        <div class="time">${formatTime(entry.time)}</div>
-        ${metaLine}
-        ${addressLine}
-        ${mapLink}
+      <div class="status-chip-time">${formatTime(entry.time)}</div>
+      ${warn}
+      ${tripParts.length ? `<div class="status-chip-sub">${tripParts.join(" ・ ")}</div>` : ""}
+      ${entry.address ? `<div class="status-chip-sub">${entry.address}</div>` : ""}
+      ${mapLink ? `<div class="status-chip-sub">${mapLink}</div>` : ""}
+    </div>`;
+}
+
+function renderStaffCard(s) {
+  const primaryPhoto = (s.checkin && s.checkin.photo_url) || (s.wakeup && s.wakeup.photo_url) || null;
+  const photoHtml = primaryPhoto
+    ? `<img class="staff-photo" src="${primaryPhoto}" alt="">`
+    : '<div class="staff-photo placeholder"></div>';
+  const metaParts = [s.login_id];
+  if (s.nearest_station) metaParts.push(`最寄駅: ${s.nearest_station}`);
+
+  return `
+    <div class="staff-card">
+      <div class="staff-card-head">
+        ${photoHtml}
+        <div>
+          <div class="staff-card-name">${s.display_name}</div>
+          <div class="staff-card-meta">${metaParts.join(" ・ ")}</div>
+        </div>
+      </div>
+      <div class="status-row">
+        ${TYPES.map((t) => renderChip(s[t.key], t)).join("")}
       </div>
     </div>`;
 }
 
 async function load() {
   const statusEl = document.getElementById("status");
-  const table = document.getElementById("table");
-  const tbody = document.getElementById("tbody");
+  const groupsEl = document.getElementById("groups");
   try {
     const res = await fetch("../server/admin_api/today.php");
     if (!res.ok) throw new Error("HTTP " + res.status);
@@ -102,22 +118,26 @@ async function load() {
       return;
     }
 
-    tbody.innerHTML = data.staff
-      .map((s) => {
-        const cells = TYPES.map((t) => `<td>${renderCell(s[t], t)}</td>`).join("");
-        return `
-          <tr>
-            <td>
-              <div class="staff-name">${s.display_name}</div>
-              <div class="staff-id">${s.login_id}</div>
-            </td>
-            ${cells}
-          </tr>`;
-      })
+    const groups = new Map();
+    data.staff.forEach((s) => {
+      const key = s.group_name || "グループ未設定";
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(s);
+    });
+
+    groupsEl.innerHTML = [...groups.entries()]
+      .map(
+        ([groupName, members]) => `
+          <section class="group-section">
+            <h2 class="group-title">${groupName}</h2>
+            <div class="staff-grid">
+              ${members.map(renderStaffCard).join("")}
+            </div>
+          </section>`
+      )
       .join("");
 
     statusEl.textContent = "";
-    table.hidden = false;
   } catch (err) {
     statusEl.textContent = "読み込みに失敗しました: " + err.message;
     statusEl.classList.add("is-error");

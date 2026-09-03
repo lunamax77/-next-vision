@@ -34,12 +34,13 @@ $startUtc = (clone $startJst)->setTimezone($utc)->format('Y-m-d H:i:s');
 $endUtc = (clone $endJst)->setTimezone($utc)->format('Y-m-d H:i:s');
 
 $accountsStmt = $pdo->query(
-    'SELECT login_id, display_name FROM staff_accounts WHERE is_active = 1 ORDER BY display_name'
+    'SELECT login_id, display_name, group_name, nearest_station FROM staff_accounts
+     WHERE is_active = 1 ORDER BY group_name IS NULL, group_name, display_name'
 );
 $accounts = $accountsStmt->fetchAll();
 
 $recordsStmt = $pdo->prepare(
-    'SELECT login_id, type, label, transport_method, route, amount, recorded_at, lat, lng, address, photo_path
+    'SELECT login_id, type, label, transport_method, route, amount, recorded_at, lat, lng, address, photo_path, location_mismatch
      FROM attendance_records
      WHERE recorded_at >= :start AND recorded_at < :end
      ORDER BY recorded_at ASC'
@@ -59,6 +60,8 @@ foreach ($accounts as $acc) {
     $entry = [
         'login_id' => $loginId,
         'display_name' => $acc['display_name'],
+        'group_name' => $acc['group_name'],
+        'nearest_station' => $acc['nearest_station'],
         'wakeup' => null,
         'checkin' => null,
         'move' => null,
@@ -79,6 +82,7 @@ foreach ($accounts as $acc) {
                 'address' => $last['address'],
                 'maps_url' => ($lat !== null && $lng !== null) ? maps_link($lat, $lng) : null,
                 'photo_url' => $last['photo_path'] ? $uploadsBase . '/' . $last['photo_path'] : null,
+                'location_mismatch' => (bool)$last['location_mismatch'],
             ];
             if ($type === 'move') {
                 $entry['move_count'] = count($list);

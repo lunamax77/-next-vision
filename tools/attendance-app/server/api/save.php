@@ -59,7 +59,8 @@ if ($loginId === '' || !in_array($type, $allowedTypes, true) || $label === '') {
 try {
     $pdo = attendance_db($config);
     $stmt = $pdo->prepare(
-        'SELECT display_name, is_active FROM staff_accounts WHERE login_id = :login_id'
+        'SELECT display_name, is_active, nearest_station, nearest_station_lat, nearest_station_lng
+         FROM staff_accounts WHERE login_id = :login_id'
     );
     $stmt->execute(['login_id' => $loginId]);
     $account = $stmt->fetch();
@@ -118,10 +119,27 @@ if ($lat !== null && $lng !== null) {
     }
 }
 
+// 出勤確認時、登録した最寄駅から大きく離れた場所からの打刻は警告フラグを立てる
+$locationMismatchThresholdM = 3000;
+$locationMismatch = false;
+if (
+    $type === 'checkin' &&
+    $lat !== null && $lng !== null &&
+    $account['nearest_station_lat'] !== null && $account['nearest_station_lng'] !== null
+) {
+    $distance = distance_meters(
+        $lat,
+        $lng,
+        (float)$account['nearest_station_lat'],
+        (float)$account['nearest_station_lng']
+    );
+    $locationMismatch = $distance > $locationMismatchThresholdM;
+}
+
 try {
     $stmt = $pdo->prepare(
-        'INSERT INTO attendance_records (login_id, staff_name, type, label, transport_method, route, amount, recorded_at, lat, lng, address, accuracy_m, photo_path)
-         VALUES (:login_id, :staff_name, :type, :label, :transport_method, :route, :amount, :recorded_at, :lat, :lng, :address, :accuracy_m, :photo_path)'
+        'INSERT INTO attendance_records (login_id, staff_name, type, label, transport_method, route, amount, recorded_at, lat, lng, address, accuracy_m, photo_path, location_mismatch)
+         VALUES (:login_id, :staff_name, :type, :label, :transport_method, :route, :amount, :recorded_at, :lat, :lng, :address, :accuracy_m, :photo_path, :location_mismatch)'
     );
     $stmt->execute([
         'login_id' => $loginId,
@@ -137,6 +155,7 @@ try {
         'address' => $address,
         'accuracy_m' => $accuracy,
         'photo_path' => $photoPath,
+        'location_mismatch' => $locationMismatch ? 1 : 0,
     ]);
     $id = (int)$pdo->lastInsertId();
 } catch (Throwable $e) {
@@ -163,6 +182,7 @@ if (!empty($config['google']['enabled'])) {
             $mapsUrl,
             $accuracy,
             $photoUrl,
+            $locationMismatch ? '⚠ 最寄駅から離れています' : '',
         ]);
         $sheetSynced = true;
         $pdo->prepare('UPDATE attendance_records SET sheet_synced = 1 WHERE id = :id')
@@ -181,4 +201,5 @@ respond(200, [
     'sheet_synced' => $sheetSynced,
     'address' => $address,
     'maps_url' => $mapsUrl,
+    'location_mismatch' => $locationMismatch,
 ]);
