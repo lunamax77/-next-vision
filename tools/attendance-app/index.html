@@ -256,6 +256,31 @@
   }
   .status.is-error{color:var(--danger);}
 
+  .today-log{margin-top:8px;}
+  .today-log-title{
+    font-size:10.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+    margin-bottom:10px;
+  }
+  .today-log-list{display:flex;flex-direction:column;gap:8px;}
+  .today-log-empty{font-size:12px;color:var(--text-faint);}
+  .today-log-item{
+    background:var(--surface);
+    border:1px solid var(--border-soft);
+    padding:12px 14px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:4px 10px;
+  }
+  .today-log-item .label{font-size:13px;color:var(--text);}
+  .today-log-item .time{font-size:13px;font-variant-numeric:tabular-nums;color:var(--accent);}
+  .today-log-item .sub{font-size:10.5px;color:var(--text-sub);margin-top:4px;flex-basis:100%;}
+  .today-log-item.pending .time{color:var(--text-faint);}
+
   /* camera modal */
   #cameraModal{
     position:fixed;inset:0;background:#000;display:none;
@@ -393,6 +418,11 @@
   </div>
 
   <div class="status" id="status"></div>
+
+  <div class="today-log">
+    <div class="today-log-title">本日の記録</div>
+    <div class="today-log-list" id="todayLogList"></div>
+  </div>
 
   </div>
 

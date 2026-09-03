@@ -31,6 +31,7 @@ const transportMethodInput = document.getElementById("transportMethod");
 const routeInput = document.getElementById("routeInput");
 const amountInput = document.getElementById("amountInput");
 const extraStatusEl = document.getElementById("extraStatus");
+const todayLogList = document.getElementById("todayLogList");
 
 const TYPES_WITH_EXTRA = ["checkin", "move", "checkout"];
 
@@ -55,10 +56,46 @@ function applySession(s) {
     loginBox.hidden = true;
     appBody.hidden = false;
     sessionNameEl.textContent = session.display_name;
+    renderTodayLog();
   } else {
     loginBox.hidden = false;
     appBody.hidden = true;
   }
+}
+
+function formatEntryTime(iso) {
+  return new Date(iso).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" });
+}
+
+function renderTodayLog() {
+  if (!session) return;
+  const todayStr = new Date().toDateString();
+  const entries = loadEntries().filter(
+    (e) => e.loginId === session.login_id && new Date(e.time).toDateString() === todayStr
+  );
+
+  if (entries.length === 0) {
+    todayLogList.innerHTML = '<div class="today-log-empty">まだ本日の記録はありません</div>';
+    return;
+  }
+
+  todayLogList.innerHTML = entries
+    .map((e) => {
+      const subParts = [];
+      if (e.transportMethod) subParts.push(e.transportMethod);
+      if (e.route) subParts.push(e.route);
+      if (e.amount !== null && e.amount !== undefined) {
+        subParts.push(`&yen;${Number(e.amount).toLocaleString("ja-JP")}`);
+      }
+      if (!e.synced) subParts.push("送信中...");
+      return `
+        <div class="today-log-item ${e.synced ? "" : "pending"}">
+          <span class="label">${e.label}</span>
+          <span class="time">${formatEntryTime(e.time)}</span>
+          ${subParts.length ? `<span class="sub">${subParts.join(" ・ ")}</span>` : ""}
+        </div>`;
+    })
+    .join("");
 }
 
 applySession(loadSession());
@@ -258,6 +295,7 @@ function addEntry(type, label, location, photo, extra) {
   entries.unshift(entry);
   saveEntries(entries);
   setStatus(`${label} を記録しました`);
+  renderTodayLog();
 
   syncEntry(entry);
 }
@@ -295,6 +333,7 @@ async function syncEntry(entry) {
       target.synced = true;
       target.address = data.address || null;
       saveEntries(entries);
+      renderTodayLog();
     }
   } catch (err) {
     setStatus(`${entry.label}: サーバー送信に失敗(端末内には保存済み)`, true);
