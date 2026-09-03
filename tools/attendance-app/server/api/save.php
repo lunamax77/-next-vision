@@ -55,6 +55,11 @@ if ($loginId === '' || !in_array($type, $allowedTypes, true) || $label === '') {
     respond(400, ['ok' => false, 'error' => 'missing required fields']);
 }
 
+$typesRequiringTrip = ['checkin', 'move', 'checkout'];
+if (in_array($type, $typesRequiringTrip, true) && ($transportMethod === null || $route === null || $amount === null)) {
+    respond(400, ['ok' => false, 'error' => '移動手段・経路・金額は必須です']);
+}
+
 try {
     $pdo = attendance_db($config);
     $stmt = $pdo->prepare(

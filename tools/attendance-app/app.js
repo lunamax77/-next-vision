@@ -30,6 +30,7 @@ const extraNext = document.getElementById("extraNext");
 const transportMethodInput = document.getElementById("transportMethod");
 const routeInput = document.getElementById("routeInput");
 const amountInput = document.getElementById("amountInput");
+const extraStatusEl = document.getElementById("extraStatus");
 
 const TYPES_WITH_EXTRA = ["checkin", "move", "checkout"];
 
@@ -156,6 +157,8 @@ function openExtraForm(type, label) {
   transportMethodInput.value = "";
   routeInput.value = "";
   amountInput.value = "";
+  extraStatusEl.textContent = "";
+  extraStatusEl.classList.remove("is-error");
   extraBox.hidden = false;
   extraBox.scrollIntoView({ behavior: "smooth", block: "center" });
 }
@@ -167,10 +170,20 @@ extraCancel.addEventListener("click", () => {
 });
 
 extraNext.addEventListener("click", () => {
+  const transportMethod = transportMethodInput.value;
+  const route = routeInput.value.trim();
+  const amount = amountInput.value;
+
+  if (!transportMethod || !route || amount === "") {
+    extraStatusEl.textContent = "移動手段・経路・金額はすべて入力してください";
+    extraStatusEl.classList.add("is-error");
+    return;
+  }
+
   const extra = {
-    transportMethod: transportMethodInput.value || null,
-    route: routeInput.value.trim() || null,
-    amount: amountInput.value !== "" ? Number(amountInput.value) : null,
+    transportMethod,
+    route,
+    amount: Number(amount),
   };
   extraBox.hidden = true;
   openCamera(pendingType, pendingLabel, extra);

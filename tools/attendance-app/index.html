@@ -208,6 +208,7 @@
     color:var(--text-faint);
     margin-bottom:8px;
   }
+  .extra-box .field label .req{color:var(--danger);text-transform:none;letter-spacing:0;}
   .extra-box .field select,
   .extra-box .field input{
     width:100%;
@@ -366,9 +367,9 @@
       <button type="button" class="extra-cancel" id="extraCancel">キャンセル</button>
     </div>
     <div class="field">
-      <label for="transportMethod">移動手段(任意)</label>
+      <label for="transportMethod">移動手段 <span class="req">*</span></label>
       <select id="transportMethod">
-        <option value="">選択しない</option>
+        <option value="">選択してください</option>
         <option value="徒歩">徒歩</option>
         <option value="自転車">自転車</option>
         <option value="バイク">バイク</option>
@@ -380,13 +381,14 @@
       </select>
     </div>
     <div class="field">
-      <label for="routeInput">経路(任意)</label>
+      <label for="routeInput">経路 <span class="req">*</span></label>
       <input type="text" id="routeInput" placeholder="例: 自宅 → 〇〇商事">
     </div>
     <div class="field">
-      <label for="amountInput">金額(任意・円)</label>
+      <label for="amountInput">金額(円) <span class="req">*</span></label>
       <input type="number" id="amountInput" inputmode="numeric" min="0" placeholder="例: 500">
     </div>
+    <div class="status" id="extraStatus"></div>
     <button type="button" class="extra-next" id="extraNext">位置情報・撮影へ進む</button>
   </div>
 
