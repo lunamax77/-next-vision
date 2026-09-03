@@ -68,13 +68,19 @@ function forward_geocode(string $query): ?array
 }
 
 /**
- * 駅名の末尾に「駅」が付いていてもいなくても、ジオコーディング用のクエリを正規化する
- * (「香芝駅」と入力されても「香芝駅駅」で検索してしまわないようにする)。
+ * 駅名から座標を取得する。
+ * 「香芝駅」のように末尾に既に「駅」が付いていても二重に付けないよう正規化し、
+ * 「〇〇駅」で見つからない場合は「〇〇」単体でも再検索する(取得できなければ null)。
  */
-function station_geocode_query(string $stationName): string
+function geocode_station(string $stationName): ?array
 {
     $base = str_ends_with($stationName, '駅') ? mb_substr($stationName, 0, -1) : $stationName;
-    return $base . '駅';
+
+    $result = forward_geocode($base . '駅');
+    if ($result !== null) {
+        return $result;
+    }
+    return forward_geocode($base);
 }
 
 /**

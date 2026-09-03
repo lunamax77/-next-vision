@@ -57,7 +57,7 @@ if ($method === 'POST') {
 
         $stationCoords = null;
         try {
-            $stationCoords = forward_geocode(station_geocode_query($nearestStation));
+            $stationCoords = geocode_station($nearestStation);
         } catch (Throwable $e) {
             error_log('accounts.php geocode error: ' . $e->getMessage());
         }
@@ -119,7 +119,7 @@ if ($method === 'POST') {
         if ($needsGeocode) {
             $stationCoords = null;
             try {
-                $stationCoords = forward_geocode(station_geocode_query($nearestStation));
+                $stationCoords = geocode_station($nearestStation);
             } catch (Throwable $e) {
                 error_log('accounts.php geocode error: ' . $e->getMessage());
             }
