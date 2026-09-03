@@ -194,6 +194,12 @@ if (!empty($config['google']['enabled'])) {
             ->execute(['id' => $id]);
     } catch (Throwable $e) {
         error_log('attendance save.php Sheets sync error: ' . $e->getMessage());
+        // サーバーのエラーログの場所が分からない環境向けに、一時的に専用ログにも書き出す
+        @file_put_contents(
+            __DIR__ . '/../sheets_debug.log',
+            date('c') . ' ' . $e->getMessage() . "\n",
+            FILE_APPEND
+        );
         // DB保存はできているのでエラーにはしない
     }
 }
