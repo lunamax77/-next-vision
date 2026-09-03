@@ -57,7 +57,7 @@ if ($method === 'POST') {
 
         $stationCoords = null;
         try {
-            $stationCoords = forward_geocode($nearestStation . '駅');
+            $stationCoords = forward_geocode(station_geocode_query($nearestStation));
         } catch (Throwable $e) {
             error_log('accounts.php geocode error: ' . $e->getMessage());
         }
@@ -105,33 +105,27 @@ if ($method === 'POST') {
             respond(400, ['ok' => false, 'error' => '氏名・電話番号・最寄駅は必須です']);
         }
 
-        $stmt = $pdo->prepare('SELECT nearest_station FROM staff_accounts WHERE id = :id');
+        $stmt = $pdo->prepare('SELECT nearest_station, nearest_station_lat, nearest_station_lng FROM staff_accounts WHERE id = :id');
         $stmt->execute(['id' => $id]);
         $current = $stmt->fetch();
         if (!$current) {
             respond(404, ['ok' => false, 'error' => 'account not found']);
         }
 
-        $lat = null;
-        $lng = null;
-        $stationGeocoded = true;
-        if ($current['nearest_station'] !== $nearestStation) {
+        $lat = $current['nearest_station_lat'];
+        $lng = $current['nearest_station_lng'];
+        $stationGeocoded = $lat !== null && $lng !== null;
+        $needsGeocode = $current['nearest_station'] !== $nearestStation || !$stationGeocoded;
+        if ($needsGeocode) {
             $stationCoords = null;
             try {
-                $stationCoords = forward_geocode($nearestStation . '駅');
+                $stationCoords = forward_geocode(station_geocode_query($nearestStation));
             } catch (Throwable $e) {
                 error_log('accounts.php geocode error: ' . $e->getMessage());
             }
             $lat = $stationCoords['lat'] ?? null;
             $lng = $stationCoords['lng'] ?? null;
             $stationGeocoded = $stationCoords !== null;
-        } else {
-            $stmt = $pdo->prepare('SELECT nearest_station_lat, nearest_station_lng FROM staff_accounts WHERE id = :id');
-            $stmt->execute(['id' => $id]);
-            $existing = $stmt->fetch();
-            $lat = $existing['nearest_station_lat'] ?? null;
-            $lng = $existing['nearest_station_lng'] ?? null;
-            $stationGeocoded = $lat !== null && $lng !== null;
         }
 
         try {

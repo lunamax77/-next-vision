@@ -68,6 +68,16 @@ function forward_geocode(string $query): ?array
 }
 
 /**
+ * 駅名の末尾に「駅」が付いていてもいなくても、ジオコーディング用のクエリを正規化する
+ * (「香芝駅」と入力されても「香芝駅駅」で検索してしまわないようにする)。
+ */
+function station_geocode_query(string $stationName): string
+{
+    $base = str_ends_with($stationName, '駅') ? mb_substr($stationName, 0, -1) : $stationName;
+    return $base . '駅';
+}
+
+/**
  * 2点間の距離をメートルで返す(ハーヴァサイン公式)。
  */
 function distance_meters(float $lat1, float $lng1, float $lat2, float $lng2): float
