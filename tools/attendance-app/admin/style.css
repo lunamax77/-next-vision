@@ -91,7 +91,7 @@ td{
 
 .staff-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns:repeat(auto-fill, minmax(460px, 1fr));
   gap:16px;
 }
 .staff-card{
@@ -124,7 +124,7 @@ td{
 
 .status-row{
   display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(110px, 1fr));
+  grid-template-columns:repeat(4, 1fr);
   gap:10px;
 }
 .status-chip{
@@ -142,11 +142,12 @@ td{
   margin-bottom:8px;
 }
 .status-chip-photo{
-  width:56px;height:56px;
+  width:100%;
+  aspect-ratio:1;
   border-radius:4px;
   object-fit:cover;
   background:var(--surface);
-  margin:0 auto 6px;
+  margin:0 0 6px;
   display:block;
 }
 .status-chip-photo.placeholder{background:var(--surface);}

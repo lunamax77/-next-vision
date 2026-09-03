@@ -69,7 +69,6 @@ function renderChip(entry, typeInfo) {
       <div class="status-chip-time">${formatTime(entry.time)}</div>
       ${warn}
       ${tripParts.length ? `<div class="status-chip-sub">${tripParts.join(" ・ ")}</div>` : ""}
-      ${entry.address ? `<div class="status-chip-sub">${entry.address}</div>` : ""}
       ${mapLink ? `<div class="status-chip-sub">${mapLink}</div>` : ""}
     </div>`;
 }
