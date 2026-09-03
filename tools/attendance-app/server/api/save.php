@@ -123,11 +123,12 @@ if ($lat !== null && $lng !== null) {
     }
 }
 
-// 出勤確認時、登録した最寄駅から大きく離れた場所からの打刻は警告フラグを立てる
+// 出勤・退勤確認時、登録した最寄駅から大きく離れた場所からの打刻は警告フラグを立てる
 $locationMismatchThresholdM = 3000;
 $locationMismatch = false;
+$typesRequiringLocationCheck = ['checkin', 'checkout'];
 if (
-    $type === 'checkin' &&
+    in_array($type, $typesRequiringLocationCheck, true) &&
     $lat !== null && $lng !== null &&
     $account['nearest_station_lat'] !== null && $account['nearest_station_lng'] !== null
 ) {
