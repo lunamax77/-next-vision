@@ -74,7 +74,7 @@ function forward_geocode(string $query): ?array
  */
 function geocode_station(string $stationName): ?array
 {
-    $base = str_ends_with($stationName, '駅') ? mb_substr($stationName, 0, -1) : $stationName;
+    $base = (mb_substr($stationName, -1) === '駅') ? mb_substr($stationName, 0, -1) : $stationName;
 
     $result = forward_geocode($base . '駅');
     if ($result !== null) {
