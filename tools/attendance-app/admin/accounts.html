@@ -73,6 +73,35 @@
   </div>
 </div>
 
+<div class="overlay" id="editOverlay">
+  <div class="overlay-box">
+    <h2>アカウント情報を編集</h2>
+    <div class="form-row">
+      <div class="field">
+        <label for="editName">氏名 <span class="req">*</span></label>
+        <input type="text" id="editName">
+      </div>
+      <div class="field">
+        <label for="editPhone">電話番号 <span class="req">*</span></label>
+        <input type="tel" id="editPhone">
+      </div>
+      <div class="field">
+        <label for="editStation">最寄駅 <span class="req">*</span></label>
+        <input type="text" id="editStation">
+      </div>
+      <div class="field">
+        <label for="editGroup">グループ名(任意)</label>
+        <input type="text" id="editGroup">
+      </div>
+    </div>
+    <div class="status" id="editStatus"></div>
+    <div style="display:flex;gap:10px;margin-top:8px;">
+      <button type="button" class="btn" id="editSave">保存</button>
+      <button type="button" class="btn" id="editCancel">キャンセル</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const statusEl = document.getElementById("status");
 const table = document.getElementById("table");
@@ -136,6 +165,7 @@ async function load() {
             <td>${badge}</td>
             <td>${formatDate(a.created_at)}</td>
             <td style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn small" data-action="edit" data-id="${a.id}" data-name="${a.display_name}" data-phone="${a.phone_number || ""}" data-station="${a.nearest_station || ""}" data-group="${a.group_name || ""}">編集</button>
               <button type="button" class="btn small" data-action="reset" data-id="${a.id}" data-name="${a.display_name}" data-login="${a.login_id}">PW再発行</button>
               <button type="button" class="btn small ${toggleClass}" data-action="toggle" data-id="${a.id}" data-active="${a.is_active ? 0 : 1}">${toggleLabel}</button>
             </td>
@@ -189,11 +219,65 @@ document.getElementById("createBtn").addEventListener("click", async () => {
   }
 });
 
+const editOverlay = document.getElementById("editOverlay");
+const editStatus = document.getElementById("editStatus");
+let editingId = null;
+
+document.getElementById("editCancel").addEventListener("click", () => {
+  editOverlay.classList.remove("open");
+});
+
+document.getElementById("editSave").addEventListener("click", async () => {
+  const displayName = document.getElementById("editName").value.trim();
+  const phoneNumber = document.getElementById("editPhone").value.trim();
+  const nearestStation = document.getElementById("editStation").value.trim();
+  const groupName = document.getElementById("editGroup").value.trim();
+
+  if (!displayName || !phoneNumber || !nearestStation) {
+    editStatus.textContent = "氏名・電話番号・最寄駅は必須です";
+    editStatus.classList.add("is-error");
+    return;
+  }
+  try {
+    const data = await api({
+      action: "update",
+      id: editingId,
+      display_name: displayName,
+      phone_number: phoneNumber,
+      nearest_station: nearestStation,
+      group_name: groupName,
+    });
+    editStatus.textContent = "";
+    editStatus.classList.remove("is-error");
+    editOverlay.classList.remove("open");
+    if (!data.station_geocoded) {
+      statusEl.textContent = "保存しました(最寄駅の位置情報が自動取得できませんでした。出勤時の位置警告は動作しない場合があります)";
+      statusEl.classList.remove("is-error");
+    }
+    load();
+  } catch (err) {
+    editStatus.textContent = "保存に失敗しました: " + err.message;
+    editStatus.classList.add("is-error");
+  }
+});
+
 tbody.addEventListener("click", async (e) => {
   const btn = e.target.closest("button[data-action]");
   if (!btn) return;
   const action = btn.dataset.action;
   const id = Number(btn.dataset.id);
+
+  if (action === "edit") {
+    editingId = id;
+    document.getElementById("editName").value = btn.dataset.name || "";
+    document.getElementById("editPhone").value = btn.dataset.phone || "";
+    document.getElementById("editStation").value = btn.dataset.station || "";
+    document.getElementById("editGroup").value = btn.dataset.group || "";
+    editStatus.textContent = "";
+    editStatus.classList.remove("is-error");
+    editOverlay.classList.add("open");
+    return;
+  }
 
   if (action === "reset") {
     try {

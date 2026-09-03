@@ -94,6 +94,69 @@ if ($method === 'POST') {
         ]);
     }
 
+    if ($action === 'update') {
+        $id = isset($input['id']) ? (int)$input['id'] : 0;
+        $displayName = trim((string)($input['display_name'] ?? ''));
+        $phoneNumber = trim((string)($input['phone_number'] ?? ''));
+        $nearestStation = trim((string)($input['nearest_station'] ?? ''));
+        $groupName = trim((string)($input['group_name'] ?? ''));
+
+        if ($id <= 0 || $displayName === '' || $phoneNumber === '' || $nearestStation === '') {
+            respond(400, ['ok' => false, 'error' => '氏名・電話番号・最寄駅は必須です']);
+        }
+
+        $stmt = $pdo->prepare('SELECT nearest_station FROM staff_accounts WHERE id = :id');
+        $stmt->execute(['id' => $id]);
+        $current = $stmt->fetch();
+        if (!$current) {
+            respond(404, ['ok' => false, 'error' => 'account not found']);
+        }
+
+        $lat = null;
+        $lng = null;
+        $stationGeocoded = true;
+        if ($current['nearest_station'] !== $nearestStation) {
+            $stationCoords = null;
+            try {
+                $stationCoords = forward_geocode($nearestStation . '駅');
+            } catch (Throwable $e) {
+                error_log('accounts.php geocode error: ' . $e->getMessage());
+            }
+            $lat = $stationCoords['lat'] ?? null;
+            $lng = $stationCoords['lng'] ?? null;
+            $stationGeocoded = $stationCoords !== null;
+        } else {
+            $stmt = $pdo->prepare('SELECT nearest_station_lat, nearest_station_lng FROM staff_accounts WHERE id = :id');
+            $stmt->execute(['id' => $id]);
+            $existing = $stmt->fetch();
+            $lat = $existing['nearest_station_lat'] ?? null;
+            $lng = $existing['nearest_station_lng'] ?? null;
+            $stationGeocoded = $lat !== null && $lng !== null;
+        }
+
+        try {
+            $stmt = $pdo->prepare(
+                'UPDATE staff_accounts
+                 SET display_name = :display_name, group_name = :group_name, phone_number = :phone_number,
+                     nearest_station = :nearest_station, nearest_station_lat = :lat, nearest_station_lng = :lng
+                 WHERE id = :id'
+            );
+            $stmt->execute([
+                'display_name' => $displayName,
+                'group_name' => $groupName !== '' ? $groupName : null,
+                'phone_number' => $phoneNumber,
+                'nearest_station' => $nearestStation,
+                'lat' => $lat,
+                'lng' => $lng,
+                'id' => $id,
+            ]);
+        } catch (Throwable $e) {
+            error_log('accounts.php update error: ' . $e->getMessage());
+            respond(500, ['ok' => false, 'error' => 'db error']);
+        }
+        respond(200, ['ok' => true, 'station_geocoded' => $stationGeocoded]);
+    }
+
     if ($action === 'reset_password') {
         $id = isset($input['id']) ? (int)$input['id'] : 0;
         if ($id <= 0) {
