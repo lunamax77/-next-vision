@@ -36,6 +36,7 @@
     <div class="field">
       <label for="newGroup">グループ名(任意)</label>
       <input type="text" id="newGroup" placeholder="営業チーム">
+      <div class="group-chips" id="newGroupChips"></div>
     </div>
   </div>
   <div class="form-row">
@@ -92,6 +93,7 @@
       <div class="field">
         <label for="editGroup">グループ名(任意)</label>
         <input type="text" id="editGroup">
+        <div class="group-chips" id="editGroupChips"></div>
       </div>
     </div>
     <div class="status" id="editStatus"></div>
@@ -135,12 +137,37 @@ async function api(body) {
   return data;
 }
 
+function renderGroupChips(containerId, inputId, groups) {
+  const container = document.getElementById(containerId);
+  const input = document.getElementById(inputId);
+  if (groups.length === 0) {
+    container.innerHTML = "";
+    return;
+  }
+  container.innerHTML = groups
+    .map((g) => `<button type="button" class="group-chip" data-group="${g}">${g}</button>`)
+    .join("");
+  container.querySelectorAll(".group-chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      input.value = chip.dataset.group;
+    });
+  });
+}
+
+function updateGroupChips(accounts) {
+  const groups = [...new Set(accounts.map((a) => a.group_name).filter((g) => g))].sort();
+  renderGroupChips("newGroupChips", "newGroup", groups);
+  renderGroupChips("editGroupChips", "editGroup", groups);
+}
+
 async function load() {
   try {
     const res = await fetch("../server/admin_api/accounts.php");
     if (!res.ok) throw new Error("HTTP " + res.status);
     const data = await res.json();
     if (!data.ok) throw new Error(data.error || "unknown error");
+
+    updateGroupChips(data.accounts);
 
     if (data.accounts.length === 0) {
       statusEl.textContent = "まだアカウントがありません。上のフォームから発行してください。";

@@ -217,6 +217,20 @@ td{
 }
 .form-row input:focus{outline:none;border-bottom-color:var(--accent);}
 
+.group-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.group-chip{
+  padding:4px 10px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  background:transparent;
+  color:var(--text-sub);
+  font-family:inherit;
+  font-size:11px;
+  cursor:pointer;
+  transition:background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+.group-chip:hover{border-color:var(--accent-dim);color:var(--accent);}
+
 .badge{
   display:inline-block;
   font-size:10.5px;
