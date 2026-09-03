@@ -20,11 +20,6 @@
     </nav>
   </header>
 
-  <div class="form-row">
-    <button type="button" class="btn" id="enableNotif">この端末で通知を受け取る</button>
-  </div>
-  <div class="status" id="notifStatus"></div>
-
   <div class="status" id="status">読み込み中...</div>
 
   <div id="groups"></div>
@@ -145,50 +140,6 @@ async function load() {
 }
 
 load();
-
-const VAPID_PUBLIC_KEY = "BBjZy-OvKLMEBoSWFHgZy9K5VYypR1NEDT4LSUkE_YoHcRd4YblYRIM0pzo6SK8e2ZJ_4Li5LJzRRwqg3HZseEk";
-
-function urlBase64ToUint8Array(base64String) {
-  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
-  const rawData = atob(base64);
-  return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
-}
-
-document.getElementById("enableNotif").addEventListener("click", async () => {
-  const notifStatus = document.getElementById("notifStatus");
-  notifStatus.classList.remove("is-error");
-  if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
-    notifStatus.textContent = "この端末・ブラウザは通知に対応していません";
-    notifStatus.classList.add("is-error");
-    return;
-  }
-  try {
-    const permission = await Notification.requestPermission();
-    if (permission !== "granted") {
-      notifStatus.textContent = "通知が許可されませんでした";
-      notifStatus.classList.add("is-error");
-      return;
-    }
-    const reg = await navigator.serviceWorker.register("../sw.js", { scope: "../" });
-    await navigator.serviceWorker.ready;
-    const sub = await reg.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
-    });
-    const res = await fetch("../server/admin_api/subscribe.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(sub),
-    });
-    const data = await res.json();
-    if (!res.ok || !data.ok) throw new Error(data.error || "登録に失敗しました");
-    notifStatus.textContent = "この端末で通知を受け取るように設定しました";
-  } catch (err) {
-    notifStatus.textContent = "設定に失敗しました: " + err.message;
-    notifStatus.classList.add("is-error");
-  }
-});
 </script>
 </body>
 </html>

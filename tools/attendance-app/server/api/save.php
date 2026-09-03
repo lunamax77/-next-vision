@@ -6,7 +6,6 @@ header('Content-Type: application/json; charset=utf-8');
 require __DIR__ . '/../lib/db.php';
 require __DIR__ . '/../lib/GoogleSheetsClient.php';
 require __DIR__ . '/../lib/geocode.php';
-require __DIR__ . '/../lib/notify.php';
 
 function respond(int $status, array $body): void
 {
@@ -192,8 +191,6 @@ if (!empty($config['google']['enabled'])) {
         // DB保存はできているのでエラーにはしない
     }
 }
-
-dispatch_notifications($config, $type, $label, $staffName, $recordedAt, $address);
 
 respond(200, [
     'ok' => true,

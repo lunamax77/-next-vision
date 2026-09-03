@@ -37,18 +37,3 @@ self.addEventListener("fetch", (event) => {
     })
   );
 });
-
-self.addEventListener("push", (event) => {
-  event.waitUntil(
-    self.registration.showNotification("勤怠確認", {
-      body: "新しい打刻がありました",
-      icon: "icon-192.png",
-      badge: "icon-192.png",
-    })
-  );
-});
-
-self.addEventListener("notificationclick", (event) => {
-  event.notification.close();
-  event.waitUntil(clients.openWindow("admin/index.html"));
-});
