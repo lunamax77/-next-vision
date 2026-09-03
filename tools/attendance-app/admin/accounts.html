@@ -110,6 +110,20 @@ const table = document.getElementById("table");
 const tbody = document.getElementById("tbody");
 const overlay = document.getElementById("overlay");
 
+function toHalfWidthDigits(str) {
+  return str.replace(/[０-９]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xfee0));
+}
+
+function restrictToPhoneChars(input) {
+  input.addEventListener("input", () => {
+    const converted = toHalfWidthDigits(input.value).replace(/[^0-9-]/g, "");
+    if (converted !== input.value) input.value = converted;
+  });
+}
+
+restrictToPhoneChars(document.getElementById("newPhone"));
+restrictToPhoneChars(document.getElementById("editPhone"));
+
 function formatDate(iso) {
   const d = new Date(iso.replace(" ", "T") + "Z");
   return d.toLocaleString("ja-JP", { year: "numeric", month: "numeric", day: "numeric" });

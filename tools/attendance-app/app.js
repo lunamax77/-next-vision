@@ -33,6 +33,15 @@ const amountInput = document.getElementById("amountInput");
 const extraStatusEl = document.getElementById("extraStatus");
 const todayLogList = document.getElementById("todayLogList");
 
+function toHalfWidthDigits(str) {
+  return str.replace(/[０-９]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xfee0));
+}
+
+amountInput.addEventListener("input", () => {
+  const converted = toHalfWidthDigits(amountInput.value).replace(/[^0-9]/g, "");
+  if (converted !== amountInput.value) amountInput.value = converted;
+});
+
 const TYPES_WITH_EXTRA = ["checkin", "move", "checkout"];
 
 let stream = null;
