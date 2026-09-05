@@ -1,10 +1,9 @@
 <title>10期 売上・純利益 月次推移</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap">
 <style>
 :root{--bg:#fbfbfd;--ink:#1a2350;--navy:#1e2a64;--navy2:#2c3a82;--navy-soft:#9aa6d6;--orange:#e8891c;--orange-soft:#fbe6cd;--muted:#5f6786;--grid:#e3e6f2;--panel:#eceef8;--panel-blue:#d6e5fb;--line:#d8dbe8;--white:#fff}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12162a;--ink:#e8ebfa;--navy:#8ea0ff;--navy2:#5f74e8;--navy-soft:#4d5aa0;--orange:#f39a33;--orange-soft:#4a3418;--muted:#a3abcc;--grid:#2a3050;--panel:#1c2140;--panel-blue:#1f2d4f;--line:#323a5c;--white:#1a1f3a}}
 :root[data-theme="dark"]{--bg:#12162a;--ink:#e8ebfa;--navy:#8ea0ff;--navy2:#5f74e8;--navy-soft:#4d5aa0;--orange:#f39a33;--orange-soft:#4a3418;--muted:#a3abcc;--grid:#2a3050;--panel:#1c2140;--panel-blue:#1f2d4f;--line:#323a5c;--white:#1a1f3a}
-body{background:var(--bg);color:var(--ink);font-family:"Noto Sans JP",system-ui,sans-serif;font-size:14px}
+body{background:var(--bg);color:var(--ink);font-family:Meiryo,"メイリオ","Yu Gothic","Hiragino Sans",Meiryo,"メイリオ","Yu Gothic","Hiragino Sans","Noto Sans JP",sans-serif;font-size:14px}
 .page{max-width:1600px;margin:0 auto;padding:36px 44px 28px;display:grid;gap:22px}
 h1{font-size:30px;font-weight:700;margin:0;letter-spacing:-.01em;text-wrap:balance}
 .meta{display:flex;flex-wrap:wrap;gap:8px 28px;font-size:15px;font-weight:500}
@@ -12,9 +11,9 @@ h1{font-size:30px;font-weight:700;margin:0;letter-spacing:-.01em;text-wrap:balan
 h2{text-align:center;font-size:22px;margin:4px 0 0}
 svg{display:block;overflow:visible}
 .grid{stroke:var(--grid);stroke-width:1}.axis{stroke:var(--line)}
-.tick{font:14px "Noto Sans JP",sans-serif;fill:var(--muted)}
+.tick{font:14px Meiryo,"メイリオ","Yu Gothic","Hiragino Sans","Noto Sans JP",sans-serif;fill:var(--muted)}
 .bar.act{fill:var(--navy)}.bar.fc{fill:var(--orange)}
-.lbl{font:600 15px "Barlow Semi Condensed",sans-serif}.lbl.act{fill:var(--navy)}.lbl.fc{fill:var(--orange)}.lbl.prev{fill:var(--muted);font-weight:500}
+.lbl{font:600 15px Meiryo,"メイリオ","Yu Gothic","Hiragino Sans","Noto Sans JP",sans-serif}.lbl.act{fill:var(--navy)}.lbl.fc{fill:var(--orange)}.lbl.prev{fill:var(--muted);font-weight:500}
 .line{fill:none;stroke:var(--navy2);stroke-width:2.5}.dot{fill:#9aa1b5;stroke:var(--navy2);stroke-width:2}
 .legend{display:flex;justify-content:center;gap:34px;font-size:14px;color:var(--muted)}
 .legend span::before{content:"";display:inline-block;width:26px;height:10px;margin-right:8px;vertical-align:middle;background:var(--sw)}
@@ -23,8 +22,8 @@ svg{display:block;overflow:visible}
 .card{padding:14px 20px;border-radius:6px;background:var(--panel);color:var(--ink)}
 .card.blue{background:var(--panel-blue)}.card.hot{background:var(--orange);color:#fff}
 .card small{display:block;font-size:14px;font-weight:700}
-.card b{display:block;font:700 34px/1.2 "Barlow Semi Condensed",sans-serif;margin:2px 0}
-.card b em{font:700 20px "Noto Sans JP",sans-serif;font-style:normal;margin-left:6px}
+.card b{display:block;font:700 30px/1.2 Meiryo,"メイリオ","Yu Gothic","Hiragino Sans","Noto Sans JP",sans-serif;margin:2px 0}
+.card b em{font:700 20px Meiryo,"メイリオ","Yu Gothic","Hiragino Sans","Noto Sans JP",sans-serif;font-style:normal;margin-left:6px}
 .card .sub{font-size:13px}
 .tblwrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:14px;white-space:nowrap}
