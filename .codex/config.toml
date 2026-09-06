@@ -1,0 +1,27 @@
+# 株式会社ネクストビジョン — Codex プロジェクト設定
+# 担当AI(5部署)をサブエージェントとして定義する。本体は ./agents/<name>.toml。
+# ジョブズ($jobs スキル)がここで定義した agent_type を指定して spawn する。
+
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 5
+
+[agents.sales]
+description = "営業担当AI。新規開拓・既存顧客対応・商談準備・パートナーシップの調査とドラフトを担う。"
+config_file = "./agents/sales.toml"
+
+[agents.marketing]
+description = "マーケティング担当AI。広告・広報・コンテンツ・SNS運用・市場リサーチの調査とドラフトを担う。"
+config_file = "./agents/marketing.toml"
+
+[agents.product]
+description = "プロダクト担当AI。機能開発・設計判断・技術調査・不具合対応を担う。"
+config_file = "./agents/product.toml"
+
+[agents.operations]
+description = "業務管理担当AI。法務整理・人事採用・スケジュール管理・社内文書を担う。"
+config_file = "./agents/operations.toml"
+
+[agents.finance]
+description = "財務担当AI。経理・資金繰り・予算・見積請求の整理・コスト判断の材料づくりを担う。"
+config_file = "./agents/finance.toml"

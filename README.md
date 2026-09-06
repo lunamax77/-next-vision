@@ -13,7 +13,7 @@
 
 ## 使い方
 
-- 実行部隊に仕事を流したいときは、**ジョブズ**に話しかけます(または `/jobs`)。
+- 実行部隊に仕事を流したいときは、**ジョブズ**に話しかけます(Claude では `/jobs`、Codex では `$jobs`)。
   ジョブズが方針を提案し、代表の承認を得てから各担当AIに振り分けます。
 - 組織の詳細は以下を参照してください。
 
@@ -26,3 +26,8 @@
 | `docs/org/00-charter.md` | 経営憲章(意思決定権限・承認ルールの詳細) |
 | `docs/org/01-org-structure.md` | 組織図と各役割 |
 | `docs/org/departments/` | 各部署(5部署)の定義 |
+| `docs/org/02-routines.md` | 定期ルーティン(定時報告など)の定義と再登録手順 |
+| `AGENTS.md` | Codex 用の憲章(`CLAUDE.md` と同内容) |
+| `.agents/skills/jobs/SKILL.md` | Codex 用ジョブズスキル(`$jobs`) |
+| `.codex/agents/*.toml` | Codex 用の担当AI(5部署)サブエージェント定義 |
+| `docs/codex/README.md` | Codex でこの組織を動かすセットアップ手順 |
