@@ -16,6 +16,15 @@ Codex / Claude どちらでも同じものを再登録できるよう、ここ�
 
 1〜3 は同じプロンプト(定時報告)。4 はメール内の期限をカレンダーへ登録する。
 
+### どこで動かすか
+
+| # | Claude | Codex |
+| --- | --- | --- |
+| 1〜3 定時報告 | 登録済み | 登録する(Codex アプリの「スケジュール」) |
+| 4 期限→カレンダー | 登録済み(**ここだけで動かす**) | 登録しない |
+
+#4 はカレンダーに書き込むため、両方で動かすと予定が二重に作られる。Codex には持ち込まない。
+
 ## プロンプト A: 定時報告(#1〜#3 共通)
 
 ```
@@ -57,13 +66,15 @@ Review incoming Gmail messages for deadlines and add them to Google Calendar.
 2. 名前・cron・プロンプトを上の表とプロンプトのとおり入力。
 3. コネクタに Gmail / Google Calendar / Google Drive を付与し、通知を「プッシュ」にする。
 
-### Codex(Codex アプリの Automations)
-1. Codex アプリ → Automations → 新規作成。
-2. スケジュールを上の JST 時刻で設定(アプリ側はローカル時刻指定)。
-3. プロンプトに上の内容を貼る。
-4. Gmail / Google Calendar / Google Drive の MCP サーバーを Codex に接続しておく
-   (`~/.codex/config.toml` の `[mcp_servers.*]`)。接続手順は `docs/codex/README.md`。
-5. 完了通知を有効にする。
+### Codex(Codex アプリの「スケジュール」)— #1〜#3 のみ
+1. Codex アプリ → 左メニュー「スケジュール」→ 新規作成。
+2. プロジェクトに「ネクストビジョン」(このリポジトリ)を選ぶ。
+3. 名前と時刻を上の表のとおり設定(アプリ側はローカル時刻 = JST で指定)。
+4. プロンプト A を貼る。
+5. ソースに Gmail / Google Calendar / Google Drive を接続しておく(アプリの「ソース」から追加。
+   CLI の場合は `docs/codex/README.md` の MCP 設定)。
+6. 通知をオンにして保存。
+7. #4 は登録しない。
 
 ## 変更のルール
 
