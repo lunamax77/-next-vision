@@ -36,7 +36,7 @@ try {
          WHERE login_id = :login_id AND route IS NOT NULL AND route <> \'\'
          GROUP BY route, transport_method, amount
          ORDER BY last_used DESC
-         LIMIT 20'
+         LIMIT 10'
     );
     $stmt->execute(['login_id' => $loginId]);
     $rows = $stmt->fetchAll();
