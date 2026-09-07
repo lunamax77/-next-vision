@@ -209,6 +209,7 @@ async function load() {
               <button type="button" class="btn small" data-action="edit" data-id="${a.id}" data-name="${a.display_name}" data-phone="${a.phone_number || ""}" data-station="${a.nearest_station || ""}" data-group="${a.group_name || ""}">編集</button>
               <button type="button" class="btn small" data-action="reset" data-id="${a.id}" data-name="${a.display_name}" data-login="${a.login_id}">PW再発行</button>
               <button type="button" class="btn small ${toggleClass}" data-action="toggle" data-id="${a.id}" data-active="${a.is_active ? 0 : 1}">${toggleLabel}</button>
+              <button type="button" class="btn small danger" data-action="delete" data-id="${a.id}" data-name="${a.display_name}" data-login="${a.login_id}">削除</button>
             </td>
           </tr>`;
       })
@@ -326,6 +327,24 @@ tbody.addEventListener("click", async (e) => {
       showOverlay(`${btn.dataset.name} さんのパスワードを再発行しました`, btn.dataset.login, data.password);
     } catch (err) {
       statusEl.textContent = "再発行に失敗しました: " + err.message;
+      statusEl.classList.add("is-error");
+    }
+    return;
+  }
+
+  if (action === "delete") {
+    const ok = window.confirm(
+      `${btn.dataset.name} さん(${btn.dataset.login})のアカウントを削除しますか?\n` +
+      "削除するとこのIDではログインできなくなります(過去の打刻記録は残ります)。"
+    );
+    if (!ok) return;
+    try {
+      await api({ action: "delete", id });
+      statusEl.textContent = `${btn.dataset.name} さんのアカウントを削除しました`;
+      statusEl.classList.remove("is-error");
+      load();
+    } catch (err) {
+      statusEl.textContent = "削除に失敗しました: " + err.message;
       statusEl.classList.add("is-error");
     }
     return;

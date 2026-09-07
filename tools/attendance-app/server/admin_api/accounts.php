@@ -176,6 +176,20 @@ if ($method === 'POST') {
         respond(200, ['ok' => true]);
     }
 
+    if ($action === 'delete') {
+        $id = isset($input['id']) ? (int)$input['id'] : 0;
+        if ($id <= 0) {
+            respond(400, ['ok' => false, 'error' => 'invalid id']);
+        }
+        // 打刻記録(attendance_records)は監査用に残し、アカウントのみ削除する
+        $stmt = $pdo->prepare('DELETE FROM staff_accounts WHERE id = :id');
+        $stmt->execute(['id' => $id]);
+        if ($stmt->rowCount() === 0) {
+            respond(404, ['ok' => false, 'error' => 'account not found']);
+        }
+        respond(200, ['ok' => true]);
+    }
+
     respond(400, ['ok' => false, 'error' => 'unknown action']);
 }
 
