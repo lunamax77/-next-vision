@@ -5,7 +5,9 @@
 > 区分: **社内調査(L0)**。契約・申請・パートナー打診などの**対外行為(L2)は竹村代表の承認が必須**。
 > ⚠️ 料金・プランは2026年時点の公開情報ベース(為替・改定で変動)。**補助金の登録有無は要・公式ツール検索で確認**。
 
-代表の方針により、生成AIは **Claude for Business**(Anthropic)と **Gemini for Google Workspace**(Google)の2つに絞り込み。
+> 🔀 **最新の代表決定(2026-09-07): 生成AIは Codex(OpenAI系)で推進**。本書(Gemini/Claude 比較)は**参考資料として保持**。Codex 主軸の方針・照会は `11-partner-outreach-draft.md` を参照。
+
+代表の方針(当初)により、生成AIは **Claude for Business**(Anthropic)と **Gemini for Google Workspace**(Google)の2つに絞り込み。
 
 ---
 
