@@ -1,5 +1,6 @@
 const STORAGE_KEY = "attendance-app-entries";
 const SESSION_KEY = "attendance-app-session";
+const LAST_LOGIN_ID_KEY = "attendance-app-last-login-id";
 
 const CONFIG = window.ATTENDANCE_CONFIG || { API_URL: "", APP_TOKEN: "" };
 
@@ -111,7 +112,41 @@ function renderTodayLog() {
     .join("");
 }
 
+// 起動時にサーバーから最新のアカウント情報(氏名・最寄駅)を取り直す。
+// 再ログインしなくても管理画面での変更が反映され、無効化されたアカウントは自動でログアウトする。
+async function refreshProfile() {
+  if (!session || !CONFIG.API_URL) return;
+  try {
+    const url = CONFIG.API_URL.replace(/\/save\.php$/, "/profile.php") +
+      "?login_id=" + encodeURIComponent(session.login_id);
+    const res = await fetch(url, { headers: { "X-App-Token": CONFIG.APP_TOKEN || "" } });
+    const data = await res.json();
+    if (res.status === 401) {
+      localStorage.removeItem(SESSION_KEY);
+      applySession(null);
+      loginError.textContent = data.error || "アカウントが無効です";
+      loginError.classList.add("is-error");
+      return;
+    }
+    if (res.ok && data.ok) {
+      const updated = {
+        login_id: data.login_id,
+        display_name: data.display_name,
+        nearest_station: data.nearest_station || "",
+      };
+      localStorage.setItem(SESSION_KEY, JSON.stringify(updated));
+      applySession(updated);
+    }
+  } catch {
+    // オフライン等で取れなくても保存済みのセッションで続行
+  }
+}
+
 applySession(loadSession());
+refreshProfile();
+try {
+  loginIdInput.value = localStorage.getItem(LAST_LOGIN_ID_KEY) || "";
+} catch {}
 
 loginBtn.addEventListener("click", async () => {
   const loginId = loginIdInput.value.trim();
@@ -150,6 +185,7 @@ loginBtn.addEventListener("click", async () => {
       nearest_station: data.nearest_station || "",
     };
     localStorage.setItem(SESSION_KEY, JSON.stringify(newSession));
+    localStorage.setItem(LAST_LOGIN_ID_KEY, newSession.login_id);
     loginPasswordInput.value = "";
     applySession(newSession);
   } catch (err) {
@@ -163,7 +199,7 @@ loginBtn.addEventListener("click", async () => {
 logoutBtn.addEventListener("click", () => {
   localStorage.removeItem(SESSION_KEY);
   applySession(null);
-  loginIdInput.value = "";
+  loginIdInput.value = localStorage.getItem(LAST_LOGIN_ID_KEY) || "";
   loginPasswordInput.value = "";
 });
 
