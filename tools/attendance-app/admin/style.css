@@ -22,7 +22,7 @@ body{
   -webkit-font-smoothing:antialiased;
 }
 .app{
-  max-width:960px;
+  max-width:1200px;
   margin:0 auto;
   padding:36px 24px 60px;
 }
@@ -77,8 +77,10 @@ th{
 td{
   padding:14px 10px;
   border-bottom:1px solid var(--border-soft);
-  vertical-align:top;
+  vertical-align:middle;
+  white-space:nowrap;
 }
+th{white-space:nowrap;}
 .group-section{margin-bottom:32px;}
 .group-title{
   font-size:14px;
@@ -185,7 +187,8 @@ td{
   transition:background-color .15s ease, color .15s ease;
 }
 .btn:hover{background:var(--accent);color:#161310;}
-.btn.small{padding:5px 10px;font-size:11.5px;}
+.btn.small{padding:5px 10px;font-size:11.5px;white-space:nowrap;}
+td .btn.small + .btn.small{margin-left:6px;}
 .btn.danger{border-color:#7a4a42;color:var(--danger);}
 .btn.danger:hover{background:var(--danger);color:#161310;}
 
@@ -240,6 +243,7 @@ td{
   font-size:10.5px;
   padding:2px 8px;
   border-radius:999px;
+  white-space:nowrap;
 }
 .badge.active{background:#7fae8e33;color:var(--ok);}
 .badge.inactive{background:#61565633;color:var(--text-faint);}

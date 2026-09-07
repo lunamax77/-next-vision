@@ -202,14 +202,14 @@ async function load() {
             <td>${a.login_id}</td>
             <td>${a.password_plain
               ? `<span class="pw" data-pw="${a.password_plain}">••••••••</span> <button type="button" class="btn small" data-action="showpw">表示</button>`
-              : '<span class="pw-unknown">不明(PW再発行で表示可)</span>'}</td>
+              : '<span class="pw-unknown" title="PW再発行を押すと表示できます">不明</span>'}</td>
             <td>${a.display_name}</td>
             <td>${a.group_name || "-"}</td>
             <td>${a.phone_number || "-"}</td>
             <td>${a.nearest_station || "-"}</td>
             <td>${badge}</td>
             <td>${formatDate(a.created_at)}</td>
-            <td style="display:flex;gap:8px;flex-wrap:wrap;">
+            <td style="white-space:nowrap;">
               <button type="button" class="btn small" data-action="edit" data-id="${a.id}" data-name="${a.display_name}" data-phone="${a.phone_number || ""}" data-station="${a.nearest_station || ""}" data-group="${a.group_name || ""}">編集</button>
               <button type="button" class="btn small" data-action="reset" data-id="${a.id}" data-name="${a.display_name}" data-login="${a.login_id}">PW再発行</button>
               <button type="button" class="btn small ${toggleClass}" data-action="toggle" data-id="${a.id}" data-active="${a.is_active ? 0 : 1}">${toggleLabel}</button>
