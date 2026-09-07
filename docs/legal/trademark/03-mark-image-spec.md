@@ -35,6 +35,13 @@
 - 元画像: `site/images/logo.png`(408×460px)
 - 「N」のシンボル + `NextVision` 文字の結合商標として、A と同じ手順で JPEG 化。
 
+## 作成結果(2026-09-07)
+
+- 元データ: Googleドライブ `（新）NextVision/ロゴ/IMG_1620.PNG`(1024×1024・透過PNG)。同フォルダの ChatGPT 生成版(背景クリーム・影あり)は使わない
+- 出力: `marks/A-penguin-color.jpg` 718×876px・300dpi(約6.1×7.4cm)・白背景・余白5%。特許庁の8cm以内に収まる
+- 参考保存: `marks/A-penguin-source-1024.png`(元データのコピー)
+- 注意: 1024pxは印刷用としては最低限。将来グッズ用にベクター(AI/SVG)化を推奨
+
 ## 保存先
 
 `docs/legal/trademark/marks/` を作り、最終版のみ置く。ファイル名は `<記号>-<名前>-<color|mono>.jpg`。
