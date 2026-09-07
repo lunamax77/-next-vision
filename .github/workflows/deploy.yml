@@ -1,0 +1,55 @@
+# nextvision.fun 自動デプロイ
+# - site/ 配下の変更が claude/hp-zip-import-a2ibct に push されたとき、
+#   CORESERVER の公開ディレクトリへ FTPS で同期します。
+# - サーバー側で手動管理している .htaccess / .htpasswd には一切触れません。
+# - 手動実行: GitHub の Actions タブ → "Deploy site to nextvision.fun" → Run workflow
+name: Deploy site to nextvision.fun
+
+on:
+  push:
+    branches:
+      - claude/hp-zip-import-a2ibct
+    paths:
+      - "site/**"
+  workflow_dispatch:
+
+# 同時に2つ走らないようにする（前の同期が終わってから次を実行）
+concurrency:
+  group: deploy-nextvision-fun
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: FTPS sync site/ -> public_html/
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sync to CORESERVER (FTPS)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: ./site/
+          server-dir: domains/nextvision.fun/public_html/
+          # サーバー側の全ファイルを消して入れ直す「危険モード」は絶対に使わない
+          dangerous-clean-slate: false
+          # 同期状態ファイル。サーバーに置かれ、差分アップロードに使われる
+          state-name: .ftp-deploy-sync-state.json
+          # サーバーに残す／アップロードしないもの（config.php はサーバー上で本番値を保持するため除外）
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.htaccess
+            **/.htpasswd
+            **/*.zip
+            **/build_details.py
+            **/config.php
+            **/node_modules/**
+            **/.DS_Store
+          log-level: standard

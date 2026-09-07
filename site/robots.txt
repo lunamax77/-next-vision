@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /contact.php
+Disallow: /thanks.html
+Disallow: /config.php
 
 Sitemap: https://nextvision.fun/sitemap.xml
