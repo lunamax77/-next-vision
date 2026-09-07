@@ -43,6 +43,7 @@
     <button type="button" class="btn" id="createBtn">アカウント発行</button>
   </div>
 
+  <div class="filter-bar" id="filterBar" hidden></div>
   <div class="status" id="status">読み込み中...</div>
 
   <div style="overflow-x:auto;">
@@ -175,6 +176,35 @@ function updateGroupChips(accounts) {
   renderGroupChips("editGroupChips", "editGroup", groups);
 }
 
+const FILTER_KEY = "attendance-admin-group-filter";
+const UNGROUPED = "グループ未設定";
+let allAccounts = [];
+
+function currentFilter() {
+  try { return localStorage.getItem(FILTER_KEY) || ""; } catch { return ""; }
+}
+
+function setFilter(value) {
+  try { localStorage.setItem(FILTER_KEY, value); } catch {}
+  renderFilterBar();
+  renderTable();
+}
+
+function renderFilterBar() {
+  const bar = document.getElementById("filterBar");
+  const names = [...new Set(allAccounts.map((a) => a.group_name || UNGROUPED))].sort();
+  if (names.length === 0) { bar.hidden = true; return; }
+  const active = currentFilter();
+  const items = [{ value: "", label: "すべて" }, ...names.map((n) => ({ value: n, label: n }))];
+  bar.innerHTML = items
+    .map((i) => `<button type="button" class="filter-chip ${i.value === active ? "active" : ""}" data-value="${i.value}">${i.label}</button>`)
+    .join("");
+  bar.hidden = false;
+  bar.querySelectorAll(".filter-chip").forEach((b) =>
+    b.addEventListener("click", () => setFilter(b.dataset.value))
+  );
+}
+
 async function load() {
   try {
     const res = await fetch("../server/admin_api/accounts.php");
@@ -190,7 +220,25 @@ async function load() {
       return;
     }
 
-    tbody.innerHTML = data.accounts
+    allAccounts = data.accounts;
+    renderFilterBar();
+    renderTable();
+    statusEl.textContent = "";
+    table.hidden = false;
+  } catch (err) {
+    statusEl.textContent = "読み込みに失敗しました: " + err.message;
+    statusEl.classList.add("is-error");
+  }
+}
+
+function renderTable() {
+  const active = currentFilter();
+  const rows = allAccounts.filter((a) => !active || (a.group_name || UNGROUPED) === active);
+  if (rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="9" style="color:var(--text-faint);">該当するアカウントがありません</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows
       .map((a) => {
         const badge = a.is_active
           ? '<span class="badge active">有効</span>'
@@ -218,13 +266,6 @@ async function load() {
           </tr>`;
       })
       .join("");
-
-    statusEl.textContent = "";
-    table.hidden = false;
-  } catch (err) {
-    statusEl.textContent = "読み込みに失敗しました: " + err.message;
-    statusEl.classList.add("is-error");
-  }
 }
 
 document.getElementById("createBtn").addEventListener("click", async () => {

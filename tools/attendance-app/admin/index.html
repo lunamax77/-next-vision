@@ -20,6 +20,7 @@
     </nav>
   </header>
 
+  <div class="filter-bar" id="filterBar" hidden></div>
   <div class="status" id="status">読み込み中...</div>
 
   <div id="groups"></div>
@@ -96,9 +97,66 @@ function renderStaffCard(s) {
     </div>`;
 }
 
+const FILTER_KEY = "attendance-admin-group-filter";
+const UNGROUPED = "グループ未設定";
+let allStaff = [];
+
+function currentFilter() {
+  try { return localStorage.getItem(FILTER_KEY) || ""; } catch { return ""; }
+}
+
+function setFilter(value) {
+  try { localStorage.setItem(FILTER_KEY, value); } catch {}
+  renderFilterBar();
+  renderGroups();
+}
+
+function renderFilterBar() {
+  const bar = document.getElementById("filterBar");
+  const names = [...new Set(allStaff.map((s) => s.group_name || UNGROUPED))].sort();
+  if (names.length === 0) { bar.hidden = true; return; }
+  const active = currentFilter();
+  const items = [{ value: "", label: "すべて" }, ...names.map((n) => ({ value: n, label: n }))];
+  bar.innerHTML = items
+    .map((i) => `<button type="button" class="filter-chip ${i.value === active ? "active" : ""}" data-value="${i.value}">${i.label}</button>`)
+    .join("");
+  bar.hidden = false;
+  bar.querySelectorAll(".filter-chip").forEach((b) =>
+    b.addEventListener("click", () => setFilter(b.dataset.value))
+  );
+}
+
+function renderGroups() {
+  const groupsEl = document.getElementById("groups");
+  const active = currentFilter();
+  const groups = new Map();
+  allStaff.forEach((s) => {
+    const key = s.group_name || UNGROUPED;
+    if (active && key !== active) return;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(s);
+  });
+
+  if (groups.size === 0) {
+    groupsEl.innerHTML = '<div class="status">該当するスタッフがいません</div>';
+    return;
+  }
+
+  groupsEl.innerHTML = [...groups.entries()]
+    .map(
+        ([groupName, members]) => `
+          <section class="group-section">
+            <h2 class="group-title">${groupName}</h2>
+            <div class="staff-grid">
+              ${members.map(renderStaffCard).join("")}
+            </div>
+          </section>`
+    )
+    .join("");
+}
+
 async function load() {
   const statusEl = document.getElementById("status");
-  const groupsEl = document.getElementById("groups");
   try {
     const res = await fetch("../server/admin_api/today.php");
     if (!res.ok) throw new Error("HTTP " + res.status);
@@ -112,25 +170,9 @@ async function load() {
       return;
     }
 
-    const groups = new Map();
-    data.staff.forEach((s) => {
-      const key = s.group_name || "グループ未設定";
-      if (!groups.has(key)) groups.set(key, []);
-      groups.get(key).push(s);
-    });
-
-    groupsEl.innerHTML = [...groups.entries()]
-      .map(
-        ([groupName, members]) => `
-          <section class="group-section">
-            <h2 class="group-title">${groupName}</h2>
-            <div class="staff-grid">
-              ${members.map(renderStaffCard).join("")}
-            </div>
-          </section>`
-      )
-      .join("");
-
+    allStaff = data.staff;
+    renderFilterBar();
+    renderGroups();
     statusEl.textContent = "";
   } catch (err) {
     statusEl.textContent = "読み込みに失敗しました: " + err.message;
