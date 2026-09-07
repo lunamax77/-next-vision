@@ -9,8 +9,8 @@
 - [x] [L0] 商標見本の仕様 (`03-mark-image-spec.md`)
 
 ## Phase 1: 代表の決定
-- [ ] [L1] 対象(A+B)・区分・ルート・予算を決定 (`README.md` §6)
-- [ ] [L1] 出願人情報(商号・所在地・代表者)を `02-application-draft.md` に記入
+- [x] [L1] 区分(41+35)・ルート(オンラインサービス)・予算(30万円以下目安)・名義を決定 (`README.md` §6)
+- [ ] [L1] 代表者フルネームと登記住所の一致確認(`02-application-draft.md`)
 
 ## Phase 2: 調査
 - [ ] [L0/代表] J-PlatPat で先行調査、`01-prior-search.md` の記録シートに結果を記入
