@@ -896,8 +896,8 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
           <div class="est-list">
             <label class="est-row"><input type="checkbox" class="est-check" data-price="90000">キッズライセンスパーク（スタンダード）<span class="est-name" hidden></span><span class="est-price">￥90,000／日</span></label>
             <label class="est-row"><input type="checkbox" class="est-check" data-price="135000">キッズライセンスパーク（プレミアム）<span class="est-price">￥135,000／日</span></label>
-            <label class="est-row"><input type="checkbox" class="est-check" data-price="90000">ぷにラボ（スクイーズ工作）<span class="est-price">￥90,000／日</span></label>
-            <label class="est-row"><input type="checkbox" class="est-check" data-price="90000">シールデコ ワークショップ<span class="est-price">￥90,000／日</span></label>
+            <label class="est-row"><input type="checkbox" class="est-check" data-price="90000" data-multiday="full">ぷにラボ（スクイーズ工作）<span class="est-price">￥90,000／日</span></label>
+            <label class="est-row"><input type="checkbox" class="est-check" data-price="90000" data-multiday="full">シールデコ ワークショップ<span class="est-price">￥90,000／日</span></label>
             <label class="est-row"><input type="checkbox" class="est-check" data-price="80000">エアリズム トランポリン<span class="est-price">￥80,000／日</span></label>
             <label class="est-row"><input type="checkbox" class="est-check" data-price="60000">エアリズム<span class="est-price">￥60,000／日</span></label>
             <label class="est-row"><input type="checkbox" class="est-check" data-price="60000">カーニバルA<span class="est-price">￥60,000／日</span></label>
@@ -921,7 +921,7 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
               <button type="button" class="est-step" id="est-days-plus" aria-label="日数を増やす">＋</button>
               <span>日間</span>
             </div>
-            <p class="est-note-s">2日目以降は機材費50％で自動計算されます（目安）。</p>
+            <p class="est-note-s">キッズライセンスパーク・エア遊具は2日目以降 機材費50％で自動計算されます（目安）。ワークショップは日数分です。</p>
           </div>
         </div>
       </div>
@@ -1008,7 +1008,7 @@ footer{background:var(--navy);color:rgb(255 255 255 / .7);padding:34px 0 30px;fo
         <div class="field"><label for="message">開催予定日・会場・ご相談内容</label><textarea id="message" name="message" maxlength="3000" placeholder="例）11月の土日、館内イベントスペース（約60㎡）で検討しています。"></textarea></div>
         <div class="hp-field" aria-hidden="true"><label for="website">Website（この欄は入力しないでください）</label><input type="text" id="website" name="website" tabindex="-1" autocomplete="off"></div>
         <button type="submit" class="btn btn-primary" style="width:100%">この内容で問い合わせる</button>
-        <p class="form-note">送信後、自動返信メールをお送りします。担当者より24時間以内にご連絡いたします。</p>
+        <p class="form-note">送信後、自動返信メールをお送りします。担当者より1営業日以内（土日祝を除く）にご連絡いたします。</p>
       </form>
     </div>
   </div>
@@ -1067,9 +1067,10 @@ navm.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
   function nameOf(el){return (el.parentElement.textContent||'').replace(/￥[\d,]+／日|個別見積り/g,'').trim();}
   function calc(){
     const days=Math.max(1,parseInt(daysInput.value,10)||1);
-    let base=0;const names=[];
-    checks.forEach(c=>{if(c.checked){base+=parseInt(c.dataset.price,10);names.push(nameOf(c));}});
-    let total=base>0?(days<=1?base:base+base*0.5*(days-1)):0;
+    let total=0;const names=[];
+    checks.forEach(c=>{if(!c.checked)return;const p=parseInt(c.dataset.price,10);names.push(nameOf(c));
+      // ワークショップ(data-multiday="full")は日数分、キッズライセンスパーク・エア遊具は2日目以降50%
+      total+= c.dataset.multiday==='full' ? p*days : (days<=1?p:p+p*0.5*(days-1));});
     total=Math.round(total);
     const needsQuote=[...ops].some(c=>c.checked)||[...quote].some(c=>c.checked);
     totalEl.textContent=yen(total);
