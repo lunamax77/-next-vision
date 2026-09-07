@@ -42,7 +42,7 @@ if ($loginId === '' || $password === '') {
 try {
     $pdo = attendance_db($config);
     $stmt = $pdo->prepare(
-        'SELECT password_hash, display_name, is_active FROM staff_accounts WHERE login_id = :login_id'
+        'SELECT password_hash, display_name, nearest_station, is_active FROM staff_accounts WHERE login_id = :login_id'
     );
     $stmt->execute(['login_id' => $loginId]);
     $row = $stmt->fetch();
@@ -59,4 +59,5 @@ respond(200, [
     'ok' => true,
     'login_id' => $loginId,
     'display_name' => $row['display_name'],
+    'nearest_station' => $row['nearest_station'],
 ]);

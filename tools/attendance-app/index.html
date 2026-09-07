@@ -209,6 +209,23 @@
     margin-bottom:8px;
   }
   .extra-box .field label .req{color:var(--danger);text-transform:none;letter-spacing:0;}
+  .route-row{display:flex;align-items:center;gap:8px;}
+  .route-row input{flex:1;min-width:0;}
+  .route-arrow{color:var(--text-faint);font-size:14px;flex-shrink:0;}
+  .history-title{font-size:10.5px;color:var(--text-faint);margin-top:12px;margin-bottom:6px;}
+  .history-chips{display:flex;flex-wrap:wrap;gap:6px;}
+  .history-chip{
+    padding:6px 10px;
+    border:1px solid var(--border);
+    border-radius:999px;
+    background:transparent;
+    color:var(--text-sub);
+    font-family:inherit;
+    font-size:11.5px;
+    cursor:pointer;
+    text-align:left;
+  }
+  .history-chip:active,.history-chip:hover{border-color:var(--accent-dim);color:var(--accent);}
   .extra-box .field select,
   .extra-box .field input{
     width:100%;
@@ -405,8 +422,15 @@
       </select>
     </div>
     <div class="field">
-      <label for="routeInput">経路 <span class="req">*</span></label>
-      <input type="text" id="routeInput" placeholder="例: 自宅 → 〇〇商事">
+      <label>経路 <span class="req">*</span></label>
+      <div class="route-row">
+        <input type="text" id="routeFrom" placeholder="最寄駅(出発)" list="stationList">
+        <span class="route-arrow">→</span>
+        <input type="text" id="routeTo" placeholder="到着駅" list="stationList">
+      </div>
+      <datalist id="stationList"></datalist>
+      <div class="history-title" id="historyTitle" hidden>過去の入力から選ぶ</div>
+      <div class="history-chips" id="historyChips"></div>
     </div>
     <div class="field">
       <label for="amountInput">金額(円) <span class="req">*</span></label>

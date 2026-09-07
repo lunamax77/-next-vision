@@ -28,7 +28,11 @@ const extraTitle = document.getElementById("extraTitle");
 const extraCancel = document.getElementById("extraCancel");
 const extraNext = document.getElementById("extraNext");
 const transportMethodInput = document.getElementById("transportMethod");
-const routeInput = document.getElementById("routeInput");
+const routeFromInput = document.getElementById("routeFrom");
+const routeToInput = document.getElementById("routeTo");
+const stationList = document.getElementById("stationList");
+const historyTitle = document.getElementById("historyTitle");
+const historyChips = document.getElementById("historyChips");
 const amountInput = document.getElementById("amountInput");
 const extraStatusEl = document.getElementById("extraStatus");
 const todayLogList = document.getElementById("todayLogList");
@@ -140,7 +144,11 @@ loginBtn.addEventListener("click", async () => {
     if (!res.ok || !data.ok) {
       throw new Error(data.error || "ログインに失敗しました");
     }
-    const newSession = { login_id: data.login_id, display_name: data.display_name };
+    const newSession = {
+      login_id: data.login_id,
+      display_name: data.display_name,
+      nearest_station: data.nearest_station || "",
+    };
     localStorage.setItem(SESSION_KEY, JSON.stringify(newSession));
     loginPasswordInput.value = "";
     applySession(newSession);
@@ -196,17 +204,76 @@ function getLocation() {
   });
 }
 
+function splitRoute(route) {
+  const parts = String(route || "").split("→").map((s) => s.trim());
+  return parts.length >= 2 ? { from: parts[0], to: parts.slice(1).join(" → ") } : { from: route || "", to: "" };
+}
+
+function applyHistoryItem(item) {
+  const r = splitRoute(item.route);
+  routeFromInput.value = r.from;
+  routeToInput.value = r.to;
+  if (item.transport_method) transportMethodInput.value = item.transport_method;
+  if (item.amount !== null && item.amount !== undefined) amountInput.value = String(item.amount);
+}
+
+function renderHistory(items) {
+  historyChips.innerHTML = "";
+  stationList.innerHTML = "";
+  historyTitle.hidden = items.length === 0;
+  if (items.length === 0) return;
+
+  const stations = new Set();
+  items.forEach((item) => {
+    const r = splitRoute(item.route);
+    if (r.from) stations.add(r.from);
+    if (r.to) stations.add(r.to);
+
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "history-chip";
+    const parts = [item.route];
+    if (item.transport_method) parts.push(item.transport_method);
+    if (item.amount !== null && item.amount !== undefined) {
+      parts.push(`¥${Number(item.amount).toLocaleString("ja-JP")}`);
+    }
+    chip.textContent = parts.join(" ・ ");
+    chip.addEventListener("click", () => applyHistoryItem(item));
+    historyChips.appendChild(chip);
+  });
+  stations.forEach((s) => {
+    const opt = document.createElement("option");
+    opt.value = s;
+    stationList.appendChild(opt);
+  });
+}
+
+async function loadHistory() {
+  if (!CONFIG.API_URL || !session) return;
+  try {
+    const url = CONFIG.API_URL.replace(/\/save\.php$/, "/history.php") +
+      "?login_id=" + encodeURIComponent(session.login_id);
+    const res = await fetch(url, { headers: { "X-App-Token": CONFIG.APP_TOKEN || "" } });
+    const data = await res.json();
+    if (res.ok && data.ok) renderHistory(data.history || []);
+  } catch {
+    // 履歴が取れなくても入力自体は可能なので無視
+  }
+}
+
 function openExtraForm(type, label) {
   pendingType = type;
   pendingLabel = label;
   extraTitle.textContent = label;
   transportMethodInput.value = "";
-  routeInput.value = "";
+  routeFromInput.value = (session && session.nearest_station) || "";
+  routeToInput.value = "";
   amountInput.value = "";
   extraStatusEl.textContent = "";
   extraStatusEl.classList.remove("is-error");
   extraBox.hidden = false;
   extraBox.scrollIntoView({ behavior: "smooth", block: "center" });
+  loadHistory();
 }
 
 extraCancel.addEventListener("click", () => {
@@ -217,11 +284,13 @@ extraCancel.addEventListener("click", () => {
 
 extraNext.addEventListener("click", () => {
   const transportMethod = transportMethodInput.value;
-  const route = routeInput.value.trim();
+  const routeFrom = routeFromInput.value.trim();
+  const routeTo = routeToInput.value.trim();
+  const route = routeFrom && routeTo ? `${routeFrom} → ${routeTo}` : "";
   const amount = amountInput.value;
 
   if (!transportMethod || !route || amount === "") {
-    extraStatusEl.textContent = "移動手段・経路・金額はすべて入力してください";
+    extraStatusEl.textContent = "移動手段・出発駅・到着駅・金額はすべて入力してください";
     extraStatusEl.classList.add("is-error");
     return;
   }
