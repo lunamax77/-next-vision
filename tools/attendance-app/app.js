@@ -1,6 +1,7 @@
 const STORAGE_KEY = "attendance-app-entries";
 const SESSION_KEY = "attendance-app-session";
 const LAST_LOGIN_ID_KEY = "attendance-app-last-login-id";
+const SESSION_MAX_AGE_MS = 24 * 60 * 60 * 1000; // ログイン後24時間で自動ログアウト
 
 const CONFIG = window.ATTENDANCE_CONFIG || { API_URL: "", APP_TOKEN: "" };
 
@@ -62,6 +63,25 @@ function loadSession() {
   } catch {
     return null;
   }
+}
+
+function isSessionExpired(s) {
+  if (!s) return false;
+  if (!s.logged_in_at) return true; // 旧形式(ログイン時刻なし)は一度ログインし直してもらう
+  return Date.now() - s.logged_in_at > SESSION_MAX_AGE_MS;
+}
+
+function expireSession() {
+  localStorage.removeItem(SESSION_KEY);
+  applySession(null);
+  loginIdInput.value = localStorage.getItem(LAST_LOGIN_ID_KEY) || "";
+  loginPasswordInput.value = "";
+  loginError.textContent = "ログインから24時間経過したため、再度ログインしてください";
+  loginError.classList.add("is-error");
+}
+
+function checkSessionExpiry() {
+  if (session && isSessionExpired(session)) expireSession();
 }
 
 function applySession(s) {
@@ -133,6 +153,7 @@ async function refreshProfile() {
         login_id: data.login_id,
         display_name: data.display_name,
         nearest_station: data.nearest_station || "",
+        logged_in_at: session.logged_in_at,
       };
       localStorage.setItem(SESSION_KEY, JSON.stringify(updated));
       applySession(updated);
@@ -142,11 +163,23 @@ async function refreshProfile() {
   }
 }
 
-applySession(loadSession());
-refreshProfile();
+{
+  const saved = loadSession();
+  if (saved && isSessionExpired(saved)) {
+    expireSession();
+  } else {
+    applySession(saved);
+    refreshProfile();
+  }
+}
 try {
-  loginIdInput.value = localStorage.getItem(LAST_LOGIN_ID_KEY) || "";
+  if (!loginIdInput.value) loginIdInput.value = localStorage.getItem(LAST_LOGIN_ID_KEY) || "";
 } catch {}
+// アプリを開いたままでも期限が来たらログアウトする
+setInterval(checkSessionExpiry, 60 * 1000);
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) checkSessionExpiry();
+});
 
 loginBtn.addEventListener("click", async () => {
   const loginId = loginIdInput.value.trim();
@@ -183,6 +216,7 @@ loginBtn.addEventListener("click", async () => {
       login_id: data.login_id,
       display_name: data.display_name,
       nearest_station: data.nearest_station || "",
+      logged_in_at: Date.now(),
     };
     localStorage.setItem(SESSION_KEY, JSON.stringify(newSession));
     localStorage.setItem(LAST_LOGIN_ID_KEY, newSession.login_id);
