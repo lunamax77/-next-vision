@@ -1,6 +1,14 @@
 const STORAGE_KEY = "attendance-app-entries";
 const SESSION_KEY = "attendance-app-session";
 const LAST_LOGIN_ID_KEY = "attendance-app-last-login-id";
+const LAST_LOGIN_PW_KEY = "attendance-app-last-login-pw";
+
+function prefillLoginForm() {
+  try {
+    loginIdInput.value = localStorage.getItem(LAST_LOGIN_ID_KEY) || "";
+    loginPasswordInput.value = localStorage.getItem(LAST_LOGIN_PW_KEY) || "";
+  } catch {}
+}
 const SESSION_MAX_AGE_MS = 24 * 60 * 60 * 1000; // ログイン後24時間で自動ログアウト
 
 const CONFIG = window.ATTENDANCE_CONFIG || { API_URL: "", APP_TOKEN: "" };
@@ -74,8 +82,7 @@ function isSessionExpired(s) {
 function expireSession() {
   localStorage.removeItem(SESSION_KEY);
   applySession(null);
-  loginIdInput.value = localStorage.getItem(LAST_LOGIN_ID_KEY) || "";
-  loginPasswordInput.value = "";
+  prefillLoginForm();
   loginError.textContent = "ログインから24時間経過したため、再度ログインしてください";
   loginError.classList.add("is-error");
 }
@@ -172,9 +179,7 @@ async function refreshProfile() {
     refreshProfile();
   }
 }
-try {
-  if (!loginIdInput.value) loginIdInput.value = localStorage.getItem(LAST_LOGIN_ID_KEY) || "";
-} catch {}
+if (!session) prefillLoginForm();
 // アプリを開いたままでも期限が来たらログアウトする
 setInterval(checkSessionExpiry, 60 * 1000);
 document.addEventListener("visibilitychange", () => {
@@ -220,7 +225,7 @@ loginBtn.addEventListener("click", async () => {
     };
     localStorage.setItem(SESSION_KEY, JSON.stringify(newSession));
     localStorage.setItem(LAST_LOGIN_ID_KEY, newSession.login_id);
-    loginPasswordInput.value = "";
+    localStorage.setItem(LAST_LOGIN_PW_KEY, password);
     applySession(newSession);
   } catch (err) {
     loginError.textContent = err.message;
@@ -233,8 +238,7 @@ loginBtn.addEventListener("click", async () => {
 logoutBtn.addEventListener("click", () => {
   localStorage.removeItem(SESSION_KEY);
   applySession(null);
-  loginIdInput.value = localStorage.getItem(LAST_LOGIN_ID_KEY) || "";
-  loginPasswordInput.value = "";
+  prefillLoginForm();
 });
 
 function loadEntries() {

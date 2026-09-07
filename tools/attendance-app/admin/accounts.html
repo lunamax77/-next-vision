@@ -50,6 +50,7 @@
       <thead>
         <tr>
           <th>ID</th>
+          <th>パスワード</th>
           <th>氏名</th>
           <th>グループ</th>
           <th>電話番号</th>
@@ -199,6 +200,9 @@ async function load() {
         return `
           <tr>
             <td>${a.login_id}</td>
+            <td>${a.password_plain
+              ? `<span class="pw" data-pw="${a.password_plain}">••••••••</span> <button type="button" class="btn small" data-action="showpw">表示</button>`
+              : '<span class="pw-unknown">不明(PW再発行で表示可)</span>'}</td>
             <td>${a.display_name}</td>
             <td>${a.group_name || "-"}</td>
             <td>${a.phone_number || "-"}</td>
@@ -308,6 +312,14 @@ tbody.addEventListener("click", async (e) => {
   if (!btn) return;
   const action = btn.dataset.action;
   const id = Number(btn.dataset.id);
+
+  if (action === "showpw") {
+    const span = btn.previousElementSibling;
+    const shown = span.textContent === span.dataset.pw;
+    span.textContent = shown ? "••••••••" : span.dataset.pw;
+    btn.textContent = shown ? "表示" : "隠す";
+    return;
+  }
 
   if (action === "edit") {
     editingId = id;

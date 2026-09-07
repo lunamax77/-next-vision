@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS staff_accounts (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   login_id VARCHAR(30) NOT NULL,      -- スタッフ用ログインID(例: staff0001)
   password_hash VARCHAR(255) NOT NULL,
+  password_plain VARCHAR(50) NULL,
   display_name VARCHAR(100) NOT NULL,
   group_name VARCHAR(100) NULL,           -- 所属グループ(任意)
   phone_number VARCHAR(20) NULL,          -- 電話番号

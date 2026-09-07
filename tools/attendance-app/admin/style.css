@@ -218,6 +218,9 @@ td{
 }
 .form-row input:focus{outline:none;border-bottom-color:var(--accent);}
 
+.pw{font-variant-numeric:tabular-nums;letter-spacing:.04em;}
+.pw-unknown{font-size:11px;color:var(--text-faint);}
+
 .group-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
 .group-chip{
   padding:4px 10px;

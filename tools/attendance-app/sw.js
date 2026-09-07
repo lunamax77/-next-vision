@@ -1,4 +1,4 @@
-const CACHE_NAME = "attendance-shell-v5";
+const CACHE_NAME = "attendance-shell-v6";
 const SHELL_FILES = ["./", "index.html", "app.js", "config.js", "manifest.json", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", (event) => {

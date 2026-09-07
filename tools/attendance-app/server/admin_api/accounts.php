@@ -31,7 +31,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET') {
     $stmt = $pdo->query(
-        'SELECT id, login_id, display_name, group_name, phone_number, nearest_station, is_active, created_at
+        'SELECT id, login_id, password_plain, display_name, group_name, phone_number, nearest_station, is_active, created_at
          FROM staff_accounts ORDER BY created_at DESC'
     );
     respond(200, ['ok' => true, 'accounts' => $stmt->fetchAll()]);
@@ -67,13 +67,14 @@ if ($method === 'POST') {
             $password = generate_temp_password();
             $stmt = $pdo->prepare(
                 'INSERT INTO staff_accounts
-                    (login_id, password_hash, display_name, group_name, phone_number, nearest_station, nearest_station_lat, nearest_station_lng, is_active)
+                    (login_id, password_hash, password_plain, display_name, group_name, phone_number, nearest_station, nearest_station_lat, nearest_station_lng, is_active)
                  VALUES
-                    (:login_id, :password_hash, :display_name, :group_name, :phone_number, :nearest_station, :lat, :lng, 1)'
+                    (:login_id, :password_hash, :password_plain, :display_name, :group_name, :phone_number, :nearest_station, :lat, :lng, 1)'
             );
             $stmt->execute([
                 'login_id' => $loginId,
                 'password_hash' => password_hash($password, PASSWORD_BCRYPT),
+                'password_plain' => $password,
                 'display_name' => $displayName,
                 'group_name' => $groupName !== '' ? $groupName : null,
                 'phone_number' => $phoneNumber,
@@ -157,8 +158,8 @@ if ($method === 'POST') {
             respond(400, ['ok' => false, 'error' => 'invalid id']);
         }
         $password = generate_temp_password();
-        $stmt = $pdo->prepare('UPDATE staff_accounts SET password_hash = :hash WHERE id = :id');
-        $stmt->execute(['hash' => password_hash($password, PASSWORD_BCRYPT), 'id' => $id]);
+        $stmt = $pdo->prepare('UPDATE staff_accounts SET password_hash = :hash, password_plain = :plain WHERE id = :id');
+        $stmt->execute(['hash' => password_hash($password, PASSWORD_BCRYPT), 'plain' => $password, 'id' => $id]);
         if ($stmt->rowCount() === 0) {
             respond(404, ['ok' => false, 'error' => 'account not found']);
         }
