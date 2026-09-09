@@ -73,3 +73,51 @@
 - https://www.regus-office.jp/faq/ （メンバーシップ利用時間）
 - https://e-office.space/spaces/okinawa/okinawa/nahashi , https://e-office.space/spaces/kyushu/fukuoka/fukuokashi , https://e-office.space/kanazawa-by-365/plan/ , https://e-office.space/spaces/tohoku/miyagi
 - https://officepass.nikkei.com/office/1199/ , https://officepass.nikkei.com/office/1338/ , https://officepass.nikkei.com/office/1251/
+
+---
+
+## 追記2: 会議室・24時間可否・費用、大阪8名個室の目安
+
+### 会議室の有無と料金
+
+| サービス | 会議室 | 料金（税込目安） | 会議室の24h利用 | 備考 |
+|---|---|---|---|---|
+| **BIZcomfort** | ○ ほぼ全拠点 | 会員: 15分単位 2名55円 / 4名110円 / 6名165円 / 8名220円 / 10名275円（8名室=880円/h）。非会員 1,100円/h〜 | ◎ 原則24h（一部拠点除く） | 個室プラン会員は月5h無料の拠点あり |
+| **いいオフィス** | ○ 加盟店による | 店舗ごと設定・時間課金（月額不要）。全国パスポート割引は明記なし | △ 店舗の営業時間内 | アプリから予約。金額は店舗ページで要確認 |
+| **NIKKEI OFFICE PASS** | △ 施設による | 1,200〜2,000円/h。会員2名以上入店で1人1hまで無料の店舗あり | △ 施設の営業時間内 | 有料会議室はサービス外＝店舗に直接予約・支払い |
+| **リージャス** | ◎ 全拠点 | 大阪: 500〜14,000円/h（規模による）。オフィス・メンバーシップ契約者は割引/一定枠無料 | △ 基本は営業時間内（受付対応） | 受付・来客対応あり。商談向き |
+| **WeWork** | ◎ 全拠点 | All Access Plusにクレジット付与（超過は従量） | × 営業時間内 | 会議室品質は高い |
+
+### 24時間利用の可否・費用（コワーキング/共用席）まとめ
+
+| サービス | 24h利用 | 月額（税込） |
+|---|---|---|
+| BIZcomfort | ◎ 全拠点24h/365日 | 全拠点 22,000円 / 1拠点 18,700円 / ライト 2,200円〜従量 |
+| いいオフィス | △ 24h店は一部（那覇・福岡・金沢等にあり） | 全国パスポート 22,000円 |
+| OFFICE PASS | △ 施設による（快活CLUB系は深夜可、3h制限） | 個人 13,750円 / 法人 10回 22,000円 |
+| リージャス | △ 契約拠点のみ24h、他拠点ラウンジは平日9-18時・1日4h | 要見積（旧価格 15,900円〜） |
+| WeWork | × 営業時間内のみ | 42,900円 |
+
+### 大阪で8名個室オフィスを借りる場合の月額目安
+
+※ 各社とも8名室の定価は非公開（空室・時期で変動）。公開されている1名単価・相場から算出した目安。要見積。
+
+| サービス | 大阪の該当拠点例 | 8名個室 月額目安 | 24h | 初期費用目安 | 備考 |
+|---|---|---|---|---|---|
+| **BIZcomfort** | 大阪本町-west（1〜9名室）、大阪東梅田、江戸堀 | **約15〜30万円** | ◎ | 入会金11,000円＋保証金（家賃1〜2ヶ月） | 最安帯。無人運営・受付なし。1名室28,600円〜 |
+| **コモンルーム中津**（独立系・参考） | 中津（8名室あり、4〜6F） | **約25〜40万円** | ◎ | 要確認 | 8〜14名の大部屋あり。個別空調 |
+| **リージャス** | 梅田スクエア、梅田ツインタワーズ、本町、なんばパークス等 | **約45〜80万円** | ◎（オフィス契約は24h） | 保証金（家賃2ヶ月程度）＋セットアップ費 | 受付・来客対応・高グレードビル。梅田相場8〜12万円/名。1名室83,900円〜 |
+| **WeWork 御堂筋フロンティア** | 御堂筋フロンティア | **約80〜110万円** | ◎（専用オフィスは24h） | セットアップ22,000円/名程度 | 最高価格帯。コミュニティ・設備重視向け |
+| いいオフィス / OFFICE PASS | — | 対象外 | — | — | 8名規模の専用個室商品は基本なし |
+
+**所見**: コスト重視なら BIZcomfort 本町-west（1〜9名室・24h）。来客・採用面接・ブランド重視ならリージャス梅田。中間はコモンルーム中津などの独立系。
+実際の見積は「BIZcomfort」「リージャス」「コモンルーム」の3社に同条件（8名・24h・登記可・会議室利用）で依頼するのが効率的。
+
+### 追加出典
+- https://bizcomfort.jp/price/ , https://bizcomfort.jp/osakafu/honmachi-west.html , https://bizcomfort.jp/osakafu/higashiumeda.html
+- https://www.regus-office.jp/service/meetingroom/ , https://www.regus.com/ja-jp/japan/osaka/meeting-rooms , https://www.regus-office.jp/osaka-area/ , https://kariruoffice.com/brand/regus/price-list/rental-coworking
+- https://hubspaces.jp/colum/umeda_rentaloffice_matome/
+- https://common-room.jp/nakatsu/price/ , https://justfitoffice.com/en/buildings/1036
+- https://wework.co.jp/location/osaka/midosuji-frontier
+- https://officepass.nikkei.com/magazine/share_office/free_meeting_rooms_for_officepass_members/ , https://kigyolog.com/tool.php?id=2760
+- https://e-office.space/howto
