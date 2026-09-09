@@ -246,6 +246,45 @@
   footer{border-top:1px solid var(--line)}
   .tel:hover{color:var(--accent)}
   .jpmap .hq rect{fill:url(#hqg)}
+
+  /* --- SBG-style section heads, news, footer --- */
+  nav li a{font-size:13px;letter-spacing:.06em}
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-bottom:clamp(28px,4vw,48px)}
+  .sec-head h2{margin:0;font-size:clamp(24px,3.2vw,34px);font-weight:500;letter-spacing:.02em}
+  .sec-head .sub{font-size:13px;color:var(--ink-3);margin-left:12px;letter-spacing:.08em}
+  .more{font-size:13px;letter-spacing:.08em;color:var(--ink-2);white-space:nowrap}
+  .more span{display:inline-block;margin-left:8px;transition:transform .2s}
+  .more:hover span{transform:translateX(4px)}
+  .lead{margin:-12px 0 36px;max-width:40em;font-size:15px;color:var(--ink-2)}
+  .statement{margin:0 0 48px;font-size:clamp(30px,4.6vw,56px);line-height:1.3;font-weight:400;letter-spacing:.02em}
+  .newslist{list-style:none;margin:0;padding:0}
+  .newslist li a{display:grid;grid-template-columns:110px 90px 1fr;gap:20px;align-items:center;padding:18px 0;border-top:1px solid var(--line);font-size:15px}
+  .newslist li:last-child a{border-bottom:1px solid var(--line)}
+  .newslist time{color:var(--ink-3);font-variant-numeric:tabular-nums;font-size:13px}
+  .newslist .cat{font-size:11px;letter-spacing:.08em;padding:3px 10px;border:1px solid var(--line);border-radius:999px;color:var(--ink-3);text-align:center}
+  .newslist li a:hover .ttl{color:var(--accent)}
+  @media (max-width:640px){.newslist li a{grid-template-columns:1fr;gap:6px}}
+  .company-intro{padding-bottom:0}
+  .company-intro::after{display:none}
+  .jump{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px 28px;font-size:14px}
+  .jump a{color:var(--ink-2);border-bottom:1px solid transparent;padding-bottom:2px}
+  .jump a:hover{color:var(--accent);border-color:var(--accent)}
+  #message,#clients,#network{padding-top:clamp(48px,6vw,80px)}
+  #message::after{display:none}
+  #recruit .recruit-grid{grid-template-columns:1fr 1fr}
+  #recruit .body{max-width:36em;font-size:16px}
+  #recruit .body p{margin:0 0 1.4em}
+  .site-footer{padding:56px 0 32px;border-top:1px solid var(--line);background:var(--bg-2)}
+  .fcols{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px}
+  .fbrand img{height:30px;width:auto;display:block;margin-bottom:16px}
+  .fbrand p{margin:0;font-size:12px;color:var(--ink-2);line-height:1.9}
+  .fcol h4{margin:0 0 12px;font-size:13px;font-weight:500}
+  .fcol a{display:block;font-size:13px;color:var(--ink-2);padding:4px 0}
+  .fcol a:hover{color:var(--accent)}
+  .fbottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:48px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;color:var(--ink-3)}
+  @media (max-width:860px){.fcols{grid-template-columns:1fr 1fr}}
+  @media (max-width:520px){.fcols{grid-template-columns:1fr}}
+  .hero-copy .label{padding-left:0}
 </style>
 
 <header>
@@ -253,14 +292,13 @@
     <nav>
       <a class="logo" href="#top"><img src="images/logo.png" alt="DreamCreation"></a>
       <ul>
-        <li><a href="#message">MESSAGE</a></li>
-        <li><a href="#service">SERVICE</a></li>
-        <li><a href="#philosophy">PHILOSOPHY</a></li>
-        <li><a href="#network">AREA</a></li>
-        <li><a href="#company">COMPANY</a></li>
-        <li><a href="#recruit">RECRUIT</a></li>
+        <li><a href="#news">ニュース</a></li>
+        <li><a href="#philosophy">企業理念</a></li>
+        <li><a href="#service">事業内容</a></li>
+        <li><a href="#company">企業情報</a></li>
+        <li><a href="#recruit">採用情報</a></li>
       </ul>
-      <a class="cta" href="#contact">CONTACT</a>
+      <a class="cta" href="#contact">お問い合わせ</a>
     </nav>
   </div>
 </header>
@@ -292,33 +330,44 @@
     </div>
   </div>
 
-  <section id="message">
-    <svg class="arc-bg" viewBox="0 0 800 400" aria-hidden="true"><path d="M0 400 C 150 80, 650 80, 800 400 L800 300 C 650 20, 150 20, 0 300 Z" fill="url(#gTop)"/></svg>
-    <div class="wrap message">
-      <span class="label">Message</span>
-      <div class="message-body">
-        <div class="portrait"><img src="images/takemura.jpg" alt="代表取締役 竹村英哲"></div>
-        <div class="message-text">
-          <h2>働くって、楽しい。<br>その実感を、事業の力に変えていく。</h2>
-          <p>企業の使命は、どこまでいっても社会への貢献だと考えています。それはまず雇用を生み出すこと。そして、人々が幸せに暮らしていくための活動拠点であり続けることです。</p>
-          <p>DreamCreationは2017年、大阪で生まれました。通信商材の販売促進から始まり、イベントの企画・運営、人材派遣へと事業を広げてきましたが、変わらないのは「一人ひとりの夢を、実現する力に変える」という原点です。</p>
-          <p>スピードは価値。1週間後の100%より、3日後の70%。現場で結果を出し続けることでクライアントに頼りにされ、社員が夢をもってイキイキと働ける会社であり続けます。</p>
-          <div class="sign">
-            <small>代表取締役</small>
-            <span>竹村 英哲</span>
-            <span class="en">Hideaki Takemura</span>
-          </div>
-        </div>
+  <section id="news">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>ニュース <span class="en sub">News</span></h2>
+        <a class="more" href="#news">一覧を見る<span aria-hidden="true">→</span></a>
+      </div>
+      <ul class="newslist">
+        <li><a href="#"><time>2026.—.—</time><span class="cat">お知らせ</span><span class="ttl">新事務所移転のご報告</span></a></li>
+        <li><a href="#"><time>—</time><span class="cat">ブログ</span><span class="ttl">株式会社DreamCreationについて</span></a></li>
+        <li><a href="#"><time>—</time><span class="cat">お知らせ</span><span class="ttl">サイトをオープンしました。</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="philosophy">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>企業理念 <span class="en sub">Philosophy</span></h2>
+      </div>
+      <p class="statement">夢の実現力で、<br>人々を幸せにする。</p>
+      <p class="slogan en">Create creative value<br><em>all the vectors in.</em></p>
+      <p class="note" style="margin:-24px 0 40px;max-width:36em;font-size:14px;color:var(--ink-2)">「顧客満足・社会貢献・人との出会い」をキーワードに、あらゆる方向へ創造的な価値をつくる。社内スローガンは「grow &amp; Fun!」。働くって、楽しい。勝負は早さ。</p>
+      <div class="values">
+        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M14 8h20v10a10 10 0 0 1-20 0V8zM14 12H8a6 6 0 0 0 6 8M34 12h6a6 6 0 0 1-6 8M24 28v8M16 40h16"/></svg><h3>No.1</h3><p>いちばんって楽しい。やる以上は圧倒的No.1を目指し続けます。</p></div>
+        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M4 40L18 14l8 14 6-8 12 20H4z"/><path d="M24 6l4 6h-8l4-6z"/></svg><h3>挑戦</h3><p>挑戦って楽しい。失敗を恐れず、現状維持を疑い、高い壁に挑み続けます。</p></div>
+        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="16"/><circle cx="24" cy="24" r="9"/><circle cx="24" cy="24" r="2"/><path d="M24 4v6M44 24h-6"/></svg><h3>逆算</h3><p>逆算って楽しい。登る山を決め、今やるべきことを逆算で決めます。</p></div>
+        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M26 4L10 26h12l-2 18 18-24H26l0-16z"/></svg><h3>スピード</h3><p>大至急って楽しい。1週間後の100%より、3日後の70%。</p></div>
+        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M10 40V20l14-12 14 12v20"/><path d="M10 40h28M18 40V28h12v12"/></svg><h3>執念</h3><p>諦めないって楽しい。「どうやってできるか」を考え、とことんやり抜きます。</p></div>
       </div>
     </div>
   </section>
 
   <section id="service">
     <div class="wrap">
-      <div class="head">
-        <span class="label">Service</span>
-        <h2>現場の力で、売れる仕組みをつくる。</h2>
+      <div class="sec-head">
+        <h2>事業内容 <span class="en sub">Business</span></h2>
       </div>
+      <p class="lead">現場の力で、売れる仕組みをつくる。セールスプロモーション、イベント、代理店、人材の4つの事業で、クライアントの課題に応えます。</p>
       <div class="services">
         <article class="svc">
           <figure><img src="images/svc-sales.jpg" alt="店頭での販売促進"></figure>
@@ -352,11 +401,87 @@
     </div>
   </section>
 
+  <section id="company" class="company-intro">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>企業情報 <span class="en sub">Corporate</span></h2>
+      </div>
+      <ul class="jump">
+        <li><a href="#message">代表メッセージ</a></li>
+        <li><a href="#profile">会社概要・沿革</a></li>
+        <li><a href="#clients">主要取引先</a></li>
+        <li><a href="#network">対応エリア</a></li>
+        <li><a href="#license">許認可・認証</a></li>
+        <li><a href="#partnership">パートナーシップ構築宣言</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="message">
+    <svg class="arc-bg" viewBox="0 0 800 400" aria-hidden="true"><path d="M0 400 C 150 80, 650 80, 800 400 L800 300 C 650 20, 150 20, 0 300 Z" fill="url(#gTop)"/></svg>
+    <div class="wrap message">
+      <span class="label">代表メッセージ</span>
+      <div class="message-body">
+        <div class="portrait"><img src="images/takemura.jpg" alt="代表取締役 竹村英哲"></div>
+        <div class="message-text">
+          <h2>働くって、楽しい。<br>その実感を、事業の力に変えていく。</h2>
+          <p>企業の使命は、どこまでいっても社会への貢献だと考えています。それはまず雇用を生み出すこと。そして、人々が幸せに暮らしていくための活動拠点であり続けることです。</p>
+          <p>DreamCreationは2017年、大阪で生まれました。通信商材の販売促進から始まり、イベントの企画・運営、人材派遣へと事業を広げてきましたが、変わらないのは「一人ひとりの夢を、実現する力に変える」という原点です。</p>
+          <p>スピードは価値。1週間後の100%より、3日後の70%。現場で結果を出し続けることでクライアントに頼りにされ、社員が夢をもってイキイキと働ける会社であり続けます。</p>
+          <div class="sign">
+            <small>代表取締役</small>
+            <span>竹村 英哲</span>
+            <span class="en">Hideaki Takemura</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="profile" class="dark">
+    <div class="wrap company">
+      <span class="label">会社概要</span>
+      <div>
+        <dl>
+          <div><dt>社名</dt><dd>株式会社DreamCreation</dd></div>
+          <div><dt>所在地</dt><dd>〒550-0015<br>大阪府大阪市西区南堀江1-10-1 KT堀江801号室</dd></div>
+          <div><dt>代表者</dt><dd>代表取締役　竹村 英哲</dd></div>
+          <div><dt>設立</dt><dd>2017年6月27日</dd></div>
+          <div><dt>資本金</dt><dd>1,200万円</dd></div>
+          <div><dt>事業内容</dt><dd>セールスプロモーション／イベントの企画・運営／代理店事業／労働者派遣事業</dd></div>
+          <div><dt>TEL</dt><dd>06-4967-1038</dd></div>
+        </dl>
+        <h3>沿革</h3>
+        <ul class="history">
+          <li><span class="year">2017.06</span><span>株式会社DreamCreation 設立。名古屋営業所・九州営業所 開設</span></li>
+          <li><span class="year">2019.07</span><span>日本テレビHRと業務提携</span></li>
+          <li><span class="year">2019.08</span><span>本社を難波 Namba Sky-O に移転</span></li>
+          <li><span class="year">2019.11</span><span>沖縄営業所 開設</span></li>
+          <li><span class="year">2021.05</span><span>資本金を1,200万円に増資</span></li>
+          <li><span class="year">2022.03</span><span>労働者派遣事業を開始</span></li>
+          <li><span class="year">—</span><span>本社を西区南堀江に移転</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="clients">
+    <div class="wrap about-grid">
+      <span class="label">主要取引先</span>
+      <div>
+        <ul class="clients">
+          <li>NTTドコモ</li><li>ドコモCS</li><li>NTTマーケティングアクトProCX</li><li>ソフトバンク</li><li>電通</li><li>博報堂</li><li>日本テレビ</li><li>WeWork</li>
+        </ul>
+        <p class="note">順不同・敬称略</p>
+      </div>
+    </div>
+  </section>
+
   <section id="network">
     <div class="wrap">
       <div class="head">
-        <span class="label">Area</span>
-        <h2>大阪から、全国へ。<br>45都府県に対応しています。</h2>
+        <span class="label">対応エリア</span>
+        <h2>大阪から、全国へ。45都府県に対応。</h2>
       </div>
       <div class="network">
         <svg class="jpmap" viewBox="0 0 536 632" aria-label="対応エリア（北海道・広島を除く45都府県）"><defs><linearGradient id="hqg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1BA0C4"/><stop offset="1" stop-color="#0E5FA6"/></linearGradient></defs><g class="na"><rect x="486" y="6" width="44" height="44" rx="6"/><text x="508.0" y="32.0" font-size="9">北海道</text></g><g class="ok"><rect x="486" y="54" width="44" height="44" rx="6"/><text x="508.0" y="80.0" font-size="11">青森</text></g><g class="ok"><rect x="438" y="102" width="44" height="44" rx="6"/><text x="460.0" y="128.0" font-size="11">秋田</text></g><g class="ok"><rect x="486" y="102" width="44" height="44" rx="6"/><text x="508.0" y="128.0" font-size="11">岩手</text></g><g class="ok"><rect x="438" y="150" width="44" height="44" rx="6"/><text x="460.0" y="176.0" font-size="11">山形</text></g><g class="ok"><rect x="486" y="150" width="44" height="44" rx="6"/><text x="508.0" y="176.0" font-size="11">宮城</text></g><g class="ok"><rect x="294" y="198" width="44" height="44" rx="6"/><text x="316.0" y="224.0" font-size="11">石川</text></g><g class="ok"><rect x="342" y="198" width="44" height="44" rx="6"/><text x="364.0" y="224.0" font-size="11">富山</text></g><g class="ok"><rect x="390" y="198" width="44" height="44" rx="6"/><text x="412.0" y="224.0" font-size="11">新潟</text></g><g class="ok"><rect x="486" y="198" width="44" height="44" rx="6"/><text x="508.0" y="224.0" font-size="11">福島</text></g><g class="ok"><rect x="246" y="246" width="44" height="44" rx="6"/><text x="268.0" y="272.0" font-size="11">福井</text></g><g class="ok"><rect x="294" y="246" width="44" height="44" rx="6"/><text x="316.0" y="272.0" font-size="11">岐阜</text></g><g class="ok"><rect x="342" y="246" width="44" height="44" rx="6"/><text x="364.0" y="272.0" font-size="11">長野</text></g><g class="ok"><rect x="390" y="246" width="44" height="44" rx="6"/><text x="412.0" y="272.0" font-size="11">群馬</text></g><g class="ok"><rect x="438" y="246" width="44" height="44" rx="6"/><text x="460.0" y="272.0" font-size="11">栃木</text></g><g class="ok"><rect x="486" y="246" width="44" height="44" rx="6"/><text x="508.0" y="272.0" font-size="11">茨城</text></g><g class="ok"><rect x="102" y="294" width="44" height="44" rx="6"/><text x="124.0" y="320.0" font-size="11">島根</text></g><g class="ok"><rect x="150" y="294" width="44" height="44" rx="6"/><text x="172.0" y="320.0" font-size="11">鳥取</text></g><g class="ok"><rect x="198" y="294" width="44" height="44" rx="6"/><text x="220.0" y="320.0" font-size="11">兵庫</text></g><g class="ok"><rect x="246" y="294" width="44" height="44" rx="6"/><text x="268.0" y="320.0" font-size="11">京都</text></g><g class="ok"><rect x="294" y="294" width="44" height="44" rx="6"/><text x="316.0" y="320.0" font-size="11">滋賀</text></g><g class="ok"><rect x="342" y="294" width="44" height="44" rx="6"/><text x="364.0" y="320.0" font-size="11">山梨</text></g><g class="ok"><rect x="390" y="294" width="44" height="44" rx="6"/><text x="412.0" y="320.0" font-size="11">埼玉</text></g><g class="ok"><rect x="438" y="294" width="44" height="44" rx="6"/><text x="460.0" y="320.0" font-size="11">千葉</text></g><g class="ok"><rect x="54" y="342" width="44" height="44" rx="6"/><text x="76.0" y="368.0" font-size="11">山口</text></g><g class="na"><rect x="102" y="342" width="44" height="44" rx="6"/><text x="124.0" y="368.0" font-size="11">広島</text></g><g class="ok"><rect x="150" y="342" width="44" height="44" rx="6"/><text x="172.0" y="368.0" font-size="11">岡山</text></g><g class="hq"><rect x="198" y="342" width="44" height="44" rx="6"/><text x="220.0" y="368.0" font-size="11">大阪</text></g><g class="ok"><rect x="246" y="342" width="44" height="44" rx="6"/><text x="268.0" y="368.0" font-size="11">奈良</text></g><g class="ok"><rect x="294" y="342" width="44" height="44" rx="6"/><text x="316.0" y="368.0" font-size="11">愛知</text></g><g class="ok"><rect x="342" y="342" width="44" height="44" rx="6"/><text x="364.0" y="368.0" font-size="11">静岡</text></g><g class="ok"><rect x="390" y="342" width="44" height="44" rx="6"/><text x="412.0" y="368.0" font-size="11">東京</text></g><g class="ok"><rect x="438" y="342" width="44" height="44" rx="6"/><text x="460.0" y="368.0" font-size="9">神奈川</text></g><g class="ok"><rect x="54" y="390" width="44" height="44" rx="6"/><text x="76.0" y="416.0" font-size="11">福岡</text></g><g class="ok"><rect x="102" y="390" width="44" height="44" rx="6"/><text x="124.0" y="416.0" font-size="11">大分</text></g><g class="ok"><rect x="150" y="390" width="44" height="44" rx="6"/><text x="172.0" y="416.0" font-size="11">香川</text></g><g class="ok"><rect x="198" y="390" width="44" height="44" rx="6"/><text x="220.0" y="416.0" font-size="11">徳島</text></g><g class="ok"><rect x="246" y="390" width="44" height="44" rx="6"/><text x="268.0" y="416.0" font-size="9">和歌山</text></g><g class="ok"><rect x="294" y="390" width="44" height="44" rx="6"/><text x="316.0" y="416.0" font-size="11">三重</text></g><g class="ok"><rect x="6" y="438" width="44" height="44" rx="6"/><text x="28.0" y="464.0" font-size="11">長崎</text></g><g class="ok"><rect x="54" y="438" width="44" height="44" rx="6"/><text x="76.0" y="464.0" font-size="11">佐賀</text></g><g class="ok"><rect x="102" y="438" width="44" height="44" rx="6"/><text x="124.0" y="464.0" font-size="11">熊本</text></g><g class="ok"><rect x="150" y="438" width="44" height="44" rx="6"/><text x="172.0" y="464.0" font-size="11">愛媛</text></g><g class="ok"><rect x="198" y="438" width="44" height="44" rx="6"/><text x="220.0" y="464.0" font-size="11">高知</text></g><g class="ok"><rect x="54" y="486" width="44" height="44" rx="6"/><text x="76.0" y="512.0" font-size="9">鹿児島</text></g><g class="ok"><rect x="102" y="486" width="44" height="44" rx="6"/><text x="124.0" y="512.0" font-size="11">宮崎</text></g><g class="ok"><rect x="6" y="582" width="44" height="44" rx="6"/><text x="28.0" y="608.0" font-size="11">沖縄</text></g></svg>
@@ -375,68 +500,11 @@
     </div>
   </section>
 
-  <section id="philosophy">
-    <div class="wrap">
-      <div class="head">
-        <span class="label">Philosophy</span>
-        <h2>夢の実現力で、人々を幸せにする。</h2>
-      </div>
-      <p class="slogan en">Create creative value<br><em>all the vectors in.</em></p>
-      <p class="note" style="margin:-24px 0 40px;max-width:36em;font-size:14px;color:var(--ink-2)">「顧客満足・社会貢献・人との出会い」をキーワードに、あらゆる方向へ創造的な価値をつくる。社内スローガンは「grow &amp; Fun!」。働くって、楽しい。勝負は早さ。</p>
-      <div class="values">
-        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M14 8h20v10a10 10 0 0 1-20 0V8zM14 12H8a6 6 0 0 0 6 8M34 12h6a6 6 0 0 1-6 8M24 28v8M16 40h16"/></svg><h3>No.1</h3><p>いちばんって楽しい。やる以上は圧倒的No.1を目指し続けます。</p></div>
-        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M4 40L18 14l8 14 6-8 12 20H4z"/><path d="M24 6l4 6h-8l4-6z"/></svg><h3>挑戦</h3><p>挑戦って楽しい。失敗を恐れず、現状維持を疑い、高い壁に挑み続けます。</p></div>
-        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="16"/><circle cx="24" cy="24" r="9"/><circle cx="24" cy="24" r="2"/><path d="M24 4v6M44 24h-6"/></svg><h3>逆算</h3><p>逆算って楽しい。登る山を決め、今やるべきことを逆算で決めます。</p></div>
-        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M26 4L10 26h12l-2 18 18-24H26l0-16z"/></svg><h3>スピード</h3><p>大至急って楽しい。1週間後の100%より、3日後の70%。</p></div>
-        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M10 40V20l14-12 14 12v20"/><path d="M10 40h28M18 40V28h12v12"/></svg><h3>執念</h3><p>諦めないって楽しい。「どうやってできるか」を考え、とことんやり抜きます。</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="clients">
-    <div class="wrap about-grid">
-      <span class="label">Clients</span>
-      <div>
-        <ul class="clients">
-          <li>NTTドコモ</li><li>ドコモCS</li><li>NTTマーケティングアクトProCX</li><li>ソフトバンク</li><li>電通</li><li>博報堂</li><li>日本テレビ</li><li>WeWork</li>
-        </ul>
-        <p class="note">順不同・敬称略</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="company" class="dark">
-    <div class="wrap company">
-      <span class="label">Company</span>
-      <div>
-        <dl>
-          <div><dt>社名</dt><dd>株式会社DreamCreation</dd></div>
-          <div><dt>所在地</dt><dd>〒550-0015<br>大阪府大阪市西区南堀江1-10-1 KT堀江801号室</dd></div>
-          <div><dt>代表者</dt><dd>代表取締役　竹村 英哲</dd></div>
-          <div><dt>設立</dt><dd>2017年6月27日</dd></div>
-          <div><dt>資本金</dt><dd>1,200万円</dd></div>
-          <div><dt>事業内容</dt><dd>セールスプロモーション／イベントの企画・運営／代理店事業／労働者派遣事業</dd></div>
-          <div><dt>TEL</dt><dd>06-4967-1038</dd></div>
-        </dl>
-        <h3>History</h3>
-        <ul class="history">
-          <li><span class="year">2017.06</span><span>株式会社DreamCreation 設立。名古屋営業所・九州営業所 開設</span></li>
-          <li><span class="year">2019.07</span><span>日本テレビHRと業務提携</span></li>
-          <li><span class="year">2019.08</span><span>本社を難波 Namba Sky-O に移転</span></li>
-          <li><span class="year">2019.11</span><span>沖縄営業所 開設</span></li>
-          <li><span class="year">2021.05</span><span>資本金を1,200万円に増資</span></li>
-          <li><span class="year">2022.03</span><span>労働者派遣事業を開始</span></li>
-          <li><span class="year">—</span><span>本社を西区南堀江に移転</span></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
   <section id="license">
     <div class="wrap">
       <div class="head">
-        <span class="label">License &amp; Certification</span>
-        <h2>許認可・認証</h2>
+        <span class="label">許認可・認証</span>
+        <h2>安心して任せていただくために。</h2>
       </div>
       <div class="certs">
         <div class="cert">
@@ -470,7 +538,7 @@
 
   <section id="partnership">
     <div class="wrap partner">
-      <span class="label">Partnership</span>
+      <span class="label">取り組み</span>
       <div class="partner-body">
         <svg class="ico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><circle cx="16" cy="18" r="8"/><circle cx="34" cy="30" r="6"/><path d="M16 10v-4M16 30v-4M8 18H4M28 18h-4M34 20v-3M34 40v-3M24 30h-3M44 30h-3M22 12l-3-3M22 24l-3 3M30 34l-3 3M40 24l-3 3"/></svg>
         <div>
@@ -483,8 +551,9 @@
   </section>
 
   <section id="recruit">
+    <div class="wrap"><div class="sec-head"><h2>採用情報 <span class="en sub">Careers</span></h2></div></div>
     <div class="wrap recruit-grid">
-      <span class="label">Recruit</span>
+      <span class="label">採用情報</span>
       <div class="body">
         <p>年齢や学歴ではなく、成果で評価する。コワーキングオフィスの活用や柔軟な勤務時間など、効率よく働ける環境を整えています。</p>
         <p>若い力とともに、これからの日本社会の中心となる会社をつくる。一緒に挑戦する仲間を募集しています。</p>
@@ -494,20 +563,9 @@
     </div>
   </section>
 
-  <section id="news">
-    <div class="wrap about-grid">
-      <span class="label">News</span>
-      <div class="body news">
-        <a class="news-item" href="#"><span class="date">—</span><span>新事務所移転のご報告</span></a>
-        <a class="news-item" href="#"><span class="date">—</span><span>株式会社DreamCreationについて</span></a>
-        <a class="news-item" href="#"><span class="date">—</span><span>サイトをオープンしました。</span></a>
-      </div>
-    </div>
-  </section>
-
   <section id="contact" class="contact">
     <div class="wrap">
-      <span class="label">Contact</span>
+      <span class="label">お問い合わせ</span>
       <h2 class="en">Let's talk.</h2>
       <p>販売促進・イベント・人材のご相談、採用に関するお問い合わせなど、お気軽にご連絡ください。</p>
       <div class="contact-row">
@@ -520,12 +578,20 @@
     <svg class="contact-arc" viewBox="0 0 1600 160" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120 C 400 20, 1000 200, 1600 60 L1600 160 L0 160 Z" fill="url(#gBot)" opacity=".9"/></svg>
   </section>
 
-  <div class="wrap">
-    <footer>
-      <span class="logo"><img src="images/logo-mark.png" alt="DreamCreation" style="height:56px"></span>
-      <span>© 2026 DreamCreation Inc.</span>
-    </footer>
-  </div>
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="fcols">
+        <div class="fbrand">
+          <img src="images/logo.png" alt="DreamCreation">
+          <p>株式会社DreamCreation<br>〒550-0015 大阪府大阪市西区南堀江1-10-1 KT堀江801号室<br>TEL 06-4967-1038</p>
+        </div>
+        <div class="fcol"><h4>企業情報</h4><a href="#message">代表メッセージ</a><a href="#profile">会社概要・沿革</a><a href="#network">対応エリア</a><a href="#license">許認可・認証</a></div>
+        <div class="fcol"><h4>事業内容</h4><a href="#service">セールスプロモーション</a><a href="#service">イベントプロモーション</a><a href="#service">代理店事業</a><a href="#service">人材派遣・育成</a></div>
+        <div class="fcol"><h4>その他</h4><a href="#news">ニュース</a><a href="#recruit">採用情報</a><a href="#contact">お問い合わせ</a><a href="#">プライバシーポリシー</a></div>
+      </div>
+      <div class="fbottom"><span>© 2026 DreamCreation Inc.</span><span class="en">Make customers happy and make society happy.</span></div>
+    </div>
+  </footer>
 </main>
 
 <script>
