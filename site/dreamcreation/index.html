@@ -607,7 +607,7 @@
           <a class="tel en" href="tel:0649671038">06-4967-1038</a>
           <p class="note">受付時間 10:00〜18:00（土日祝を除く）</p>
         </div>
-        <form id="inquiry" class="form" data-endpoint="" novalidate>
+        <form id="inquiry" class="form" data-endpoint="contact.php" novalidate>
           <div class="row2">
             <label><span>会社名</span><input name="company" type="text" autocomplete="organization" placeholder="株式会社〇〇"></label>
             <label><span>お名前 <em>必須</em></span><input name="name" type="text" required autocomplete="name" placeholder="山田 太郎"></label>
@@ -662,11 +662,11 @@
     });
   })();
 
-  // ---- contact form: posts to a mail endpoint (FormSubmit/Formspree/自社PHP等). 未設定時は mailto にフォールバック ----
+  // ---- contact form: contact.php へ JSON POST。endpoint 未設定時は mailto にフォールバック ----
   (function(){
     var f=document.getElementById('inquiry'); if(!f) return;
     var st=f.querySelector('.form-status'), btn=f.querySelector('button[type=submit]');
-    var TO='info@d-creation-o.com'; // 受信先（要確認）
+    var TO='data@d-creation-o.com';
     f.addEventListener('submit',function(e){
       e.preventDefault();
       if(!f.checkValidity()){ f.reportValidity(); return; }
@@ -678,10 +678,10 @@
       if(!ep){ location.href='mailto:'+TO+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body); st.textContent='メールソフトが開きます。送信してください。'; st.className='form-status ok'; return; }
       btn.disabled=true; st.textContent='送信中…'; st.className='form-status';
       fetch(ep,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
-        body:JSON.stringify({_subject:subject,_replyto:d.email,_template:'table',company:d.company,name:d.name,email:d.email,tel:d.tel,type:d.type,message:d.message})})
-      .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json().catch(function(){return {};}); })
+        body:JSON.stringify({company:d.company,name:d.name,email:d.email,tel:d.tel,type:d.type,message:d.message,_honey:d._honey||''})})
+      .then(function(r){ return r.json().catch(function(){return {ok:r.ok};}).then(function(j){ if(!r.ok||j.ok===false) throw new Error(j.error||r.status); }); })
       .then(function(){ f.reset(); st.textContent='送信しました。担当者よりご連絡いたします。'; st.className='form-status ok'; })
-      .catch(function(){ st.textContent='送信に失敗しました。お手数ですが '+TO+' までメールをお送りください。'; st.className='form-status err'; })
+      .catch(function(err){ st.textContent=(err&&err.message&&isNaN(err.message)?err.message+' ':'送信に失敗しました。')+'お手数ですが '+TO+' までメールをお送りください。'; st.className='form-status err'; })
       .finally(function(){ btn.disabled=false; });
     });
   })();
