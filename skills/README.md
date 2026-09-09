@@ -19,6 +19,10 @@ Codex/Agent双方向)」参照)。
 | ファイル | 内容 |
 | --- | --- |
 | `google-sheets-ledger-parsing.md` | 売掛・買掛スプレッドシートの読み取りロジック(見出し検出・名前と金額の拾い方・ハマりどころ) |
+| `stateless-periodic-reporting-pattern.md` | 記憶を持たない定期実行で「前回比・本日累計」を出す設計(チェックポイント方式) |
+| `external-action-approval-gate-pattern.md` | 対外的な実行(送信・投稿・支払い等)を伴う自動化の二段階承認ゲートの作り方 |
+| `gmail-to-drive-staging-pattern.md` | メール添付の中身を直接読めないときに、Drive等へ退避して読む回避策 |
+| `browser-automation-environment-notes.md` | ブラウザ自動化の環境依存の落とし穴(ブラウザ本体とライブラリのバージョン、プロキシ環境での注意点) |
 
 ## すでに積み上がっている知見(リポジトリの他の場所)
 
