@@ -40,3 +40,36 @@
 - https://mf.workstyling.jp/ , https://ippooffice.co.jp/hitte/columns/serviceoffice-sharedoffice/work-styling/
 - https://wework.co.jp/en/lp/all-access-plus
 - https://www.stationwork.jp/help/price , https://appllio.com/office-box-review-station-work-cocodesk-telecube
+
+---
+
+## 追記: 訪問都市別の拠点カバー状況（沖縄・福岡・東京・金沢・大阪・仙台）
+
+| サービス | 沖縄(那覇) | 福岡 | 東京 | 金沢 | 大阪 | 仙台 | 6都市カバー |
+|---|---|---|---|---|---|---|---|
+| **BIZcomfort** | × | × | ◎ 24h | × | ◎ 24h | ◎ 24h（クリスロード・一番町） | 3/6 |
+| **いいオフィス** | ○ 安里・東町など24h店あり | ○ 呉服町24h店あり | ◎ | ○ 金沢 by 365KANAZAWA（24hプランあり） | ◎ | ○ THE6・広瀬通・cocolin等 | 6/6 |
+| **NIKKEI OFFICE PASS** | △ 快活CLUB沖縄コザ（3h制限） | ○ | ◎ | △ 快活CLUB金沢駅東口（日中） | ◎ | ○ リージャス花京院・ステージライン駅前・快活CLUB | 6/6（施設の質にばらつき） |
+| **リージャス** | ◎ JR九州那覇ビル・ホークシティ那覇（24h） | ◎ 天神ほか複数 | ◎ | ◎ 金沢駅東・金沢パークビル（24h） | ◎ | ◎ 花京院ほか | 6/6（全国53都市218拠点） |
+| **WeWork** | × | ○ | ◎ | × | ◎ | × | 3/6 |
+
+※ リージャスのメンバーシップは「契約センターは24h」「他拠点のビジネスラウンジは平日9-18時・1日4h上限」の運用。全拠点24hではない点に注意。
+
+## 所見の更新
+
+- **BIZcomfortは沖縄・福岡・金沢に拠点がなく、今回の要件では主軸にならない**（東京・大阪・仙台の24h用として補助的に使う価値はある）。
+- **主軸候補は「いいオフィス 全国パスポート（22,000円/月）」** — 6都市すべてに拠点があり、那覇・福岡・金沢に24h営業店がある。ただし加盟店ごとに営業時間・設備差があるため、各都市の具体店舗を事前確認する。
+- **来客・商談品質を重視する場合はリージャス** — 6都市すべてに高グレード拠点。ただしメンバーシップは他拠点ラウンジが平日日中のみ。全拠点24hが必須なら要件を営業に提示して要見積。
+- **低頻度なら OFFICE PASS 法人（10回券22,000円）** — 6都市カバーだが、沖縄・金沢は快活CLUB系が中心。
+
+### 推奨構成（たたき台）
+1. いいオフィス 全国パスポート（22,000円/月）を主軸
+2. 会議室・受付が必要な商談日はリージャスをドロップイン/日単位で併用
+3. 東京・大阪・仙台の深夜作業は、必要なら BIZcomfort ライトプラン（2,200円〜従量）を追加
+
+### 追加出典
+- https://bizcomfort.jp/sitemap/ （展開都道府県一覧）
+- https://www.regus-office.jp/base/ , https://www.regus-office.jp/okinawa-area/coi-naha/ , https://www.regus-office.jp/coworking/kanazawa_area/kanazawa_higashi/
+- https://www.regus-office.jp/faq/ （メンバーシップ利用時間）
+- https://e-office.space/spaces/okinawa/okinawa/nahashi , https://e-office.space/spaces/kyushu/fukuoka/fukuokashi , https://e-office.space/kanazawa-by-365/plan/ , https://e-office.space/spaces/tohoku/miyagi
+- https://officepass.nikkei.com/office/1199/ , https://officepass.nikkei.com/office/1338/ , https://officepass.nikkei.com/office/1251/
