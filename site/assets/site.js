@@ -117,6 +117,15 @@
       }
     }, true);
 
+    // 動画の再生（初回のみ）を計測
+    document.addEventListener('play', function (ev) {
+      var v = ev.target;
+      if (!v || v.tagName !== 'VIDEO' || v.hasAttribute('autoplay') || v.__nvTracked) return;
+      v.__nvTracked = true;
+      var src = v.currentSrc || (v.querySelector('source') || {}).src || '';
+      track('video_play', { video_title: v.getAttribute('aria-label') || '', video_url: src, page_path: location.pathname });
+    }, true);
+
     var form = document.getElementById('inquiry');
     if (form) {
       form.addEventListener('submit', function () {
