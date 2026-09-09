@@ -84,6 +84,7 @@
   .values{display:grid;grid-template-columns:repeat(3,1fr);gap:48px}
   .value h3{margin:0 0 10px;font-size:22px;font-weight:400}
   .value p{margin:0;color:var(--ink-2);font-size:14px}
+  .vico{width:40px;height:40px;margin-bottom:16px}
   .value .rule{width:32px;height:1px;background:var(--accent);margin-bottom:20px}
   @media (max-width:760px){.values{grid-template-columns:1fr;gap:32px}}
 
@@ -143,8 +144,11 @@
   .svc figure{margin:0;aspect-ratio:4/3;overflow:hidden;background:var(--bg-2)}
   .svc figure img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
   .svc:hover figure img{transform:scale(1.03)}
-  .svc .en,.svc h3,.svc p,.svc .tags{padding:0 24px}
-  .svc .en{font-size:24px;padding-top:22px}
+  .svc .svc-head,.svc h3,.svc p,.svc .tags{padding:0 24px}
+  .svc-head{display:flex;align-items:center;gap:12px;padding-top:22px}
+  .svc-head .en{padding:0 !important;padding-top:0 !important}
+  .ico{width:34px;height:34px;flex:0 0 34px;color:var(--accent)}
+  .svc .en{font-size:22px}
   @media (max-width:1000px){.services{grid-template-columns:1fr 1fr}}
   @media (max-width:600px){.services{grid-template-columns:1fr}}
 
@@ -156,9 +160,16 @@
   @media (max-width:760px){.gallery{grid-template-columns:1fr 1fr;grid-auto-rows:180px}.gallery figure:first-child{grid-column:span 2}}
 
   .network{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-  .jpmap{width:100%;max-width:460px;height:auto;display:block}
-  .jpmap .hq circle{fill:var(--g1)} .jpmap .pin circle{fill:var(--accent)}
-  .jpmap text{font-family:"Bodoni Moda",serif;font-size:13px;fill:var(--ink-2);text-anchor:middle}
+  .jpmap{width:100%;max-width:400px;height:auto;display:block}
+  .jpmap text{text-anchor:middle;font-family:inherit;fill:var(--ink)}
+  .jpmap .ok rect{fill:color-mix(in srgb,var(--accent) 16%,var(--bg))}
+  .jpmap .ok:hover rect{fill:color-mix(in srgb,var(--accent) 34%,var(--bg))}
+  .jpmap .hq rect{fill:var(--accent)} .jpmap .hq text{fill:#fff;font-weight:700}
+  .jpmap .na rect{fill:none;stroke:var(--line);stroke-dasharray:3 3} .jpmap .na text{fill:var(--ink-3)}
+  .area-text p{margin:0 0 20px;font-size:15px;max-width:30em}
+  .legend{list-style:none;margin:0 0 28px;padding:0;display:flex;flex-wrap:wrap;gap:8px 20px;font-size:12px;color:var(--ink-2)}
+  .legend .sw{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:6px}
+  .legend .sw.hq{background:var(--accent)} .legend .sw.ok{background:color-mix(in srgb,var(--accent) 16%,var(--bg))} .legend .sw.na{border:1px dashed var(--line)}
   .offices{display:grid;grid-template-columns:120px 1fr;max-width:none}
   .offices dt,.offices dd{border-top-color:var(--line);font-size:14px}
   .offices>div:last-child dt,.offices>div:last-child dd{border-bottom-color:var(--line)}
@@ -184,6 +195,15 @@
   .cert{display:flex;gap:20px;align-items:flex-start;padding:24px;border:1px solid var(--line)}
   .cert .badge{flex:0 0 72px;width:72px;height:72px;border-radius:50%;border:1.5px solid var(--accent);display:grid;place-items:center;color:var(--accent);font-size:11px;letter-spacing:.06em;text-align:center;line-height:1.3}
   .cert .badge img{width:100%;height:100%;object-fit:contain}
+  .bico{width:38px;height:38px}
+  .pmark-note{margin-top:32px;padding:24px;border:1px solid var(--line);font-size:13px;color:var(--ink-2);max-width:60em;line-height:1.8}
+  .partner{display:grid;grid-template-columns:200px 1fr;gap:32px;align-items:start}
+  .partner-body{display:grid;grid-template-columns:120px 1fr;gap:32px;align-items:start}
+  .partner .ico{width:96px;height:96px;color:var(--ink)}
+  .partner h2{margin:0 0 16px;font-size:clamp(22px,3vw,32px);font-weight:400;line-height:1.35}
+  .partner p{margin:0 0 1.2em;font-size:14px;color:var(--ink-2);max-width:40em}
+  .partner p:last-child{margin:0}
+  @media (max-width:760px){.partner,.partner-body{grid-template-columns:1fr}}
   .cert h3{margin:0 0 6px;font-size:15px;font-weight:500}
   .cert p{margin:0;font-size:13px;color:var(--ink-2)}
   .cert .num{font-variant-numeric:tabular-nums;letter-spacing:.04em;color:var(--ink)}
@@ -210,6 +230,7 @@
         <li><a href="#message">MESSAGE</a></li>
         <li><a href="#service">SERVICE</a></li>
         <li><a href="#philosophy">PHILOSOPHY</a></li>
+        <li><a href="#network">AREA</a></li>
         <li><a href="#company">COMPANY</a></li>
         <li><a href="#recruit">RECRUIT</a></li>
       </ul>
@@ -274,28 +295,28 @@
       <div class="services">
         <article class="svc">
           <figure><img src="images/svc-sales.jpg" alt="店頭での販売促進"></figure>
-          <span class="en">Sales Promotion</span>
+          <div class="svc-head"><svg class="ico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M6 20v8h6l14 8V12L12 20H6z"/><path d="M32 18a8 8 0 0 1 0 12M36 13a14 14 0 0 1 0 22"/></svg><span class="en">Sales Promotion</span></div>
           <h3>セールスプロモーション</h3>
           <p>通信商材を中心に、家電量販店・携帯ショップでの推奨販売・販売応援、キャンペーン事務局運営、サンプリングまで。</p>
           <div class="tags"><span>推奨販売</span><span>キャンペーン</span><span>フィールドサポート</span></div>
         </article>
         <article class="svc">
           <figure><img src="images/svc-event.jpg" alt="イベントプロモーション"></figure>
-          <span class="en">Event</span>
+          <div class="svc-head"><svg class="ico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M24 8v32M10 40h28M24 8l16 20H8L24 8z"/><path d="M24 8c4 3 8 3 12 0"/></svg><span class="en">Event</span></div>
           <h3>イベントプロモーション</h3>
           <p>体験型・参加型の集客イベントから、セミナー・式典・社内イベントまで。企画立案から当日の運営、備品やキャスティングの手配までワンストップで。</p>
           <div class="tags"><span>企画・運営</span><span>体験型イベント</span><span>キャスティング</span></div>
         </article>
         <article class="svc">
           <figure><img src="images/svc-agency.jpg" alt="代理店事業"></figure>
-          <span class="en">Agency</span>
+          <div class="svc-head"><svg class="ico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M6 24l10-10 8 8 6-6 12 12"/><path d="M16 14l8 8M6 24l8 8 8-8"/><circle cx="36" cy="16" r="3"/></svg><span class="en">Agency</span></div>
           <h3>代理店事業</h3>
           <p>通信・キャッシュレス決済・省エネ商材など、法人・個人向けの各種商材を代理店として販売。アウトバウンド営業にも対応します。</p>
           <div class="tags"><span>通信</span><span>キャッシュレス</span><span>アウトバウンド</span></div>
         </article>
         <article class="svc">
           <figure><img src="images/svc-staffing.jpg" alt="人材・研修"></figure>
-          <span class="en">Staffing</span>
+          <div class="svc-head"><svg class="ico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><circle cx="18" cy="16" r="6"/><circle cx="32" cy="18" r="5"/><path d="M6 40c0-8 5-12 12-12s12 4 12 12M28 40c0-6 3-10 9-10 4 0 6 2 7 6"/></svg><span class="en">Staffing</span></div>
           <h3>人材派遣・育成</h3>
           <p>労働者派遣事業の許可のもと、販売・イベント運営に強い人材を派遣。現場で成果を出せる人材を育てるスマホ教室・研修も行います。</p>
           <div class="tags"><span>労働者派遣</span><span>研修</span><span>スマホ教室</span></div>
@@ -307,25 +328,22 @@
   <section id="network">
     <div class="wrap">
       <div class="head">
-        <span class="label">Network</span>
-        <h2>大阪から、全国へ。</h2>
+        <span class="label">Area</span>
+        <h2>大阪から、全国へ。<br>45都府県に対応しています。</h2>
       </div>
       <div class="network">
-        <svg class="jpmap" viewBox="0 0 420 360" aria-label="拠点マップ">
-          <g fill="var(--line)">
-            <circle cx="330" cy="40" r="11"/><circle cx="318" cy="70" r="7"/><circle cx="312" cy="90" r="7"/><circle cx="326" cy="90" r="7"/><circle cx="306" cy="110" r="7"/><circle cx="320" cy="110" r="7"/><circle cx="334" cy="110" r="7"/><circle cx="300" cy="130" r="7"/><circle cx="314" cy="130" r="7"/><circle cx="328" cy="130" r="7"/><circle cx="294" cy="150" r="7"/><circle cx="308" cy="150" r="7"/><circle cx="322" cy="150" r="7"/><circle cx="288" cy="170" r="7"/><circle cx="302" cy="170" r="7"/><circle cx="316" cy="170" r="7"/><circle cx="270" cy="185" r="7"/><circle cx="284" cy="190" r="7"/><circle cx="298" cy="190" r="7"/><circle cx="256" cy="200" r="7"/><circle cx="242" cy="210" r="7"/><circle cx="228" cy="215" r="7"/><circle cx="214" cy="220" r="7"/><circle cx="200" cy="225" r="7"/><circle cx="186" cy="230" r="7"/><circle cx="172" cy="235" r="7"/><circle cx="158" cy="240" r="7"/><circle cx="144" cy="245" r="7"/><circle cx="130" cy="252" r="7"/><circle cx="116" cy="260" r="7"/><circle cx="102" cy="268" r="7"/><circle cx="88" cy="276" r="7"/><circle cx="74" cy="284" r="7"/><circle cx="60" cy="292" r="7"/><circle cx="46" cy="300" r="7"/><circle cx="60" cy="312" r="7"/><circle cx="74" cy="300" r="7"/><circle cx="88" cy="296" r="7"/><circle cx="160" cy="255" r="7"/><circle cx="174" cy="250" r="7"/><circle cx="188" cy="245" r="7"/><circle cx="202" cy="240" r="7"/><circle cx="216" cy="235" r="7"/><circle cx="230" cy="230" r="7"/><circle cx="244" cy="225" r="7"/>
-          </g>
-          <g class="hq"><circle cx="228" cy="215" r="10"/><text x="228" y="252">Osaka HQ</text></g>
-          <g class="pin"><circle cx="298" cy="190" r="8"/><text x="298" y="176">Tokyo</text></g>
-          <g class="pin"><circle cx="88" cy="276" r="8"/><text x="88" y="262">Fukuoka</text></g>
-          <g class="pin"><circle cx="40" cy="340" r="8"/><text x="40" y="326">Okinawa</text></g>
-        </svg>
-        <dl class="offices">
-          <div><dt>本社</dt><dd>〒550-0015 大阪府大阪市西区南堀江1-10-1 KT堀江801号室<br>TEL 06-4967-1038</dd></div>
-          <div><dt>東京営業所</dt><dd>—</dd></div>
-          <div><dt>九州営業所</dt><dd>〒811-2317 福岡県糟屋郡粕屋町長者原東2-3-27</dd></div>
-          <div><dt>沖縄営業所</dt><dd>—</dd></div>
-        </dl>
+        <svg class="jpmap" viewBox="0 0 536 632" aria-label="対応エリア（北海道・広島を除く45都府県）"><g class="na"><rect x="486" y="6" width="44" height="44" rx="6"/><text x="508.0" y="32.0" font-size="9">北海道</text></g><g class="ok"><rect x="486" y="54" width="44" height="44" rx="6"/><text x="508.0" y="80.0" font-size="11">青森</text></g><g class="ok"><rect x="438" y="102" width="44" height="44" rx="6"/><text x="460.0" y="128.0" font-size="11">秋田</text></g><g class="ok"><rect x="486" y="102" width="44" height="44" rx="6"/><text x="508.0" y="128.0" font-size="11">岩手</text></g><g class="ok"><rect x="438" y="150" width="44" height="44" rx="6"/><text x="460.0" y="176.0" font-size="11">山形</text></g><g class="ok"><rect x="486" y="150" width="44" height="44" rx="6"/><text x="508.0" y="176.0" font-size="11">宮城</text></g><g class="ok"><rect x="294" y="198" width="44" height="44" rx="6"/><text x="316.0" y="224.0" font-size="11">石川</text></g><g class="ok"><rect x="342" y="198" width="44" height="44" rx="6"/><text x="364.0" y="224.0" font-size="11">富山</text></g><g class="ok"><rect x="390" y="198" width="44" height="44" rx="6"/><text x="412.0" y="224.0" font-size="11">新潟</text></g><g class="ok"><rect x="486" y="198" width="44" height="44" rx="6"/><text x="508.0" y="224.0" font-size="11">福島</text></g><g class="ok"><rect x="246" y="246" width="44" height="44" rx="6"/><text x="268.0" y="272.0" font-size="11">福井</text></g><g class="ok"><rect x="294" y="246" width="44" height="44" rx="6"/><text x="316.0" y="272.0" font-size="11">岐阜</text></g><g class="ok"><rect x="342" y="246" width="44" height="44" rx="6"/><text x="364.0" y="272.0" font-size="11">長野</text></g><g class="ok"><rect x="390" y="246" width="44" height="44" rx="6"/><text x="412.0" y="272.0" font-size="11">群馬</text></g><g class="ok"><rect x="438" y="246" width="44" height="44" rx="6"/><text x="460.0" y="272.0" font-size="11">栃木</text></g><g class="ok"><rect x="486" y="246" width="44" height="44" rx="6"/><text x="508.0" y="272.0" font-size="11">茨城</text></g><g class="ok"><rect x="102" y="294" width="44" height="44" rx="6"/><text x="124.0" y="320.0" font-size="11">島根</text></g><g class="ok"><rect x="150" y="294" width="44" height="44" rx="6"/><text x="172.0" y="320.0" font-size="11">鳥取</text></g><g class="ok"><rect x="198" y="294" width="44" height="44" rx="6"/><text x="220.0" y="320.0" font-size="11">兵庫</text></g><g class="ok"><rect x="246" y="294" width="44" height="44" rx="6"/><text x="268.0" y="320.0" font-size="11">京都</text></g><g class="ok"><rect x="294" y="294" width="44" height="44" rx="6"/><text x="316.0" y="320.0" font-size="11">滋賀</text></g><g class="ok"><rect x="342" y="294" width="44" height="44" rx="6"/><text x="364.0" y="320.0" font-size="11">山梨</text></g><g class="ok"><rect x="390" y="294" width="44" height="44" rx="6"/><text x="412.0" y="320.0" font-size="11">埼玉</text></g><g class="ok"><rect x="438" y="294" width="44" height="44" rx="6"/><text x="460.0" y="320.0" font-size="11">千葉</text></g><g class="ok"><rect x="54" y="342" width="44" height="44" rx="6"/><text x="76.0" y="368.0" font-size="11">山口</text></g><g class="na"><rect x="102" y="342" width="44" height="44" rx="6"/><text x="124.0" y="368.0" font-size="11">広島</text></g><g class="ok"><rect x="150" y="342" width="44" height="44" rx="6"/><text x="172.0" y="368.0" font-size="11">岡山</text></g><g class="hq"><rect x="198" y="342" width="44" height="44" rx="6"/><text x="220.0" y="368.0" font-size="11">大阪</text></g><g class="ok"><rect x="246" y="342" width="44" height="44" rx="6"/><text x="268.0" y="368.0" font-size="11">奈良</text></g><g class="ok"><rect x="294" y="342" width="44" height="44" rx="6"/><text x="316.0" y="368.0" font-size="11">愛知</text></g><g class="ok"><rect x="342" y="342" width="44" height="44" rx="6"/><text x="364.0" y="368.0" font-size="11">静岡</text></g><g class="ok"><rect x="390" y="342" width="44" height="44" rx="6"/><text x="412.0" y="368.0" font-size="11">東京</text></g><g class="ok"><rect x="438" y="342" width="44" height="44" rx="6"/><text x="460.0" y="368.0" font-size="9">神奈川</text></g><g class="ok"><rect x="54" y="390" width="44" height="44" rx="6"/><text x="76.0" y="416.0" font-size="11">福岡</text></g><g class="ok"><rect x="102" y="390" width="44" height="44" rx="6"/><text x="124.0" y="416.0" font-size="11">大分</text></g><g class="ok"><rect x="150" y="390" width="44" height="44" rx="6"/><text x="172.0" y="416.0" font-size="11">香川</text></g><g class="ok"><rect x="198" y="390" width="44" height="44" rx="6"/><text x="220.0" y="416.0" font-size="11">徳島</text></g><g class="ok"><rect x="246" y="390" width="44" height="44" rx="6"/><text x="268.0" y="416.0" font-size="9">和歌山</text></g><g class="ok"><rect x="294" y="390" width="44" height="44" rx="6"/><text x="316.0" y="416.0" font-size="11">三重</text></g><g class="ok"><rect x="6" y="438" width="44" height="44" rx="6"/><text x="28.0" y="464.0" font-size="11">長崎</text></g><g class="ok"><rect x="54" y="438" width="44" height="44" rx="6"/><text x="76.0" y="464.0" font-size="11">佐賀</text></g><g class="ok"><rect x="102" y="438" width="44" height="44" rx="6"/><text x="124.0" y="464.0" font-size="11">熊本</text></g><g class="ok"><rect x="150" y="438" width="44" height="44" rx="6"/><text x="172.0" y="464.0" font-size="11">愛媛</text></g><g class="ok"><rect x="198" y="438" width="44" height="44" rx="6"/><text x="220.0" y="464.0" font-size="11">高知</text></g><g class="ok"><rect x="54" y="486" width="44" height="44" rx="6"/><text x="76.0" y="512.0" font-size="9">鹿児島</text></g><g class="ok"><rect x="102" y="486" width="44" height="44" rx="6"/><text x="124.0" y="512.0" font-size="11">宮崎</text></g><g class="ok"><rect x="6" y="582" width="44" height="44" rx="6"/><text x="28.0" y="608.0" font-size="11">沖縄</text></g></svg>
+        <div class="area-text">
+          <p>本社は大阪・南堀江。全国の家電量販店・携帯ショップ・商業施設での販売促進やイベント運営に、北海道と広島県を除く45都府県で対応しています。</p>
+          <ul class="legend">
+            <li><span class="sw hq"></span>本社</li>
+            <li><span class="sw ok"></span>対応エリア</li>
+            <li><span class="sw na"></span>対応エリア外（北海道・広島）</li>
+          </ul>
+          <dl class="offices">
+            <div><dt>本社</dt><dd>〒550-0015<br>大阪府大阪市西区南堀江1-10-1 KT堀江801号室<br>TEL 06-4967-1038</dd></div>
+          </dl>
+        </div>
       </div>
     </div>
   </section>
@@ -339,11 +357,11 @@
       <p class="slogan en">Create creative value<br><em>all the vectors in.</em></p>
       <p class="note" style="margin:-24px 0 40px;max-width:36em;font-size:14px;color:var(--ink-2)">「顧客満足・社会貢献・人との出会い」をキーワードに、あらゆる方向へ創造的な価値をつくる。社内スローガンは「grow &amp; Fun!」。働くって、楽しい。勝負は早さ。</p>
       <div class="values">
-        <div class="value"><div class="rule"></div><h3>No.1</h3><p>いちばんって楽しい。やる以上は圧倒的No.1を目指し続けます。</p></div>
-        <div class="value"><div class="rule"></div><h3>挑戦</h3><p>挑戦って楽しい。失敗を恐れず、現状維持を疑い、高い壁に挑み続けます。</p></div>
-        <div class="value"><div class="rule"></div><h3>逆算</h3><p>逆算って楽しい。登る山を決め、今やるべきことを逆算で決めます。</p></div>
-        <div class="value"><div class="rule"></div><h3>スピード</h3><p>大至急って楽しい。1週間後の100%より、3日後の70%。</p></div>
-        <div class="value"><div class="rule"></div><h3>執念</h3><p>諦めないって楽しい。「どうやってできるか」を考え、とことんやり抜きます。</p></div>
+        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M14 8h20v10a10 10 0 0 1-20 0V8zM14 12H8a6 6 0 0 0 6 8M34 12h6a6 6 0 0 1-6 8M24 28v8M16 40h16"/></svg><h3>No.1</h3><p>いちばんって楽しい。やる以上は圧倒的No.1を目指し続けます。</p></div>
+        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M4 40L18 14l8 14 6-8 12 20H4z"/><path d="M24 6l4 6h-8l4-6z"/></svg><h3>挑戦</h3><p>挑戦って楽しい。失敗を恐れず、現状維持を疑い、高い壁に挑み続けます。</p></div>
+        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="16"/><circle cx="24" cy="24" r="9"/><circle cx="24" cy="24" r="2"/><path d="M24 4v6M44 24h-6"/></svg><h3>逆算</h3><p>逆算って楽しい。登る山を決め、今やるべきことを逆算で決めます。</p></div>
+        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M26 4L10 26h12l-2 18 18-24H26l0-16z"/></svg><h3>スピード</h3><p>大至急って楽しい。1週間後の100%より、3日後の70%。</p></div>
+        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M10 40V20l14-12 14 12v20"/><path d="M10 40h28M18 40V28h12v12"/></svg><h3>執念</h3><p>諦めないって楽しい。「どうやってできるか」を考え、とことんやり抜きます。</p></div>
       </div>
     </div>
   </section>
@@ -395,15 +413,15 @@
       </div>
       <div class="certs">
         <div class="cert">
-          <div class="badge">P<br>MARK</div>
+          <div class="badge"><svg class="ico bico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M24 4l16 6v12c0 10-7 18-16 22C15 40 8 32 8 22V10l16-6z"/><path d="M17 30V16h8a5 5 0 0 1 0 10h-8"/></svg></div>
           <div>
             <h3>プライバシーマーク</h3>
-            <p>個人情報保護体制について第三者認証を取得しています。</p>
-            <p class="num">登録番号：———— <span class="todo">要確認</span></p>
+            <p>株式会社DreamCreationは「プライバシーマーク」使用の許諾事業者として認定されています。</p>
+            <p class="num">登録番号：17004884</p>
           </div>
         </div>
         <div class="cert">
-          <div class="badge">派遣</div>
+          <div class="badge"><svg class="ico bico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><rect x="6" y="14" width="36" height="26" rx="3"/><path d="M18 14V9h12v5M6 24h36M20 24v5h8v-5"/></svg></div>
           <div>
             <h3>労働者派遣事業許可</h3>
             <p>厚生労働大臣許可（一般労働者派遣事業）</p>
@@ -411,12 +429,27 @@
           </div>
         </div>
         <div class="cert">
-          <div class="badge">T</div>
+          <div class="badge"><svg class="ico bico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M12 4h18l8 8v32H12z"/><path d="M30 4v8h8M18 22h12M18 30h12M18 38h8"/></svg></div>
           <div>
             <h3>適格請求書発行事業者</h3>
             <p>インボイス制度に対応しています。</p>
             <p class="num">登録番号：T5120001206752</p>
           </div>
+        </div>
+      </div>
+      <p class="pmark-note">プライバシーマーク制度は、日本産業規格「JIS Q 15001 個人情報保護マネジメントシステム―要求事項」に適合し、個人情報について適切な保護措置を講ずる体制を整備している事業者等を認定して、その旨を示すプライバシーマークを付与し、事業活動に関してプライバシーマークの使用を認める制度です。</p>
+    </div>
+  </section>
+
+  <section id="partnership">
+    <div class="wrap partner">
+      <span class="label">Partnership</span>
+      <div class="partner-body">
+        <svg class="ico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><circle cx="16" cy="18" r="8"/><circle cx="34" cy="30" r="6"/><path d="M16 10v-4M16 30v-4M8 18H4M28 18h-4M34 20v-3M34 40v-3M24 30h-3M44 30h-3M22 12l-3-3M22 24l-3 3M30 34l-3 3M40 24l-3 3"/></svg>
+        <div>
+          <h2>私たちはパートナーシップ構築宣言を行っています。</h2>
+          <p>「パートナーシップ構築宣言」とは、企業規模の大小に関わらず、企業が「発注者」の立場で自社の取引方針を宣言する取組です。企業は代表者の名前で、「サプライチェーン全体の共存共栄と新たな連携（企業間連携、IT実装支援、専門人材マッチング、グリーン調達等）」「振興基準の遵守」に重点的に取り組むことを宣言します。</p>
+          <p>参照：経済産業省ホームページ <a href="https://www.biz-partnership.jp/index.html" target="_blank" rel="noopener" style="color:var(--accent)">https://www.biz-partnership.jp/index.html</a></p>
         </div>
       </div>
     </div>
