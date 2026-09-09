@@ -2,6 +2,8 @@
 
 **対象**: 竹村代表　**所要時間**: 約20分　**必要なもの**: スマホの LINE アプリ（または メールアドレス）、会社ロゴ画像
 
+> **設定済み（2026-09-09）**: 友だち追加URL `https://lin.ee/9TGxdfG` ／ ベーシックID `@561xemce`
+
 ## 何ができるようになるか
 
 HP 全ページの右下に緑の「**LINEで相談**」ボタン、トップページの CONTACT に「LINEで相談する」ボタンが出ます（**すでに設置済み**）。
@@ -34,7 +36,7 @@ LINE公式アカウントを作って **友だち追加URL（`https://lin.ee/〜
 
 1. LINE Official Account Manager（https://manager.line.biz/）→ 対象アカウント
 2. 左メニュー「**友だちを増やす**」→「**友だち追加ガイド**」
-3. 「**URLを作成**」または「**友だち追加URL**」の項目に `https://lin.ee/XXXXXXX` 形式の短い URL が表示される → **コピー**
+3. 「**URLを作成**」または「**友だち追加URL**」の項目に `https://lin.ee/9TGxdfG` 形式の短い URL が表示される → **コピー**
    - 「QRコード」もここでダウンロードできます（チラシ・名刺用。マーケ担当へ）
 
 ## 手順3: HP に URL を書き込む（2分）
@@ -43,7 +45,7 @@ URL は **1箇所だけ** 書き換えれば全ページに反映されます。
 
 ### やり方A: ジョブズ（AI）に頼む（推奨）
 
-> 「LINEの友だち追加URLは https://lin.ee/AbCdEfG です。HPのLINEボタンを有効にしてデプロイして」
+> 「LINEの友だち追加URLは https://lin.ee/9TGxdfG です。HPのLINEボタンを有効にしてデプロイして」
 
 ### やり方B: 自分で編集する
 
@@ -51,11 +53,11 @@ URL は **1箇所だけ** 書き換えれば全ページに反映されます。
 - 冒頭付近のこの行を、本物の URL に書き換える:
 
 ```js
-  var NV_LINE_URL = 'https://lin.ee/XXXXXXX';   // ← ここを書き換える（1箇所だけ）
+  var NV_LINE_URL = 'https://lin.ee/9TGxdfG';   // ← ここを書き換える（1箇所だけ）
 ```
 
 - `index.html` の CONTACT ボタンにも仮URLが入っていますが、`site.js` が自動で同じURLに揃えるので **編集不要** です
-  （念のため揃えたい場合のコマンド: `sed -i.bak 's#https://lin.ee/XXXXXXX#https://lin.ee/AbCdEfG#g' site/assets/site.js site/index.html && rm site/*.bak site/assets/*.bak`）
+  （念のため揃えたい場合のコマンド: `sed -i.bak 's#https://lin.ee/9TGxdfG#https://lin.ee/9TGxdfG#g' site/assets/site.js site/index.html && rm site/*.bak site/assets/*.bak`）
 - 保存 → commit → push で自動デプロイ（[deploy.md](deploy.md)）
 
 ## 手順4: 動作確認（2分）

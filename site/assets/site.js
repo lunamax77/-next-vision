@@ -5,12 +5,12 @@
  *  3) 問い合わせフォームのエラーメッセージ表示（contact.php から戻った時）
  *
  * ★ LINE の友だち追加URLは、下の NV_LINE_URL の1行だけ書き換えれば
- *    全ページに反映されます。（例: https://lin.ee/AbCdEfG）
+ *    全ページに反映されます。（例: https://lin.ee/9TGxdfG）
  * ===================================================================== */
 (function () {
   'use strict';
 
-  var NV_LINE_URL = 'https://lin.ee/XXXXXXX';   // ← ここを書き換える（1箇所だけ）
+  var NV_LINE_URL = 'https://lin.ee/9TGxdfG';   // ← ここを書き換える（1箇所だけ）
   var NV_TEL      = '07013192126';              // 電話ボタンの番号（ハイフンなし）
   var NV_TEL_DISP = '070-1319-2126';
 
