@@ -7,7 +7,7 @@
 - **GA4**: 何人がHPを見たか、どのページが見られたか、**電話番号のタップ数**（`phone_click`）、**フォーム送信数**（`form_submit`）、**LINEボタンのタップ数**（`line_click`）が分かります。
 - **Search Console**: Google 検索で「どんな言葉で・何回表示され・何回クリックされたか」が分かります。マーケ担当のSEO施策の効果測定に使います。
 
-HP側の準備（計測タグ・イベント送信）は済んでいます。あとは **測定ID（`G-` で始まる11桁）を取得して、HP内の仮の文字 `G-XXXXXXXXXX` を置き換える** だけです。
+HP側の準備（計測タグ・イベント送信）は済んでいます。あとは **測定ID（`G-` で始まる11桁）を取得して、HP内の仮の文字 `G-9EZ5VMNS2J` を置き換える** だけです。
 
 ---
 
@@ -25,7 +25,7 @@ HP側の準備（計測タグ・イベント送信）は済んでいます。あ
 
 ## 手順2: 測定IDを HP に入れる（5分）
 
-HTMLの6ファイル（index / klp / punilab / seal / air / thanks）に仮のID `G-XXXXXXXXXX` が入っています。これを本物に置き換えます。
+HTMLの6ファイル（index / klp / punilab / seal / air / thanks）に仮のID `G-9EZ5VMNS2J` が入っています。これを本物に置き換えます。
 
 ### やり方A: ジョブズ（AI）に頼む（推奨）
 
@@ -37,7 +37,7 @@ HTMLの6ファイル（index / klp / punilab / seal / air / thanks）に仮のID
 リポジトリのフォルダで、`G-AB12CD34EF` を本物のIDに変えて実行:
 
 ```bash
-sed -i.bak 's/G-XXXXXXXXXX/G-AB12CD34EF/g' site/*.html && rm site/*.html.bak
+sed -i.bak 's/G-9EZ5VMNS2J/G-AB12CD34EF/g' site/*.html && rm site/*.html.bak
 grep -c "G-AB12CD34EF" site/*.html     # 各ファイル 1 と出ればOK（gtagのURLとconfigで2箇所→行数では1）
 git add site && git commit -m "GA4 測定IDを設定" && git push
 ```
