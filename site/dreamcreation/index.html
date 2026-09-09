@@ -84,8 +84,7 @@
   .values{display:grid;grid-template-columns:repeat(3,1fr);gap:48px}
   .value h3{margin:0 0 10px;font-size:22px;font-weight:400}
   .value p{margin:0;color:var(--ink-2);font-size:14px}
-  .vico{width:40px;height:40px;margin-bottom:16px}
-  .value .rule{width:32px;height:1px;background:var(--accent);margin-bottom:20px}
+    .value .rule{width:32px;height:1px;background:var(--accent);margin-bottom:20px}
   @media (max-width:760px){.values{grid-template-columns:1fr;gap:32px}}
 
   .dark{background:var(--dark);color:var(--dark-ink);border:0}
@@ -179,10 +178,22 @@
   @media (max-width:900px){.network{grid-template-columns:1fr}}
   .slogan{margin:0 0 40px;font-size:clamp(28px,4.5vw,56px);line-height:1.1;font-weight:400}
   .slogan em{font-style:italic;color:var(--accent)}
-  .values{grid-template-columns:repeat(5,1fr);gap:32px}
-  .value h3{font-size:19px}
-  @media (max-width:1000px){.values{grid-template-columns:repeat(3,1fr)}}
-  @media (max-width:640px){.values{grid-template-columns:1fr 1fr;gap:24px}}
+  .values{position:relative;grid-template-columns:repeat(5,1fr);gap:0;padding-top:34px}
+  .values::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--brand);border-radius:2px}
+  .value{position:relative;padding:0 28px 0 0}
+  .value+.value{padding-left:28px;border-left:1px solid var(--line)}
+  .value::before{content:"";position:absolute;left:0;top:-40px;width:10px;height:10px;border-radius:50%;background:var(--bg);border:2px solid var(--accent)}
+  .value:nth-child(1)::before{border-color:#F58220}.value:nth-child(2)::before{border-color:#E4C23A}.value:nth-child(3)::before{border-color:#4CB748}.value:nth-child(4)::before{border-color:#1BA0C4}.value:nth-child(5)::before{border-color:#0E5FA6}
+  .value+.value::before{left:-6px}
+  .value .tag{display:block;font-size:11px;letter-spacing:.12em;color:var(--ink-3);margin-bottom:10px}
+  .value h3{font-size:22px;margin:0 0 10px}
+  .value p{font-size:14px}
+  @media (max-width:900px){
+    .values{grid-template-columns:1fr;padding-top:0;padding-left:28px;gap:28px}
+    .values::before{top:0;bottom:0;left:0;right:auto;width:2px;height:auto;background:linear-gradient(180deg,#F58220,#E4C23A,#4CB748,#1BA0C4,#0E5FA6)}
+    .value,.value+.value{padding:0;border-left:0}
+    .value::before,.value+.value::before{left:-34px;top:6px}
+  }
 
   .clients{display:flex;flex-wrap:wrap;gap:10px 28px;margin:0;padding:0;list-style:none}
   .clients li{font-size:15px;letter-spacing:.04em;color:var(--ink-2);padding:6px 0}
@@ -374,11 +385,11 @@
       <p class="slogan en">Create creative value<br><em>all the vectors in.</em></p>
       <p class="note" style="margin:-24px 0 40px;max-width:36em;font-size:14px;color:var(--ink-2)">「顧客満足・社会貢献・人との出会い」をキーワードに、あらゆる方向へ創造的な価値をつくる。社内スローガンは「grow &amp; Fun!」。働くって、楽しい。勝負は早さ。</p>
       <div class="values">
-        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M14 8h20v10a10 10 0 0 1-20 0V8zM14 12H8a6 6 0 0 0 6 8M34 12h6a6 6 0 0 1-6 8M24 28v8M16 40h16"/></svg><h3>No.1</h3><p>いちばんって楽しい。やる以上は圧倒的No.1を目指し続けます。</p></div>
-        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M4 40L18 14l8 14 6-8 12 20H4z"/><path d="M24 6l4 6h-8l4-6z"/></svg><h3>挑戦</h3><p>挑戦って楽しい。失敗を恐れず、現状維持を疑い、高い壁に挑み続けます。</p></div>
-        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="16"/><circle cx="24" cy="24" r="9"/><circle cx="24" cy="24" r="2"/><path d="M24 4v6M44 24h-6"/></svg><h3>逆算</h3><p>逆算って楽しい。登る山を決め、今やるべきことを逆算で決めます。</p></div>
-        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M26 4L10 26h12l-2 18 18-24H26l0-16z"/></svg><h3>スピード</h3><p>大至急って楽しい。1週間後の100%より、3日後の70%。</p></div>
-        <div class="value"><svg class="ico vico" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" viewBox="0 0 48 48"><path d="M10 40V20l14-12 14 12v20"/><path d="M10 40h28M18 40V28h12v12"/></svg><h3>執念</h3><p>諦めないって楽しい。「どうやってできるか」を考え、とことんやり抜きます。</p></div>
+        <div class="value"><span class="tag">いちばんって楽しい</span><h3>No.1</h3><p>やる以上は圧倒的No.1を目指し続けます。</p></div>
+        <div class="value"><span class="tag">挑戦って楽しい</span><h3>挑戦</h3><p>失敗を恐れず、現状維持を疑い、高い壁に挑み続けます。</p></div>
+        <div class="value"><span class="tag">逆算って楽しい</span><h3>逆算</h3><p>登る山を決め、今やるべきことを逆算で決めます。</p></div>
+        <div class="value"><span class="tag">大至急って楽しい</span><h3>スピード</h3><p>1週間後の100%より、3日後の70%。</p></div>
+        <div class="value"><span class="tag">諦めないって楽しい</span><h3>執念</h3><p>「どうやってできるか」を考え、とことんやり抜きます。</p></div>
       </div>
     </div>
   </section>
