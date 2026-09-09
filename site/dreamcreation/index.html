@@ -1,5 +1,5 @@
 <title>DreamCreation</title>
-<meta name="description" content="株式会社DreamCreation｜大阪・南堀江。通信商材の販売促進、イベント企画・運営、営業代行。">
+<meta name="description" content="株式会社DreamCreation｜Make customers happy and make society happy. 大阪・南堀江から全国へ。セールスプロモーション・イベント・人材派遣。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap">
 <style>
@@ -10,7 +10,8 @@
     --ink-2:#4B5059;
     --ink-3:#8A8F98;
     --line:#D3D6D1;
-    --accent:#3C4BC9;
+    --accent:#1E6FB8;
+    --g1:#F58220; --g2:#E4C23A; --g3:#4CB748; --g4:#1BA0C4; --g5:#0E5FA6;
     --accent-ink:#FFFFFF;
     --dark:#15181F;
     --dark-ink:#F4F5F3;
@@ -19,13 +20,13 @@
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
       --bg:#111318; --bg-2:#181B22; --ink:#EEF0EC; --ink-2:#B3B7BF; --ink-3:#767B85;
-      --line:#2A2E37; --accent:#7C88F0; --accent-ink:#0F1220;
+      --line:#2A2E37; --accent:#5FA8E8; --accent-ink:#0F1220;
       --dark:#F4F5F3; --dark-ink:#15181F; --dark-ink-2:#4B5059;
     }
   }
   :root[data-theme="dark"]{
     --bg:#111318; --bg-2:#181B22; --ink:#EEF0EC; --ink-2:#B3B7BF; --ink-3:#767B85;
-    --line:#2A2E37; --accent:#7C88F0; --accent-ink:#0F1220;
+    --line:#2A2E37; --accent:#5FA8E8; --accent-ink:#0F1220;
     --dark:#F4F5F3; --dark-ink:#15181F; --dark-ink-2:#4B5059;
   }
   *{box-sizing:border-box}
@@ -116,14 +117,13 @@
   :root[data-theme="dark"] .logo img,.dark .logo img{filter:brightness(0) invert(1)}
   @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .logo img{filter:brightness(0) invert(1)}}
   .hero{position:relative;padding:0;border-bottom:0}
-  .hero-media{position:relative;min-height:520px;max-height:680px;height:66vh;overflow:hidden;background:var(--dark)}
-  .hero-media img{width:100%;height:100%;object-fit:cover;display:block;opacity:.72}
-  .hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(21,24,31,.15) 0%,rgba(21,24,31,.55) 70%,rgba(21,24,31,.85) 100%)}
-  .hero-copy{position:absolute;left:0;right:0;bottom:0;color:#F4F5F3;padding-bottom:clamp(36px,6vw,72px)}
-  .hero-copy h1{margin:0 0 20px;font-size:clamp(36px,6.5vw,86px);line-height:1.05;font-weight:400;letter-spacing:.01em;text-wrap:balance}
-  .hero-copy h1 em{font-style:italic;color:#B9C2FF}
-  .hero-copy p{margin:0;max-width:34em;font-size:15px;color:rgba(244,245,243,.85)}
-  .hero-copy .label{color:rgba(244,245,243,.7)}
+  .hero-media{position:relative;min-height:560px;overflow:hidden;background:var(--bg);border-bottom:1px solid var(--line)}
+  .arcs{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .hero-copy{position:relative;padding:clamp(150px,22vw,260px) 0 clamp(110px,14vw,170px)}
+  .hero-copy h1{margin:8px 0 24px;font-size:clamp(36px,6vw,80px);line-height:1.05;font-weight:400;letter-spacing:.01em;text-wrap:balance}
+  .hero-copy h1 em{font-style:italic;color:var(--accent)}
+  .hero-copy p{margin:0;max-width:34em;font-size:15px;color:var(--ink-2)}
+  .hero-copy .label{color:var(--ink-3)}
   .hero-copy .hero-row{align-items:end}
 
   .message{display:grid;grid-template-columns:200px 1fr;gap:32px}
@@ -155,6 +155,14 @@
   .gallery figcaption{display:none}
   @media (max-width:760px){.gallery{grid-template-columns:1fr 1fr;grid-auto-rows:180px}.gallery figure:first-child{grid-column:span 2}}
 
+  .network{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  .jpmap{width:100%;max-width:460px;height:auto;display:block}
+  .jpmap .hq circle{fill:var(--g1)} .jpmap .pin circle{fill:var(--accent)}
+  .jpmap text{font-family:"Bodoni Moda",serif;font-size:13px;fill:var(--ink-2);text-anchor:middle}
+  .offices{display:grid;grid-template-columns:120px 1fr;max-width:none}
+  .offices dt,.offices dd{border-top-color:var(--line);font-size:14px}
+  .offices>div:last-child dt,.offices>div:last-child dd{border-bottom-color:var(--line)}
+  @media (max-width:900px){.network{grid-template-columns:1fr}}
   .slogan{margin:0 0 40px;font-size:clamp(28px,4.5vw,56px);line-height:1.1;font-weight:400}
   .slogan em{font-style:italic;color:var(--accent)}
   .values{grid-template-columns:repeat(5,1fr);gap:32px}
@@ -213,14 +221,22 @@
 <main id="top">
   <div class="hero">
     <div class="hero-media">
-      <img src="images/hero.jpg" alt="店頭イベントの様子">
+      <svg class="arcs" viewBox="0 0 1600 720" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="gTop" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2FA84F"/><stop offset=".22" stop-color="#E4C23A"/><stop offset=".5" stop-color="#1BA0C4"/><stop offset="1" stop-color="#0E5FA6"/></linearGradient>
+          <linearGradient id="gBot" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F58220"/><stop offset=".45" stop-color="#E4C23A"/><stop offset=".75" stop-color="#4CB748"/><stop offset="1" stop-color="#1BA0C4"/></linearGradient>
+        </defs>
+        <path d="M-100 330 C 300 -120, 1200 -120, 1700 420 L1700 -50 L-100 -50 Z" fill="url(#gTop)" opacity=".95"/>
+        <path d="M-100 690 C 400 610, 1000 760, 1700 650 L1700 800 L-100 800 Z" fill="url(#gBot)" opacity=".9"/>
+      </svg>
       <div class="hero-copy">
         <div class="wrap">
-          <h1 class="en">Make dreams<br><em>real.</em></h1>
+          <span class="label">Company Profile</span>
+          <h1 class="en">Make customers happy<br>and make <em>society</em> happy.</h1>
           <div class="hero-row">
-            <p>夢の実現力で、人々を幸せにする。株式会社DreamCreationは、販売促進・イベント・人材の力で、クライアントの「売れる」をつくる大阪の会社です。</p>
+            <p>お客様を幸せに、社会を幸せに。株式会社DreamCreationは、セールスプロモーション・イベント・人材の力で、あらゆる方向に創造的な価値を生み出す大阪の会社です。</p>
             <div class="meta">
-              <span class="label">Osaka, Japan</span>
+              <span class="label">Osaka · Tokyo · Fukuoka · Okinawa</span>
               <span class="label">Est. 2017 / Sales Promotion · Event · Staffing</span>
             </div>
           </div>
@@ -264,7 +280,7 @@
           <div class="tags"><span>推奨販売</span><span>キャンペーン</span><span>フィールドサポート</span></div>
         </article>
         <article class="svc">
-          <figure><img src="images/svc-event.jpg" alt="店頭イベント"></figure>
+          <figure><img src="images/svc-event.jpg" alt="イベントプロモーション"></figure>
           <span class="en">Event</span>
           <h3>イベントプロモーション</h3>
           <p>体験型・参加型の集客イベントから、セミナー・式典・社内イベントまで。企画立案から当日の運営、備品やキャスティングの手配までワンストップで。</p>
@@ -288,18 +304,28 @@
     </div>
   </section>
 
-  <section id="works">
+  <section id="network">
     <div class="wrap">
       <div class="head">
-        <span class="label">Works</span>
-        <h2>店頭を、人が集まる場所に。</h2>
+        <span class="label">Network</span>
+        <h2>大阪から、全国へ。</h2>
       </div>
-      <div class="gallery">
-        <figure><img src="images/work-1.jpg" alt="キッズライセンスパーク（ドコモショップ店頭）"><figcaption>キッズライセンスパーク</figcaption></figure>
-        <figure><img src="images/work-2.jpg" alt="スクイーズ作成体験（ヨドバシカメラ梅田）"><figcaption>スクイーズ作成体験</figcaption></figure>
-        <figure><img src="images/work-3.jpg" alt="ふにふにシール作り体験会"><figcaption>シール作り体験会</figcaption></figure>
-        <figure><img src="images/work-4.jpg" alt="エア遊具（輪投げ・的あて）"><figcaption>エア遊具</figcaption></figure>
-        <figure><img src="images/work-5.jpg" alt="イベントの様子"><figcaption>イベント風景</figcaption></figure>
+      <div class="network">
+        <svg class="jpmap" viewBox="0 0 420 360" aria-label="拠点マップ">
+          <g fill="var(--line)">
+            <circle cx="330" cy="40" r="11"/><circle cx="318" cy="70" r="7"/><circle cx="312" cy="90" r="7"/><circle cx="326" cy="90" r="7"/><circle cx="306" cy="110" r="7"/><circle cx="320" cy="110" r="7"/><circle cx="334" cy="110" r="7"/><circle cx="300" cy="130" r="7"/><circle cx="314" cy="130" r="7"/><circle cx="328" cy="130" r="7"/><circle cx="294" cy="150" r="7"/><circle cx="308" cy="150" r="7"/><circle cx="322" cy="150" r="7"/><circle cx="288" cy="170" r="7"/><circle cx="302" cy="170" r="7"/><circle cx="316" cy="170" r="7"/><circle cx="270" cy="185" r="7"/><circle cx="284" cy="190" r="7"/><circle cx="298" cy="190" r="7"/><circle cx="256" cy="200" r="7"/><circle cx="242" cy="210" r="7"/><circle cx="228" cy="215" r="7"/><circle cx="214" cy="220" r="7"/><circle cx="200" cy="225" r="7"/><circle cx="186" cy="230" r="7"/><circle cx="172" cy="235" r="7"/><circle cx="158" cy="240" r="7"/><circle cx="144" cy="245" r="7"/><circle cx="130" cy="252" r="7"/><circle cx="116" cy="260" r="7"/><circle cx="102" cy="268" r="7"/><circle cx="88" cy="276" r="7"/><circle cx="74" cy="284" r="7"/><circle cx="60" cy="292" r="7"/><circle cx="46" cy="300" r="7"/><circle cx="60" cy="312" r="7"/><circle cx="74" cy="300" r="7"/><circle cx="88" cy="296" r="7"/><circle cx="160" cy="255" r="7"/><circle cx="174" cy="250" r="7"/><circle cx="188" cy="245" r="7"/><circle cx="202" cy="240" r="7"/><circle cx="216" cy="235" r="7"/><circle cx="230" cy="230" r="7"/><circle cx="244" cy="225" r="7"/>
+          </g>
+          <g class="hq"><circle cx="228" cy="215" r="10"/><text x="228" y="252">Osaka HQ</text></g>
+          <g class="pin"><circle cx="298" cy="190" r="8"/><text x="298" y="176">Tokyo</text></g>
+          <g class="pin"><circle cx="88" cy="276" r="8"/><text x="88" y="262">Fukuoka</text></g>
+          <g class="pin"><circle cx="40" cy="340" r="8"/><text x="40" y="326">Okinawa</text></g>
+        </svg>
+        <dl class="offices">
+          <div><dt>本社</dt><dd>〒550-0015 大阪府大阪市西区南堀江1-10-1 KT堀江801号室<br>TEL 06-4967-1038</dd></div>
+          <div><dt>東京営業所</dt><dd>—</dd></div>
+          <div><dt>九州営業所</dt><dd>〒811-2317 福岡県糟屋郡粕屋町長者原東2-3-27</dd></div>
+          <div><dt>沖縄営業所</dt><dd>—</dd></div>
+        </dl>
       </div>
     </div>
   </section>
@@ -310,7 +336,8 @@
         <span class="label">Philosophy</span>
         <h2>夢の実現力で、人々を幸せにする。</h2>
       </div>
-      <p class="slogan en">grow <em>&amp;</em> Fun!</p>
+      <p class="slogan en">Create creative value<br><em>all the vectors in.</em></p>
+      <p class="note" style="margin:-24px 0 40px;max-width:36em;font-size:14px;color:var(--ink-2)">「顧客満足・社会貢献・人との出会い」をキーワードに、あらゆる方向へ創造的な価値をつくる。社内スローガンは「grow &amp; Fun!」。働くって、楽しい。勝負は早さ。</p>
       <div class="values">
         <div class="value"><div class="rule"></div><h3>No.1</h3><p>いちばんって楽しい。やる以上は圧倒的No.1を目指し続けます。</p></div>
         <div class="value"><div class="rule"></div><h3>挑戦</h3><p>挑戦って楽しい。失敗を恐れず、現状維持を疑い、高い壁に挑み続けます。</p></div>
@@ -326,7 +353,7 @@
       <span class="label">Clients</span>
       <div>
         <ul class="clients">
-          <li>NTTドコモ</li><li>ドコモCS</li><li>NTTマーケティングアクトProCX</li><li>ソフトバンク</li><li>楽天モバイル</li><li>電通</li><li>博報堂</li><li>日本テレビ</li><li>WeWork</li>
+          <li>NTTドコモ</li><li>ドコモCS</li><li>NTTマーケティングアクトProCX</li><li>ソフトバンク</li><li>電通</li><li>博報堂</li><li>日本テレビ</li><li>WeWork</li>
         </ul>
         <p class="note">順不同・敬称略</p>
       </div>
