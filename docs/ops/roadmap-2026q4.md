@@ -145,5 +145,5 @@
 
 1. **月次レビューの日程**：毎月最終金曜（10/2、10/30、11/27）でよいですか？ 所要30分。
 2. **10月・11月の仮目標**（上の表）：このまま仮置きでよいか、いったん数字なしで始めるか。
-3. ~~Instagram の開始週~~ → Instagram・TikTok（nv.kidslab）は開設済み（2026-09-09 確認）。投稿計画は `docs/marketing/02-launch-posts.md` を土台に W4 から。Google ビジネスプロフィールは W4 のまま。
+3. ~~Instagram の開始週~~ → Instagram・TikTok（nv.kidslab）は開設済み（2026-09-09 確認）。投稿計画は `docs/marketing/02-launch-posts.md` を土台に W4 から。Google ビジネスプロフィールは W4 のまま（住所は 大阪市西区北堀江1丁目23番25号 で登録・非公開設定。代表決定 9/9。手順 `docs/setup/google-business.md`）。
 4. **年末年始の休業期間**：自動返信・LINEのあいさつ文に入れる休業日程（11月中に決めておくと W12 で切替できます）。
