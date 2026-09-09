@@ -5,7 +5,7 @@
 
 ## 0. 前提の確認（設定前に決めること）
 
-- 問い合わせフォームは `site/contact.php` 経由で送信され、送信者への自動返信は **`site/mail-templates/autoreply.txt`** の文面で送られる仕組みになっています（`docs/setup/form.md`。2026-09-07時点で本番設定は構築中）。
+- 問い合わせフォームは `site/contact.php` 経由で送信され、送信者への自動返信は **`site/mail-templates/autoreply.txt`** の文面で送られる仕組みになっています（`docs/setup/form.md`。**2026-09-09 代表承認済み・本番稼働中**）。
   したがって、下記1の文案は**既存 autoreply.txt の改訂案**です。差分は「参考リンク（各商材ページ・料金・FAQ）」と「ご相談を早く進めるための6項目」を追加した点で、返信期限の表現（1営業日以内）は既存文面に合わせています。
   採用する場合はプロダクト担当が autoreply.txt に反映します（差し込み変数 `{name}` `{company}` 等は既存テンプレートのものをそのまま使えます）。
 - 差出人表示: `株式会社NextVision <data@nextvision.fun>`
