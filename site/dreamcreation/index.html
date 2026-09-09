@@ -111,6 +111,82 @@
   .news-item:hover{color:var(--accent)}
   .contact-row{display:flex;gap:32px;align-items:center;flex-wrap:wrap}
   .tel{font-size:26px;color:var(--ink)}
+  /* --- imagery --- */
+  .logo img{height:34px;width:auto;display:block}
+  :root[data-theme="dark"] .logo img,.dark .logo img{filter:brightness(0) invert(1)}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .logo img{filter:brightness(0) invert(1)}}
+  .hero{position:relative;padding:0;border-bottom:0}
+  .hero-media{position:relative;min-height:520px;max-height:680px;height:66vh;overflow:hidden;background:var(--dark)}
+  .hero-media img{width:100%;height:100%;object-fit:cover;display:block;opacity:.72}
+  .hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(21,24,31,.15) 0%,rgba(21,24,31,.55) 70%,rgba(21,24,31,.85) 100%)}
+  .hero-copy{position:absolute;left:0;right:0;bottom:0;color:#F4F5F3;padding-bottom:clamp(36px,6vw,72px)}
+  .hero-copy h1{margin:0 0 20px;font-size:clamp(36px,6.5vw,86px);line-height:1.05;font-weight:400;letter-spacing:.01em;text-wrap:balance}
+  .hero-copy h1 em{font-style:italic;color:#B9C2FF}
+  .hero-copy p{margin:0;max-width:34em;font-size:15px;color:rgba(244,245,243,.85)}
+  .hero-copy .label{color:rgba(244,245,243,.7)}
+  .hero-copy .hero-row{align-items:end}
+
+  .message{display:grid;grid-template-columns:200px 1fr;gap:32px}
+  .message-body{display:grid;grid-template-columns:320px 1fr;gap:48px;align-items:start}
+  .portrait{aspect-ratio:4/5;overflow:hidden;background:var(--bg-2)}
+  .portrait img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.9)}
+  .message-text{max-width:36em;font-size:16px}
+  .message-text h2{margin:0 0 24px;font-size:clamp(24px,3vw,34px);line-height:1.35;font-weight:400;text-wrap:balance}
+  .message-text p{margin:0 0 1.4em}
+  .sign{margin-top:28px;display:flex;flex-direction:column;gap:2px}
+  .sign .en{font-size:22px}
+  .sign small{color:var(--ink-3);font-size:12px;letter-spacing:.1em}
+  @media (max-width:900px){.message{grid-template-columns:1fr}.message-body{grid-template-columns:1fr}.portrait{max-width:320px}}
+
+  .services{grid-template-columns:repeat(4,1fr)}
+  .svc{padding:0 0 28px;min-height:0}
+  .svc figure{margin:0;aspect-ratio:4/3;overflow:hidden;background:var(--bg-2)}
+  .svc figure img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
+  .svc:hover figure img{transform:scale(1.03)}
+  .svc .en,.svc h3,.svc p,.svc .tags{padding:0 24px}
+  .svc .en{font-size:24px;padding-top:22px}
+  @media (max-width:1000px){.services{grid-template-columns:1fr 1fr}}
+  @media (max-width:600px){.services{grid-template-columns:1fr}}
+
+  .gallery{display:grid;grid-template-columns:2fr 1fr 1fr;grid-auto-rows:260px;gap:8px}
+  .gallery figure{margin:0;overflow:hidden;background:var(--bg-2)}
+  .gallery figure:first-child{grid-row:span 2}
+  .gallery img{width:100%;height:100%;object-fit:cover;display:block}
+  .gallery figcaption{display:none}
+  @media (max-width:760px){.gallery{grid-template-columns:1fr 1fr;grid-auto-rows:180px}.gallery figure:first-child{grid-column:span 2}}
+
+  .slogan{margin:0 0 40px;font-size:clamp(28px,4.5vw,56px);line-height:1.1;font-weight:400}
+  .slogan em{font-style:italic;color:var(--accent)}
+  .values{grid-template-columns:repeat(5,1fr);gap:32px}
+  .value h3{font-size:19px}
+  @media (max-width:1000px){.values{grid-template-columns:repeat(3,1fr)}}
+  @media (max-width:640px){.values{grid-template-columns:1fr 1fr;gap:24px}}
+
+  .clients{display:flex;flex-wrap:wrap;gap:10px 28px;margin:0;padding:0;list-style:none}
+  .clients li{font-size:15px;letter-spacing:.04em;color:var(--ink-2);padding:6px 0}
+  .note{font-size:12px;color:var(--ink-3);margin-top:16px}
+
+  .history{margin:40px 0 0;padding:0;list-style:none;max-width:640px}
+  .history li{display:grid;grid-template-columns:120px 1fr;gap:16px;padding:12px 0;border-top:1px solid color-mix(in srgb,var(--dark-ink) 18%,transparent);font-size:14px}
+  .history li:last-child{border-bottom:1px solid color-mix(in srgb,var(--dark-ink) 18%,transparent)}
+  .history .year{color:var(--dark-ink-2);font-variant-numeric:tabular-nums}
+  .dark h3{margin:48px 0 0;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--dark-ink-2);font-weight:500}
+
+  .certs{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .cert{display:flex;gap:20px;align-items:flex-start;padding:24px;border:1px solid var(--line)}
+  .cert .badge{flex:0 0 72px;width:72px;height:72px;border-radius:50%;border:1.5px solid var(--accent);display:grid;place-items:center;color:var(--accent);font-size:11px;letter-spacing:.06em;text-align:center;line-height:1.3}
+  .cert .badge img{width:100%;height:100%;object-fit:contain}
+  .cert h3{margin:0 0 6px;font-size:15px;font-weight:500}
+  .cert p{margin:0;font-size:13px;color:var(--ink-2)}
+  .cert .num{font-variant-numeric:tabular-nums;letter-spacing:.04em;color:var(--ink)}
+  .todo{display:inline-block;font-size:11px;padding:1px 8px;border:1px dashed var(--accent);color:var(--accent);border-radius:999px;margin-left:6px;vertical-align:middle}
+  @media (max-width:900px){.certs{grid-template-columns:1fr}}
+
+  .recruit-grid{display:grid;grid-template-columns:200px 1fr 1fr;gap:32px;align-items:start}
+  .recruit-grid figure{margin:0;aspect-ratio:4/3;overflow:hidden;background:var(--bg-2)}
+  .recruit-grid img{width:100%;height:100%;object-fit:cover;display:block}
+  @media (max-width:900px){.recruit-grid{grid-template-columns:1fr}}
+
   footer{padding:36px 0;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--ink-3);letter-spacing:.08em}
   footer .logo{font-size:16px;color:var(--ink)}
 
@@ -121,13 +197,13 @@
 <header>
   <div class="wrap">
     <nav>
-      <a class="logo en" href="#top">Dream<b>Creation</b></a>
+      <a class="logo" href="#top"><img src="images/logo.png" alt="DreamCreation"></a>
       <ul>
+        <li><a href="#message">MESSAGE</a></li>
         <li><a href="#service">SERVICE</a></li>
         <li><a href="#philosophy">PHILOSOPHY</a></li>
         <li><a href="#company">COMPANY</a></li>
         <li><a href="#recruit">RECRUIT</a></li>
-        <li><a href="#news">NEWS</a></li>
       </ul>
       <a class="cta" href="#contact">CONTACT</a>
     </nav>
@@ -136,24 +212,39 @@
 
 <main id="top">
   <div class="hero">
-    <div class="wrap">
-      <h1 class="en">Make people<br><em>happy.</em></h1>
-      <div class="hero-row">
-        <p>お客様を幸せに、社会を幸せに。株式会社DreamCreationは、通信商材の販売促進とイベントの企画・運営を通じて、一人ひとりの強みを最大限に活かし、事業を通じて夢を実現する会社です。</p>
-        <div class="meta">
-          <span class="label">Osaka, Japan</span>
-          <span class="label">Est. 2017 / Sales Promotion · Event · Consulting</span>
+    <div class="hero-media">
+      <img src="images/hero.jpg" alt="店頭イベントの様子">
+      <div class="hero-copy">
+        <div class="wrap">
+          <h1 class="en">Make dreams<br><em>real.</em></h1>
+          <div class="hero-row">
+            <p>夢の実現力で、人々を幸せにする。株式会社DreamCreationは、販売促進・イベント・人材の力で、クライアントの「売れる」をつくる大阪の会社です。</p>
+            <div class="meta">
+              <span class="label">Osaka, Japan</span>
+              <span class="label">Est. 2017 / Sales Promotion · Event · Staffing</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <section id="about">
-    <div class="wrap about-grid">
-      <span class="label">About</span>
-      <div class="body">
-        <p>私たちは「顧客満足・社会貢献・人との出会い」をキーワードに、新しい市場の開拓、新しい需要の創造、新しい販売システムの構築に取り組んでいます。</p>
-        <p>大切にしているのはスピードとクオリティ。事業、拠点、社員、売上のすべてを右肩上がりに伸ばしながら、年齢や学歴に関係なく成果で評価する、実力主義のチームです。</p>
+  <section id="message">
+    <div class="wrap message">
+      <span class="label">Message</span>
+      <div class="message-body">
+        <div class="portrait"><img src="images/takemura.jpg" alt="代表取締役 竹村英哲"></div>
+        <div class="message-text">
+          <h2>働くって、楽しい。<br>その実感を、事業の力に変えていく。</h2>
+          <p>企業の使命は、どこまでいっても社会への貢献だと考えています。それはまず雇用を生み出すこと。そして、人々が幸せに暮らしていくための活動拠点であり続けることです。</p>
+          <p>DreamCreationは2017年、大阪で生まれました。通信商材の販売促進から始まり、イベントの企画・運営、人材派遣へと事業を広げてきましたが、変わらないのは「一人ひとりの夢を、実現する力に変える」という原点です。</p>
+          <p>スピードは価値。1週間後の100%より、3日後の70%。現場で結果を出し続けることでクライアントに頼りにされ、社員が夢をもってイキイキと働ける会社であり続けます。</p>
+          <div class="sign">
+            <small>代表取締役</small>
+            <span>竹村 英哲</span>
+            <span class="en">Hideaki Takemura</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -166,23 +257,49 @@
       </div>
       <div class="services">
         <article class="svc">
-          <span class="en">Promotion</span>
-          <h3>販売促進業務</h3>
-          <p>通信商材を中心に、家電量販店・携帯ショップでの販売促進を行います。店頭での提案力と実績で、クライアントの売上に直結する成果を出します。</p>
-          <div class="tags"><span>通信商材</span><span>家電量販店</span><span>携帯ショップ</span></div>
+          <figure><img src="images/svc-sales.jpg" alt="店頭での販売促進"></figure>
+          <span class="en">Sales Promotion</span>
+          <h3>セールスプロモーション</h3>
+          <p>通信商材を中心に、家電量販店・携帯ショップでの推奨販売・販売応援、キャンペーン事務局運営、サンプリングまで。</p>
+          <div class="tags"><span>推奨販売</span><span>キャンペーン</span><span>フィールドサポート</span></div>
         </article>
         <article class="svc">
+          <figure><img src="images/svc-event.jpg" alt="店頭イベント"></figure>
           <span class="en">Event</span>
-          <h3>イベント企画・運営</h3>
-          <p>課題を解決する効果的なイベントを、企画立案から当日の運営までワンストップでプロデュースします。</p>
-          <div class="tags"><span>企画立案</span><span>運営</span><span>プロデュース</span></div>
+          <h3>イベントプロモーション</h3>
+          <p>体験型・参加型の集客イベントから、セミナー・式典・社内イベントまで。企画立案から当日の運営、備品やキャスティングの手配までワンストップで。</p>
+          <div class="tags"><span>企画・運営</span><span>体験型イベント</span><span>キャスティング</span></div>
         </article>
         <article class="svc">
-          <span class="en">Sales</span>
-          <h3>営業代行・アウトバウンド</h3>
-          <p>アウトバウンド営業をはじめ、社員の適性に合わせた多様な営業業務を展開。新しい販売システムの構築を支えます。</p>
-          <div class="tags"><span>アウトバウンド</span><span>営業代行</span><span>新規開拓</span></div>
+          <figure><img src="images/svc-agency.jpg" alt="代理店事業"></figure>
+          <span class="en">Agency</span>
+          <h3>代理店事業</h3>
+          <p>通信・キャッシュレス決済・省エネ商材など、法人・個人向けの各種商材を代理店として販売。アウトバウンド営業にも対応します。</p>
+          <div class="tags"><span>通信</span><span>キャッシュレス</span><span>アウトバウンド</span></div>
         </article>
+        <article class="svc">
+          <figure><img src="images/svc-staffing.jpg" alt="人材・研修"></figure>
+          <span class="en">Staffing</span>
+          <h3>人材派遣・育成</h3>
+          <p>労働者派遣事業の許可のもと、販売・イベント運営に強い人材を派遣。現場で成果を出せる人材を育てるスマホ教室・研修も行います。</p>
+          <div class="tags"><span>労働者派遣</span><span>研修</span><span>スマホ教室</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="works">
+    <div class="wrap">
+      <div class="head">
+        <span class="label">Works</span>
+        <h2>店頭を、人が集まる場所に。</h2>
+      </div>
+      <div class="gallery">
+        <figure><img src="images/work-1.jpg" alt="キッズライセンスパーク（ドコモショップ店頭）"><figcaption>キッズライセンスパーク</figcaption></figure>
+        <figure><img src="images/work-2.jpg" alt="スクイーズ作成体験（ヨドバシカメラ梅田）"><figcaption>スクイーズ作成体験</figcaption></figure>
+        <figure><img src="images/work-3.jpg" alt="ふにふにシール作り体験会"><figcaption>シール作り体験会</figcaption></figure>
+        <figure><img src="images/work-4.jpg" alt="エア遊具（輪投げ・的あて）"><figcaption>エア遊具</figcaption></figure>
+        <figure><img src="images/work-5.jpg" alt="イベントの様子"><figcaption>イベント風景</figcaption></figure>
       </div>
     </div>
   </section>
@@ -191,12 +308,27 @@
     <div class="wrap">
       <div class="head">
         <span class="label">Philosophy</span>
-        <h2>個の強みを、事業の力に。</h2>
+        <h2>夢の実現力で、人々を幸せにする。</h2>
       </div>
+      <p class="slogan en">grow <em>&amp;</em> Fun!</p>
       <div class="values">
-        <div class="value"><div class="rule"></div><h3>顧客満足</h3><p>お客様を幸せにすることが、すべての出発点。スピードとクオリティで期待を超える成果を届けます。</p></div>
-        <div class="value"><div class="rule"></div><h3>社会貢献</h3><p>新しい市場と需要を創り、社会を幸せにする。若い力で、これからの日本社会の中心を担う会社を目指します。</p></div>
-        <div class="value"><div class="rule"></div><h3>人との出会い</h3><p>一人ひとりの強み・個性・多様性を最大限に活かし、事業を通じてそれぞれの夢の実現を支えます。</p></div>
+        <div class="value"><div class="rule"></div><h3>No.1</h3><p>いちばんって楽しい。やる以上は圧倒的No.1を目指し続けます。</p></div>
+        <div class="value"><div class="rule"></div><h3>挑戦</h3><p>挑戦って楽しい。失敗を恐れず、現状維持を疑い、高い壁に挑み続けます。</p></div>
+        <div class="value"><div class="rule"></div><h3>逆算</h3><p>逆算って楽しい。登る山を決め、今やるべきことを逆算で決めます。</p></div>
+        <div class="value"><div class="rule"></div><h3>スピード</h3><p>大至急って楽しい。1週間後の100%より、3日後の70%。</p></div>
+        <div class="value"><div class="rule"></div><h3>執念</h3><p>諦めないって楽しい。「どうやってできるか」を考え、とことんやり抜きます。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="clients">
+    <div class="wrap about-grid">
+      <span class="label">Clients</span>
+      <div>
+        <ul class="clients">
+          <li>NTTドコモ</li><li>ドコモCS</li><li>NTTマーケティングアクトProCX</li><li>ソフトバンク</li><li>楽天モバイル</li><li>電通</li><li>博報堂</li><li>日本テレビ</li><li>WeWork</li>
+        </ul>
+        <p class="note">順不同・敬称略</p>
       </div>
     </div>
   </section>
@@ -210,21 +342,68 @@
           <div><dt>所在地</dt><dd>〒550-0015<br>大阪府大阪市西区南堀江1-10-1 KT堀江801号室</dd></div>
           <div><dt>代表者</dt><dd>代表取締役　竹村 英哲</dd></div>
           <div><dt>設立</dt><dd>2017年6月27日</dd></div>
-          <div><dt>事業内容</dt><dd>通信商材の販売促進業務／イベントの企画・運営／営業代行</dd></div>
+          <div><dt>資本金</dt><dd>1,200万円</dd></div>
+          <div><dt>事業内容</dt><dd>セールスプロモーション／イベントの企画・運営／代理店事業／労働者派遣事業</dd></div>
           <div><dt>TEL</dt><dd>06-4967-1038</dd></div>
         </dl>
+        <h3>History</h3>
+        <ul class="history">
+          <li><span class="year">2017.06</span><span>株式会社DreamCreation 設立。名古屋営業所・九州営業所 開設</span></li>
+          <li><span class="year">2019.07</span><span>日本テレビHRと業務提携</span></li>
+          <li><span class="year">2019.08</span><span>本社を難波 Namba Sky-O に移転</span></li>
+          <li><span class="year">2019.11</span><span>沖縄営業所 開設</span></li>
+          <li><span class="year">2021.05</span><span>資本金を1,200万円に増資</span></li>
+          <li><span class="year">2022.03</span><span>労働者派遣事業を開始</span></li>
+          <li><span class="year">—</span><span>本社を西区南堀江に移転</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="license">
+    <div class="wrap">
+      <div class="head">
+        <span class="label">License &amp; Certification</span>
+        <h2>許認可・認証</h2>
+      </div>
+      <div class="certs">
+        <div class="cert">
+          <div class="badge">P<br>MARK</div>
+          <div>
+            <h3>プライバシーマーク</h3>
+            <p>個人情報保護体制について第三者認証を取得しています。</p>
+            <p class="num">登録番号：———— <span class="todo">要確認</span></p>
+          </div>
+        </div>
+        <div class="cert">
+          <div class="badge">派遣</div>
+          <div>
+            <h3>労働者派遣事業許可</h3>
+            <p>厚生労働大臣許可（一般労働者派遣事業）</p>
+            <p class="num">許可番号：派27-304911</p>
+          </div>
+        </div>
+        <div class="cert">
+          <div class="badge">T</div>
+          <div>
+            <h3>適格請求書発行事業者</h3>
+            <p>インボイス制度に対応しています。</p>
+            <p class="num">登録番号：T5120001206752</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <section id="recruit">
-    <div class="wrap about-grid">
+    <div class="wrap recruit-grid">
       <span class="label">Recruit</span>
       <div class="body">
         <p>年齢や学歴ではなく、成果で評価する。コワーキングオフィスの活用や柔軟な勤務時間など、効率よく働ける環境を整えています。</p>
         <p>若い力とともに、これからの日本社会の中心となる会社をつくる。一緒に挑戦する仲間を募集しています。</p>
         <p><a class="cta" href="#contact">採用について問い合わせる</a></p>
       </div>
+      <figure><img src="images/team.jpg" alt="DreamCreationのメンバー"></figure>
     </div>
   </section>
 
@@ -243,7 +422,7 @@
     <div class="wrap">
       <span class="label">Contact</span>
       <h2 class="en">Let's talk.</h2>
-      <p>販売促進・イベント・営業のご相談、採用に関するお問い合わせなど、お気軽にご連絡ください。</p>
+      <p>販売促進・イベント・人材のご相談、採用に関するお問い合わせなど、お気軽にご連絡ください。</p>
       <div class="contact-row">
         <a class="cta" href="#contact">お問い合わせフォーム
           <svg width="18" height="12" viewBox="0 0 18 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M0 6h16M11 1l5 5-5 5"/></svg>
@@ -255,7 +434,7 @@
 
   <div class="wrap">
     <footer>
-      <span class="logo en">Dream<b>Creation</b></span>
+      <span class="logo"><img src="images/logo-mark.png" alt="DreamCreation" style="height:56px"></span>
       <span>© 2026 DreamCreation Inc.</span>
     </footer>
   </div>
