@@ -123,16 +123,19 @@
   .hero-copy{position:relative;padding:clamp(150px,22vw,260px) 0 clamp(110px,14vw,170px)}
   .hero-copy h1{margin:8px 0 24px;font-size:clamp(36px,6vw,80px);line-height:1.05;font-weight:400;letter-spacing:.01em;text-wrap:balance}
   .hero-copy h1 em{font-style:italic;color:var(--accent)}
-  .hero-copy p{margin:0;max-width:34em;font-size:15px;color:var(--ink-2)}
+  .hero-copy p{margin:0}
+  .hero-lead{max-width:46em;font-size:16px;color:var(--ink-2);line-height:1.9}
+  .hero-meta{margin-top:20px !important;max-width:none;white-space:nowrap}
+  @media (max-width:640px){.hero-meta{white-space:normal}}
   .hero-copy .label{color:var(--ink-3)}
   .hero-copy .hero-row{align-items:end}
 
   .message{display:grid;grid-template-columns:200px 1fr;gap:32px}
-  .message-body{display:grid;grid-template-columns:320px 1fr;gap:48px;align-items:start}
+  .message-body{display:grid;grid-template-columns:minmax(280px,380px) 1fr;gap:clamp(32px,5vw,72px);align-items:start;margin-top:28px}
   .portrait{aspect-ratio:4/5;overflow:hidden;background:var(--bg-2)}
   .portrait img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.9)}
-  .message-text{max-width:36em;font-size:16px}
-  .message-text h2{margin:0 0 24px;font-size:clamp(24px,3vw,34px);line-height:1.35;font-weight:400;text-wrap:balance}
+  .message-text{max-width:none;font-size:16px}
+  .message-text h2{margin:0 0 24px;font-size:clamp(22px,2.4vw,30px);line-height:1.5;font-weight:400;text-wrap:balance}
   .message-text p{margin:0 0 1.4em}
   .sign{margin-top:28px;display:flex;flex-direction:column;gap:2px}
   .sign .en{font-size:22px}
@@ -210,8 +213,9 @@
   .todo{display:inline-block;font-size:11px;padding:1px 8px;border:1px dashed var(--accent);color:var(--accent);border-radius:999px;margin-left:6px;vertical-align:middle}
   @media (max-width:900px){.certs{grid-template-columns:1fr}}
 
-  .recruit-grid{display:grid;grid-template-columns:200px 1fr 1fr;gap:32px;align-items:start}
+  .recruit-grid{display:grid;grid-template-columns:minmax(280px,440px) 1fr;gap:clamp(32px,5vw,72px);align-items:center}
   .recruit-grid figure{margin:0;aspect-ratio:4/3;overflow:hidden;background:var(--bg-2)}
+  .recruit-grid h3{margin:0 0 20px;font-size:clamp(20px,2.2vw,26px);font-weight:400;line-height:1.5}
   .recruit-grid img{width:100%;height:100%;object-fit:cover;display:block}
   @media (max-width:900px){.recruit-grid{grid-template-columns:1fr}}
 
@@ -271,7 +275,6 @@
   .jump a:hover{color:var(--accent);border-color:var(--accent)}
   #message,#clients,#network{padding-top:clamp(48px,6vw,80px)}
   #message::after{display:none}
-  #recruit .recruit-grid{grid-template-columns:1fr 1fr}
   #recruit .body{max-width:36em;font-size:16px}
   #recruit .body p{margin:0 0 1.4em}
   .site-footer{padding:56px 0 32px;border-top:1px solid var(--line);background:var(--bg-2)}
@@ -285,6 +288,29 @@
   @media (max-width:860px){.fcols{grid-template-columns:1fr 1fr}}
   @media (max-width:520px){.fcols{grid-template-columns:1fr}}
   .hero-copy .label{padding-left:0}
+
+  /* --- contact form --- */
+  .contact-grid{display:grid;grid-template-columns:minmax(260px,1fr) 1.6fr;gap:clamp(32px,6vw,96px);align-items:start}
+  .contact h3.en{margin:0 0 16px;font-size:clamp(36px,5vw,64px);line-height:1;font-weight:400}
+  .contact-grid p{max-width:30em;color:var(--ink-2);margin:0 0 20px;font-size:15px}
+  .contact .tel{display:inline-block;margin-bottom:6px}
+  .form{display:flex;flex-direction:column;gap:18px}
+  .form label{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--ink-2)}
+  .form label em{font-style:normal;font-size:10px;color:#fff;background:var(--g1);padding:1px 6px;border-radius:3px;margin-left:6px;vertical-align:1px}
+  .form input,.form select,.form textarea{font:inherit;font-size:15px;color:var(--ink);background:var(--bg-2);border:1px solid var(--line);border-radius:4px;padding:12px 14px;width:100%;box-sizing:border-box;transition:border-color .2s,box-shadow .2s}
+  .form input:focus,.form select:focus,.form textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+  .form textarea{resize:vertical;min-height:140px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .form .agree{flex-direction:row;align-items:center;gap:10px;font-size:13px}
+  .form .agree input{width:16px;height:16px;padding:0;accent-color:var(--accent)}
+  .form-actions{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+  .form button.cta{cursor:pointer;font:inherit;font-size:13px;letter-spacing:.12em;padding:14px 28px;background:var(--ink);color:var(--bg);border:0}
+  .form button.cta:hover{background:var(--accent)}
+  .form button[disabled]{opacity:.6;cursor:wait}
+  .form-status{margin:0;font-size:13px;color:var(--ink-2)}
+  .form-status.ok{color:var(--g3)} .form-status.err{color:var(--g1)}
+  .form input:user-invalid,.form textarea:user-invalid{border-color:var(--g1)}
+  @media (max-width:860px){.contact-grid,.row2{grid-template-columns:1fr}}
 </style>
 
 <header>
@@ -318,13 +344,8 @@
         <div class="wrap">
           <span class="label">Company Profile</span>
           <h1 class="en">Make customers happy<br>and make <em>society</em> happy.</h1>
-          <div class="hero-row">
-            <p>お客様を幸せに、社会を幸せに。株式会社DreamCreationは、セールスプロモーション・イベント・人材の力で、あらゆる方向に創造的な価値を生み出す大阪の会社です。</p>
-            <div class="meta">
-              <span class="label">Osaka · Tokyo · Fukuoka · Okinawa</span>
-              <span class="label">Est. 2017 / Sales Promotion · Event · Staffing</span>
-            </div>
-          </div>
+          <p class="hero-lead">お客様を幸せに、社会を幸せに。セールスプロモーション・イベント・人材の力で、あらゆる方向に創造的な価値を生み出す大阪の会社です。</p>
+          <p class="hero-meta label">Osaka, Japan　/　Est. 2017　/　Sales Promotion · Event · Staffing</p>
         </div>
       </div>
     </div>
@@ -419,12 +440,12 @@
 
   <section id="message">
     <svg class="arc-bg" viewBox="0 0 800 400" aria-hidden="true"><path d="M0 400 C 150 80, 650 80, 800 400 L800 300 C 650 20, 150 20, 0 300 Z" fill="url(#gTop)"/></svg>
-    <div class="wrap message">
+    <div class="wrap">
       <span class="label">代表メッセージ</span>
       <div class="message-body">
         <div class="portrait"><img src="images/takemura.jpg" alt="代表取締役 竹村英哲"></div>
         <div class="message-text">
-          <h2>働くって、楽しい。<br>その実感を、事業の力に変えていく。</h2>
+          <h2>働くって、楽しい。その実感を、事業の力に変えていく。</h2>
           <p>企業の使命は、どこまでいっても社会への貢献だと考えています。それはまず雇用を生み出すこと。そして、人々が幸せに暮らしていくための活動拠点であり続けることです。</p>
           <p>DreamCreationは2017年、大阪で生まれました。通信商材の販売促進から始まり、イベントの企画・運営、人材派遣へと事業を広げてきましたが、変わらないのは「一人ひとりの夢を、実現する力に変える」という原点です。</p>
           <p>スピードは価値。1週間後の100%より、3日後の70%。現場で結果を出し続けることでクライアントに頼りにされ、社員が夢をもってイキイキと働ける会社であり続けます。</p>
@@ -551,28 +572,50 @@
   </section>
 
   <section id="recruit">
-    <div class="wrap"><div class="sec-head"><h2>採用情報 <span class="en sub">Careers</span></h2></div></div>
-    <div class="wrap recruit-grid">
-      <span class="label">採用情報</span>
-      <div class="body">
-        <p>年齢や学歴ではなく、成果で評価する。コワーキングオフィスの活用や柔軟な勤務時間など、効率よく働ける環境を整えています。</p>
-        <p>若い力とともに、これからの日本社会の中心となる会社をつくる。一緒に挑戦する仲間を募集しています。</p>
-        <p><a class="cta" href="#contact">採用について問い合わせる</a></p>
+    <div class="wrap">
+      <div class="sec-head"><h2>採用情報 <span class="en sub">Careers</span></h2></div>
+      <div class="recruit-grid">
+        <figure><img src="images/team.jpg" alt="DreamCreationのメンバー"></figure>
+        <div class="body">
+          <h3>成果で評価する。若い力で、次の中心をつくる。</h3>
+          <p>年齢や学歴ではなく、成果で評価する。コワーキングオフィスの活用や柔軟な勤務時間など、効率よく働ける環境を整えています。</p>
+          <p>若い力とともに、これからの日本社会の中心となる会社をつくる。一緒に挑戦する仲間を募集しています。</p>
+          <p><a class="cta" href="#contact">採用について問い合わせる</a></p>
+        </div>
       </div>
-      <figure><img src="images/team.jpg" alt="DreamCreationのメンバー"></figure>
     </div>
   </section>
 
   <section id="contact" class="contact">
     <div class="wrap">
-      <span class="label">お問い合わせ</span>
-      <h2 class="en">Let's talk.</h2>
-      <p>販売促進・イベント・人材のご相談、採用に関するお問い合わせなど、お気軽にご連絡ください。</p>
-      <div class="contact-row">
-        <a class="cta" href="#contact">お問い合わせフォーム
-          <svg width="18" height="12" viewBox="0 0 18 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M0 6h16M11 1l5 5-5 5"/></svg>
-        </a>
-        <a class="tel en" href="tel:0649671038">06-4967-1038</a>
+      <div class="sec-head"><h2>お問い合わせ <span class="en sub">Contact</span></h2></div>
+      <div class="contact-grid">
+        <div>
+          <h3 class="en">Let's talk.</h3>
+          <p>販売促進・イベント・人材のご相談、採用に関するお問い合わせなど、お気軽にご連絡ください。通常2営業日以内にご返信します。</p>
+          <a class="tel en" href="tel:0649671038">06-4967-1038</a>
+          <p class="note">受付時間 10:00〜18:00（土日祝を除く）</p>
+        </div>
+        <form id="inquiry" class="form" data-endpoint="" novalidate>
+          <div class="row2">
+            <label><span>会社名</span><input name="company" type="text" autocomplete="organization" placeholder="株式会社〇〇"></label>
+            <label><span>お名前 <em>必須</em></span><input name="name" type="text" required autocomplete="name" placeholder="山田 太郎"></label>
+          </div>
+          <div class="row2">
+            <label><span>メールアドレス <em>必須</em></span><input name="email" type="email" required autocomplete="email" placeholder="you@example.com"></label>
+            <label><span>電話番号</span><input name="tel" type="tel" autocomplete="tel" placeholder="06-0000-0000"></label>
+          </div>
+          <label><span>お問い合わせ種別</span>
+            <select name="type"><option>販売促進のご相談</option><option>イベントのご相談</option><option>代理店・営業代行のご相談</option><option>人材派遣のご相談</option><option>採用について</option><option>その他</option></select>
+          </label>
+          <label><span>お問い合わせ内容 <em>必須</em></span><textarea name="message" rows="6" required placeholder="ご相談内容をご記入ください"></textarea></label>
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="display:none">
+          <label class="agree"><input type="checkbox" name="agree" required> <span><a href="#" style="text-decoration:underline">プライバシーポリシー</a>に同意する</span></label>
+          <div class="form-actions">
+            <button class="cta" type="submit">送信する<svg width="18" height="12" viewBox="0 0 18 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M0 6h16M11 1l5 5-5 5"/></svg></button>
+            <p class="form-status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
       </div>
     </div>
     <svg class="contact-arc" viewBox="0 0 1600 160" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120 C 400 20, 1000 200, 1600 60 L1600 160 L0 160 Z" fill="url(#gBot)" opacity=".9"/></svg>
@@ -605,6 +648,30 @@
       var r = el.getBoundingClientRect();
       el.classList.add('reveal');
       if (r.top > innerHeight) { el.classList.add('pre'); io.observe(el); }
+    });
+  })();
+
+  // ---- contact form: posts to a mail endpoint (FormSubmit/Formspree/自社PHP等). 未設定時は mailto にフォールバック ----
+  (function(){
+    var f=document.getElementById('inquiry'); if(!f) return;
+    var st=f.querySelector('.form-status'), btn=f.querySelector('button[type=submit]');
+    var TO='info@d-creation-o.com'; // 受信先（要確認）
+    f.addEventListener('submit',function(e){
+      e.preventDefault();
+      if(!f.checkValidity()){ f.reportValidity(); return; }
+      var d=Object.fromEntries(new FormData(f).entries());
+      if(d._honey){ return; }
+      var subject='【HPお問い合わせ】'+d.type+'：'+(d.company||d.name);
+      var body='会社名: '+(d.company||'-')+'\nお名前: '+d.name+'\nメール: '+d.email+'\n電話: '+(d.tel||'-')+'\n種別: '+d.type+'\n\n'+d.message;
+      var ep=f.dataset.endpoint;
+      if(!ep){ location.href='mailto:'+TO+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body); st.textContent='メールソフトが開きます。送信してください。'; st.className='form-status ok'; return; }
+      btn.disabled=true; st.textContent='送信中…'; st.className='form-status';
+      fetch(ep,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body:JSON.stringify({_subject:subject,_replyto:d.email,_template:'table',company:d.company,name:d.name,email:d.email,tel:d.tel,type:d.type,message:d.message})})
+      .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json().catch(function(){return {};}); })
+      .then(function(){ f.reset(); st.textContent='送信しました。担当者よりご連絡いたします。'; st.className='form-status ok'; })
+      .catch(function(){ st.textContent='送信に失敗しました。お手数ですが '+TO+' までメールをお送りください。'; st.className='form-status err'; })
+      .finally(function(){ btn.disabled=false; });
     });
   })();
 </script>
