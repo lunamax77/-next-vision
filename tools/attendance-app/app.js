@@ -97,7 +97,9 @@ function applySession(s) {
     loginBox.hidden = true;
     appBody.hidden = false;
     sessionNameEl.textContent = session.display_name;
+    pruneOldEntries();
     renderTodayLog();
+    loadMonthRecords();
   } else {
     loginBox.hidden = false;
     appBody.hidden = true;
@@ -108,35 +110,99 @@ function formatEntryTime(iso) {
   return new Date(iso).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" });
 }
 
+// サーバーの recorded_at は UTC("YYYY-MM-DD HH:MM:SS")なので Date に変換する
+function serverTimeToDate(s) {
+  return new Date(String(s).replace(" ", "T") + "Z");
+}
+
+function formatDateHeading(d) {
+  return d.toLocaleDateString("ja-JP", { month: "numeric", day: "numeric", weekday: "short" });
+}
+
+// 端末内の記録は今月分だけ残す(月が変わったら前月分は削除)
+function pruneOldEntries() {
+  const now = new Date();
+  const entries = loadEntries().filter((e) => {
+    const d = new Date(e.time);
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+  });
+  saveEntries(entries);
+}
+
+let monthRecords = [];
+
 function renderTodayLog() {
   if (!session) return;
-  const todayStr = new Date().toDateString();
-  const entries = loadEntries().filter(
-    (e) => e.loginId === session.login_id && new Date(e.time).toDateString() === todayStr
-  );
+  const now = new Date();
+  const title = document.getElementById("todayLogTitle");
+  if (title) title.textContent = `${now.getMonth() + 1}月の記録`;
 
-  if (entries.length === 0) {
-    todayLogList.innerHTML = '<div class="today-log-empty">まだ本日の記録はありません</div>';
+  // サーバーに未送信の端末内記録(今月分)を先頭に出す
+  const pending = loadEntries()
+    .filter((e) => e.loginId === session.login_id && !e.synced)
+    .map((e) => ({
+      label: e.label,
+      date: new Date(e.time),
+      transport_method: e.transportMethod,
+      route: e.route,
+      amount: e.amount,
+      pending: true,
+      location_mismatch: false,
+    }));
+  const synced = monthRecords.map((r) => ({
+    label: r.label,
+    date: serverTimeToDate(r.time),
+    transport_method: r.transport_method,
+    route: r.route,
+    amount: r.amount,
+    pending: false,
+    location_mismatch: r.location_mismatch,
+  }));
+  const items = [...pending, ...synced].sort((a, b) => b.date - a.date);
+
+  if (items.length === 0) {
+    todayLogList.innerHTML = '<div class="today-log-empty">まだ今月の記録はありません</div>';
     return;
   }
 
-  todayLogList.innerHTML = entries
+  let lastDay = "";
+  todayLogList.innerHTML = items
     .map((e) => {
       const subParts = [];
-      if (e.transportMethod) subParts.push(e.transportMethod);
+      if (e.transport_method) subParts.push(e.transport_method);
       if (e.route) subParts.push(e.route);
       if (e.amount !== null && e.amount !== undefined) {
         subParts.push(`&yen;${Number(e.amount).toLocaleString("ja-JP")}`);
       }
-      if (!e.synced) subParts.push("送信中...");
-      return `
-        <div class="today-log-item ${e.synced ? "" : "pending"}">
+      if (e.pending) subParts.push("送信中...");
+      const dayKey = e.date.toDateString();
+      const heading = dayKey !== lastDay ? `<div class="today-log-date">${formatDateHeading(e.date)}</div>` : "";
+      lastDay = dayKey;
+      return `${heading}
+        <div class="today-log-item ${e.pending ? "pending" : ""}">
           <span class="label">${e.label}</span>
-          <span class="time">${formatEntryTime(e.time)}</span>
+          <span class="time">${formatEntryTime(e.date)}</span>
           ${subParts.length ? `<span class="sub">${subParts.join(" ・ ")}</span>` : ""}
+          ${e.location_mismatch ? '<span class="warn">⚠ 最寄駅から離れています</span>' : ""}
         </div>`;
     })
     .join("");
+}
+
+async function loadMonthRecords() {
+  if (!session || !CONFIG.API_URL) return;
+  try {
+    const url = CONFIG.API_URL.replace(/\/save\.php$/, "/records.php") +
+      "?login_id=" + encodeURIComponent(session.login_id);
+    const res = await fetch(url, { headers: { "X-App-Token": CONFIG.APP_TOKEN || "" } });
+    const data = await res.json();
+    if (res.ok && data.ok) {
+      monthRecords = data.records || [];
+      renderTodayLog();
+    }
+  } catch {
+    // オフライン時は端末内の記録のみ表示
+  }
 }
 
 // 起動時にサーバーから最新のアカウント情報(氏名・最寄駅)を取り直す。
@@ -335,10 +401,44 @@ async function loadHistory() {
   }
 }
 
+const TYPES_WITH_TIME = ["checkin", "checkout"];
+const timeField = document.getElementById("timeField");
+const timeHourSelect = document.getElementById("timeHour");
+const timeMinuteSelect = document.getElementById("timeMinute");
+for (let h = 0; h < 24; h++) {
+  const opt = document.createElement("option");
+  opt.value = String(h);
+  opt.textContent = String(h).padStart(2, "0");
+  timeHourSelect.appendChild(opt);
+}
+
+function setTimePickerToNow() {
+  const now = new Date();
+  const rounded = Math.round(now.getMinutes() / 15) * 15;
+  let hour = now.getHours();
+  let minute = rounded;
+  if (rounded === 60) {
+    minute = 0;
+    hour = (hour + 1) % 24;
+  }
+  timeHourSelect.value = String(hour);
+  timeMinuteSelect.value = String(minute);
+}
+
+// 選択された時刻を「今日のその時刻」として返す(選択欄が非表示なら現在時刻)
+function selectedRecordTime() {
+  if (timeField.hidden) return new Date();
+  const d = new Date();
+  d.setHours(Number(timeHourSelect.value), Number(timeMinuteSelect.value), 0, 0);
+  return d;
+}
+
 function openExtraForm(type, label) {
   pendingType = type;
   pendingLabel = label;
   extraTitle.textContent = label;
+  timeField.hidden = !TYPES_WITH_TIME.includes(type);
+  if (!timeField.hidden) setTimePickerToNow();
   transportMethodInput.value = "";
   routeFromInput.value = (session && session.nearest_station) || "";
   routeToInput.value = "";
@@ -373,6 +473,7 @@ extraNext.addEventListener("click", () => {
     transportMethod,
     route,
     amount: Number(amount),
+    recordTime: selectedRecordTime().toISOString(),
   };
   extraBox.hidden = true;
   openCamera(pendingType, pendingLabel, extra);
@@ -435,7 +536,7 @@ function addEntry(type, label, location, photo, extra) {
     staffName: session.display_name,
     type,
     label,
-    time: new Date().toISOString(),
+    time: (extra && extra.recordTime) || new Date().toISOString(),
     location,
     photo,
     transportMethod: extra ? extra.transportMethod : null,
@@ -485,7 +586,7 @@ async function syncEntry(entry) {
       target.synced = true;
       target.address = data.address || null;
       saveEntries(entries);
-      renderTodayLog();
+      loadMonthRecords();
     }
   } catch (err) {
     setStatus(`${entry.label}: サーバー送信に失敗(端末内には保存済み)`, true);

@@ -297,6 +297,15 @@
   .today-log-item .time{font-size:13px;font-variant-numeric:tabular-nums;color:var(--accent);}
   .today-log-item .sub{font-size:10.5px;color:var(--text-sub);margin-top:4px;flex-basis:100%;}
   .today-log-item.pending .time{color:var(--text-faint);}
+  .today-log-date{
+    font-size:11px;
+    color:var(--text-sub);
+    margin:10px 0 2px;
+    padding-bottom:4px;
+    border-bottom:1px solid var(--border-soft);
+  }
+  .today-log-item .warn{font-size:10.5px;color:var(--danger);flex-basis:100%;}
+  .route-row select{flex:1;min-width:0;}
 
   /* camera modal */
   #cameraModal{
@@ -408,6 +417,19 @@
       <span class="extra-title" id="extraTitle">出勤確認</span>
       <button type="button" class="extra-cancel" id="extraCancel">キャンセル</button>
     </div>
+    <div class="field" id="timeField" hidden>
+      <label>打刻時刻 <span class="req">*</span></label>
+      <div class="route-row">
+        <select id="timeHour"></select>
+        <span class="route-arrow">:</span>
+        <select id="timeMinute">
+          <option value="0">00</option>
+          <option value="15">15</option>
+          <option value="30">30</option>
+          <option value="45">45</option>
+        </select>
+      </div>
+    </div>
     <div class="field">
       <label for="transportMethod">移動手段 <span class="req">*</span></label>
       <select id="transportMethod">
@@ -443,7 +465,7 @@
   <div class="status" id="status"></div>
 
   <div class="today-log">
-    <div class="today-log-title">本日の記録</div>
+    <div class="today-log-title" id="todayLogTitle">今月の記録</div>
     <div class="today-log-list" id="todayLogList"></div>
   </div>
 
