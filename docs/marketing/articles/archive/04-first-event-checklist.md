@@ -6,7 +6,7 @@ keywords: 店頭イベント 準備 チェックリスト / 子ども向けイ�
 cta: index.html（FAQ・ご利用の流れ）→ お問い合わせ
 reader: 初めてキッズイベントの担当になった方（準備の抜け漏れが不安）
 check_items: 6（末尾の <!-- 要確認 --> コメント）
-status: published（2026-09-14）　URL: https://nextvision.fun/blog/first-event-checklist.html
+status: withdrawn（2026-09-14 代表指示で取り下げ・非公開。番号04は次の記事に繰り上げ）
 ---
 
 # 初めてのキッズイベント開催チェックリスト｜会場・電源・安全
