@@ -1,6 +1,6 @@
 # HP 掲載メディア（写真・動画）の台帳
 
-最終更新: 2026-09-09　担当: プロダクト
+最終更新: 2026-09-14　担当: プロダクト
 
 ## 方針（代表決定）
 
@@ -11,6 +11,8 @@
 
 ## 掲載中のメディア
 
+
+
 | ファイル | 掲載場所 | 元データ（Google ドライブ） | 加工 |
 | --- | --- | --- | --- |
 | images/klp-photo-hero.jpg | klp.html 上部 ／ index.html 開催イメージ | 企画・提案書/コンテンツ/キッズライセンスパーク/画像/6月ヨドバシ梅田 ② | 顔モザイク・背景ぼかし |
@@ -20,7 +22,7 @@
 | video/punilab-promo.mp4（+ punilab-promo-poster.jpg） | punilab.html MOVIE ／ index.html 動画で見る | 企画・提案書/コンテンツ/スクイーズ/fixed_audio_overlap_final.mp4（代表作成） | faststart のみ。出演者2名の顔あり（代表承認 2026-09-09） |
 | video/punilab-making.mp4（+ punilab-making-poster.jpg） | punilab.html MOVIE | ぷにラボ作成動画 ①⑫⑬ ＋ 素材 ② を結合（各4秒） | 540×960・無音・ループ |
 | images/punilab-colors.jpg / punilab-mold.jpg / punilab-pack.jpg | punilab.html 作れるアイテム ／ index.html 開催イメージ | 素材②・作成①・作成⑬ から切り出し | 4:3 トリミング |
-| images/car-*.jpg（7台） | klp.html 車種選択 | カタログ PPTX（元が横240px） | 4倍拡大・シャープ化。**元の大きな写真が届けば差し替える** |
+| images/car-*.jpg（7台） | klp.html 車種選択 | 企画・提案書/コンテンツ/キッズライセンスパーク/車体画像（カタログ PNG 7点） | メイン写真を切り出し、960×736 に白背景で配置（2026-09-14 差し替え） |
 
 ## 未使用の素材（判断済み）
 
