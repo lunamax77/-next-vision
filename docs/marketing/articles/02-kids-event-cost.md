@@ -6,7 +6,7 @@ keywords: キッズイベント 費用 相場 / ふわふわ遊具 レンタル 
 cta: index.html（料金・お見積りシミュレーター）
 reader: 初めて店頭キッズイベントの予算を組む担当者
 check_items: 5（末尾の <!-- 要確認 --> コメント）
-status: draft（代表承認前・未公開）
+status: published（2026-09-14）　URL: https://nextvision.fun/blog/kids-event-cost.html
 ---
 
 # 店頭キッズイベントの費用相場と内訳｜税別・送料別で解説

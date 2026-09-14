@@ -6,7 +6,7 @@ keywords: 体験型イベント 集客 / 滞在時間 伸ばす 商業施設
 cta: klp.html／punilab.html
 reader: 滞在時間・商談時間を伸ばしたい施設運営・店舗担当者（上司への説明材料を探している）
 check_items: 4（末尾の <!-- 要確認 --> コメント）
-status: draft（代表承認前・未公開）
+status: published（2026-09-14）　URL: https://nextvision.fun/blog/taiken-stay-time.html
 ---
 
 # 体験型イベントが滞在時間を伸ばす理由｜物販との違い
