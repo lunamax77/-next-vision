@@ -27,7 +27,7 @@ pip install -q markdown
 
 ## 3. 下書きを書く（`docs/marketing/articles/NN-<slug>.md`）
 
-形式は `docs/marketing/articles/01-family-shukyaku.md` と同じ front matter（title / description / slug / keywords / cta / reader / status）に加えて、`lead`（アイキャッチのファイル名）、`category`、`cta_heading`、`cta_text`、`cta_buttons` を書く（書式は `tools/build_article.py` の冒頭コメント）。slug は英小文字とハイフンのみ。
+形式は `docs/marketing/articles/01-family-shukyaku.md` と同じ front matter（`category`（集客／費用／効果／準備／運転体験／ワークショップ／エア遊具／業種）、`theme`（orange／blue／coral／green／navy／purple のうち直近3本と重ならない色）、`photo`（直近3本と違う写真）を必ず書く）（title / description / slug / keywords / cta / reader / status）に加えて、`lead`（アイキャッチのファイル名）、`category`、`cta_heading`、`cta_text`、`cta_buttons` を書く（書式は `tools/build_article.py` の冒頭コメント）。slug は英小文字とハイフンのみ。
 
 **書き方のルール（必ず守る）**
 
@@ -40,20 +40,22 @@ pip install -q markdown
 7. 画像は `site/images/` にある加工済みのものだけ（klp-photo-hero.jpg / klp-photo-scene.jpg / klp-photo-session.jpg / punilab-colors.jpg / punilab-mold.jpg / punilab-pack.jpg / license.jpg / seal.jpg / airizm.jpg / case-klp-store.jpg / case-seal-store.jpg）。本文への図版は `[figure: ...]` 記法で1〜2か所。
 8. 内部リンクを最低2本（主CTAの商材ページ＋関連する公開済み記事 `blog/*.html`）。外部リンクは張らない。
 9. `<!-- 要確認 -->` は**残さない**。自分で判断できない事実は書かない（削る）。
-10. AI が書いたことを隠さないが、記事内で「AI」に言及する必要はない。文体は「です・ます」、断定しすぎない。
+10. 見出し・タイトルは短く（title 32字以内、H2 は20字以内）。読みやすさのため、不自然な位置で折り返さない短い言い回しを選ぶ。
+11. AI が書いたことを隠さないが、記事内で「AI」に言及する必要はない。文体は「です・ます」、断定しすぎない。
 
 ## 4. 公開する
 
 ```bash
+python3 tools/make_eyecatch.py NN                      # アイキャッチ画像を生成（記事ごとに色と写真を変える。front matter の category / theme / photo を使う）
 python3 tools/build_article.py NN --publish            # site/blog/<slug>.html 生成、index.html の読みもの欄（先頭）と sitemap.xml に追加、下書きの status を published に
 python3 -c "import html.parser,sys;open('site/blog/<slug>.html').read()" && grep -c "要確認" site/blog/<slug>.html   # 0 であること
 ```
 
 - `docs/marketing/article-queue.md` の該当行を `公開済（YYYY-MM-DD）` にし、「公開済み」表に URL を追記。
-- 変更を確認: `git status` に含まれるのは `site/blog/<slug>.html`、`site/index.html`、`site/sitemap.xml`、`docs/marketing/articles/NN-*.md`、`docs/marketing/article-queue.md` だけであること。**それ以外のファイルは変更しない。**
+- 変更を確認: `git status` に含まれるのは `site/blog/<slug>.html`、`site/images/eyecatch-<slug>.jpg`、`site/index.html`、`site/sitemap.xml`、`docs/marketing/articles/NN-*.md`、`docs/marketing/article-queue.md` だけであること。**それ以外のファイルは変更しない。**
 
 ```bash
-git add site/blog site/index.html site/sitemap.xml docs/marketing
+git add site/blog site/images/eyecatch-*.jpg site/index.html site/sitemap.xml docs/marketing
 git commit -m "HP: コラム記事NN「<タイトル>」を公開（毎週土曜の自動公開ルーチン）"
 git push -u origin claude/hp-zip-import-a2ibct
 ```

@@ -7,6 +7,10 @@ cta: index.html（体験コンテンツ一覧）→ klp.html
 reader: 商業施設・店舗の販促／集客担当者（週末のファミリー集客に悩んでいる）
 check_items: 4（末尾の <!-- 要確認 --> コメント）
 status: published（2026-09-09）　URL: https://nextvision.fun/blog/family-shukyaku.html
+category: 集客
+theme: orange
+photo: klp-photo-scene.jpg
+lead: eyecatch-family-shukyaku.jpg
 ---
 
 # 商業施設のファミリー集客が難しい理由と5つの打ち手

@@ -7,6 +7,10 @@ cta: index.html（料金・お見積りシミュレーター）
 reader: 初めて店頭キッズイベントの予算を組む担当者
 check_items: 5（末尾の <!-- 要確認 --> コメント）
 status: published（2026-09-14）　URL: https://nextvision.fun/blog/kids-event-cost.html
+category: 費用
+theme: blue
+photo: airizm.jpg
+lead: eyecatch-kids-event-cost.jpg
 ---
 
 # 店頭キッズイベントの費用相場と内訳｜税別・送料別で解説
