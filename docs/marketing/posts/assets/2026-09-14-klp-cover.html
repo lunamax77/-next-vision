@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="zmg-local.css">
+<style>
+  :root{
+    --navy:#26576E; --navy-d:#1B4356; --sky:#3E9BD8; --cyan:#45C4E8;
+    --orange:#F5A623; --cream:#FFFBEF; --white:#FFFFFF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1080px;height:1350px}
+  body{
+    font-family:"Zen Maru Gothic",sans-serif;
+    background:var(--navy);
+    position:relative;
+    overflow:hidden;
+  }
+  /* 背景の装飾（やわらかい円） */
+  .blob{position:absolute;border-radius:50%}
+  .b1{width:760px;height:760px;right:-250px;top:-260px;background:#2E6580}
+  .b2{width:520px;height:520px;left:-190px;bottom:-160px;background:#215064}
+  .b3{width:300px;height:300px;right:-70px;bottom:190px;background:#2A5C74}
+
+  .wrap{position:relative;height:100%;padding:96px 88px;display:flex;flex-direction:column}
+
+  /* 上部ラベル */
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:14px;
+    align-self:flex-start;
+    background:rgba(255,255,255,.12);
+    border:2px solid rgba(255,255,255,.30);
+    border-radius:999px;padding:14px 28px;
+    font-size:27px;font-weight:700;color:var(--cream);letter-spacing:.04em;
+  }
+  .eyebrow .dot{width:13px;height:13px;border-radius:50%;background:var(--orange)}
+
+  /* メイン見出し */
+  .main{margin-top:52px}
+  .l1{
+    font-size:102px;font-weight:900;color:var(--white);
+    line-height:1.16;letter-spacing:.01em;
+  }
+  .num{
+    font-size:206px;font-weight:900;color:var(--orange);
+    line-height:.88;letter-spacing:-.02em;
+    display:inline-block;vertical-align:-18px;
+    text-shadow:0 7px 0 rgba(0,0,0,.12);
+  }
+  .l2{
+    margin-top:32px;
+    font-size:40px;font-weight:700;color:var(--cyan);
+    line-height:1.5;letter-spacing:.01em;
+  }
+
+  /* 7車種のチップ（空白を埋め、「選べる」を具体にする） */
+  .cars{
+    margin-top:52px;display:flex;flex-wrap:wrap;gap:16px;
+    padding-top:40px;border-top:3px solid rgba(255,255,255,.18);
+  }
+  .car{
+    background:rgba(255,255,255,.13);
+    border:2px solid rgba(255,255,255,.26);
+    border-radius:999px;padding:15px 30px;
+    font-size:31px;font-weight:700;color:var(--cream);
+    white-space:nowrap;
+  }
+
+  .cars-note{
+    margin-top:30px;font-size:30px;font-weight:500;
+    color:rgba(255,255,255,.72);line-height:1.5;
+  }
+
+  /* 補足3つ */
+  .specs{margin-top:auto;display:flex;gap:18px}
+  .spec{
+    flex:1;background:rgba(255,255,255,.96);border-radius:24px;
+    padding:30px 20px;text-align:center;
+  }
+  .spec .k{font-size:22px;font-weight:700;color:#6C8598;letter-spacing:.02em}
+  .spec .v{margin-top:8px;font-size:35px;font-weight:900;color:var(--navy);line-height:1.25}
+  .spec .v small{font-size:26px;font-weight:700}
+
+  /* 下段 */
+  .foot{margin-top:40px;display:flex;align-items:center;justify-content:space-between}
+  .brand{font-size:26px;font-weight:700;color:rgba(255,255,255,.86);line-height:1.5}
+  .brand b{display:block;font-size:30px;font-weight:900;color:#fff}
+  .swipe{
+    display:inline-flex;align-items:center;gap:16px;
+    background:var(--orange);border-radius:999px;
+    padding:22px 38px;
+    font-size:32px;font-weight:900;color:#3B2A06;
+  }
+  .swipe .arrow{font-size:34px;line-height:1}
+</style>
+</head>
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span>こども免許証がもらえる運転体験</div>
+
+    <div class="main">
+      <div class="l1">選べる、<span class="num">7</span>車種。</div>
+      <div class="l2">本格EVカーでコースを約3周。<br>受付から約5分で、免許証ができあがります。</div>
+
+      <div class="cars">
+        <span class="car">GT R</span>
+        <span class="car">LC500</span>
+        <span class="car">540K</span>
+        <span class="car">GX550</span>
+        <span class="car">ポリスカー</span>
+        <span class="car">ポリスSUV</span>
+        <span class="car">スポーツカー</span>
+      </div>
+      <div class="cars-note">会場の広さやご希望に合わせて、車種をお選びいただけます。</div>
+    </div>
+
+    <div class="specs">
+      <div class="spec"><div class="k">対象年齢</div><div class="v">3〜8<small>歳</small></div></div>
+      <div class="spec"><div class="k">免許証の発行</div><div class="v">約5<small>分</small></div></div>
+      <div class="spec"><div class="k">設置場所</div><div class="v"><small>屋内・屋外</small></div></div>
+    </div>
+
+    <div class="foot">
+      <div class="brand">キッズライセンスパーク<b>株式会社NextVision</b></div>
+      <div class="swipe">7車種を見る<span class="arrow">→</span></div>
+    </div>
+  </div>
+</body>
+</html>
