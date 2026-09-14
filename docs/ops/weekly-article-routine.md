@@ -6,6 +6,9 @@
 
 ## 0. 前提
 
+- Routine（定期実行）の登録: 名前「NextVision 毎週土曜 記事自動公開」、ID `trig_01Kcjr7uhe5zA6rxniNyMiJp`、毎週土曜 9:00 JST（cron `0 0 * * 6` UTC）、初回 2026-09-19。完了時に代表へプッシュ通知とメール。止めたいときは代表が claude.ai の Routines 画面で無効化するか、チャットで「自動公開を止めて」と伝える。
+- 起動されたセッションには外部連携ツール（GitHub MCP 等）が付かない前提。デプロイ結果の確認ができない場合は「未確認」と報告し、代表が https://github.com/lunamax77/-next-vision/actions で緑のチェックを確認する。
+
 - リポジトリ: `lunamax77/-next-vision`、作業ブランチ: `claude/hp-zip-import-a2ibct`（このブランチへの push で GitHub Actions が nextvision.fun に自動デプロイする）。
 - 対外行為の扱い: 記事公開は代表が包括承認済み。**それ以外の対外行為（メール送信・SNS投稿・外部サービス登録など）はしない。**
 - 秘密情報（サーバーのパスワード等）は扱わない。`site/config.php` は触らない。
