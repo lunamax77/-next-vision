@@ -15,7 +15,7 @@ on:
 
 concurrency:
   group: deploy-attendance
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   deploy:
@@ -31,7 +31,7 @@ jobs:
           server: b41.coreserver.jp
           username: dcreation
           password: ${{ secrets.CORESERVER_FTP_PASSWORD }}
-          protocol: ftps
+          protocol: ftp
           port: 21
           local-dir: tools/attendance-app/
           server-dir: public_html/attendance/
