@@ -1,0 +1,48 @@
+name: Deploy attendance app to CoreServer
+
+# tools/attendance-app 配下に変更が push されたら、CoreServer の
+# /public_html/attendance/ へ FTP で自動アップロードする。
+# サーバー側にだけある設定ファイル(config.js / config.php / 鍵ファイル / 写真)は上書きしない。
+
+on:
+  push:
+    branches:
+      - claude/internal-app-development-dw39w5
+    paths:
+      - "tools/attendance-app/**"
+      - ".github/workflows/deploy-attendance.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-attendance
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Upload to CoreServer via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: b41.coreserver.jp
+          username: dcreation
+          password: ${{ secrets.CORESERVER_FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: tools/attendance-app/
+          server-dir: public_html/attendance/
+          state-name: .ftp-deploy-sync-state.json
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            config.js
+            **/config.php
+            **/google-service-account.json
+            **/.htpasswd
+            **/uploads/**
+            **/sheets_debug.log
