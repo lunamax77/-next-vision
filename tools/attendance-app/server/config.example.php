@@ -38,4 +38,8 @@ return [
         'from' => '09:00',
         'to' => '11:00',
     ],
+
+    // GitHub Actions からの自動デプロイ用トークン(server/deploy.php)。
+    // GitHub の Secrets "ATTENDANCE_DEPLOY_TOKEN" と同じ値にする。空なら自動デプロイ無効。
+    'deploy_token' => '',
 ];

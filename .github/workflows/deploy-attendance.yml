@@ -1,8 +1,9 @@
 name: Deploy attendance app to CoreServer
 
-# tools/attendance-app 配下に変更が push されたら、CoreServer の
-# /public_html/attendance/ へ FTP で自動アップロードする。
-# サーバー側にだけある設定ファイル(config.js / config.php / 鍵ファイル / 写真)は上書きしない。
+# tools/attendance-app 配下に変更が push されたら、内容を zip にまとめて
+# サーバー側の受け口(attendance/server/deploy.php)へ HTTPS で送り、展開してもらう。
+# サーバー側にだけある設定ファイル(config.js / config.php / 鍵ファイル / 写真)は
+# deploy.php 側で上書きしない。
 
 on:
   push:
@@ -20,29 +21,36 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Upload to CoreServer via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: b41.coreserver.jp
-          username: dcreation
-          password: ${{ secrets.CORESERVER_FTP_PASSWORD }}
-          protocol: ftp
-          port: 21
-          local-dir: tools/attendance-app/
-          server-dir: public_html/attendance/
-          state-name: .ftp-deploy-sync-state.json
-          dangerous-clean-slate: false
-          exclude: |
-            **/.git*
-            **/.git*/**
-            config.js
-            **/config.php
-            **/google-service-account.json
-            **/.htpasswd
-            **/uploads/**
-            **/sheets_debug.log
+      - name: Build package
+        run: |
+          cd tools/attendance-app
+          zip -rq "$RUNNER_TEMP/package.zip" . \
+            -x "config.js" \
+            -x "server/config.php" \
+            -x "server/google-service-account.json" \
+            -x "server/uploads/*" \
+            -x "*/.htpasswd" ".htpasswd" \
+            -x "*.gitkeep" "*.gitignore"
+          unzip -l "$RUNNER_TEMP/package.zip" | tail -n 1
+
+      - name: Upload to server
+        env:
+          DEPLOY_TOKEN: ${{ secrets.ATTENDANCE_DEPLOY_TOKEN }}
+        run: |
+          if [ -z "$DEPLOY_TOKEN" ]; then
+            echo "::error::ATTENDANCE_DEPLOY_TOKEN secret is not set"; exit 1
+          fi
+          http_code=$(curl -sS -o "$RUNNER_TEMP/resp.json" -w "%{http_code}" \
+            -H "X-Deploy-Token: $DEPLOY_TOKEN" \
+            -F "package=@$RUNNER_TEMP/package.zip" \
+            "https://d-creation-o.com/attendance/server/deploy.php")
+          echo "HTTP $http_code"
+          cat "$RUNNER_TEMP/resp.json"; echo
+          if [ "$http_code" != "200" ]; then
+            echo "::error::deploy failed (HTTP $http_code)"; exit 1
+          fi
