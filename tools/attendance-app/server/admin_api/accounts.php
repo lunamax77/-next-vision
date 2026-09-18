@@ -31,7 +31,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET') {
     $stmt = $pdo->query(
-        'SELECT id, login_id, password_plain, display_name, group_name, phone_number, nearest_station, is_active, created_at
+        'SELECT id, login_id, password_plain, display_name, group_name, area, phone_number, nearest_station, is_active, created_at
          FROM staff_accounts ORDER BY created_at DESC'
     );
     respond(200, ['ok' => true, 'accounts' => $stmt->fetchAll()]);
@@ -50,6 +50,7 @@ if ($method === 'POST') {
         $phoneNumber = trim((string)($input['phone_number'] ?? ''));
         $nearestStation = trim((string)($input['nearest_station'] ?? ''));
         $groupName = trim((string)($input['group_name'] ?? ''));
+        $area = trim((string)($input['area'] ?? ''));
 
         if ($displayName === '' || $phoneNumber === '' || $nearestStation === '') {
             respond(400, ['ok' => false, 'error' => '氏名・電話番号・最寄駅は必須です']);
@@ -67,9 +68,9 @@ if ($method === 'POST') {
             $password = generate_temp_password();
             $stmt = $pdo->prepare(
                 'INSERT INTO staff_accounts
-                    (login_id, password_hash, password_plain, display_name, group_name, phone_number, nearest_station, nearest_station_lat, nearest_station_lng, is_active)
+                    (login_id, password_hash, password_plain, display_name, group_name, area, phone_number, nearest_station, nearest_station_lat, nearest_station_lng, is_active)
                  VALUES
-                    (:login_id, :password_hash, :password_plain, :display_name, :group_name, :phone_number, :nearest_station, :lat, :lng, 1)'
+                    (:login_id, :password_hash, :password_plain, :display_name, :group_name, :area, :phone_number, :nearest_station, :lat, :lng, 1)'
             );
             $stmt->execute([
                 'login_id' => $loginId,
@@ -77,6 +78,7 @@ if ($method === 'POST') {
                 'password_plain' => $password,
                 'display_name' => $displayName,
                 'group_name' => $groupName !== '' ? $groupName : null,
+                'area' => $area !== '' ? $area : null,
                 'phone_number' => $phoneNumber,
                 'nearest_station' => $nearestStation,
                 'lat' => $stationCoords['lat'] ?? null,
@@ -101,6 +103,7 @@ if ($method === 'POST') {
         $phoneNumber = trim((string)($input['phone_number'] ?? ''));
         $nearestStation = trim((string)($input['nearest_station'] ?? ''));
         $groupName = trim((string)($input['group_name'] ?? ''));
+        $area = trim((string)($input['area'] ?? ''));
 
         if ($id <= 0 || $displayName === '' || $phoneNumber === '' || $nearestStation === '') {
             respond(400, ['ok' => false, 'error' => '氏名・電話番号・最寄駅は必須です']);
@@ -132,13 +135,14 @@ if ($method === 'POST') {
         try {
             $stmt = $pdo->prepare(
                 'UPDATE staff_accounts
-                 SET display_name = :display_name, group_name = :group_name, phone_number = :phone_number,
+                 SET display_name = :display_name, group_name = :group_name, area = :area, phone_number = :phone_number,
                      nearest_station = :nearest_station, nearest_station_lat = :lat, nearest_station_lng = :lng
                  WHERE id = :id'
             );
             $stmt->execute([
                 'display_name' => $displayName,
                 'group_name' => $groupName !== '' ? $groupName : null,
+                'area' => $area !== '' ? $area : null,
                 'phone_number' => $phoneNumber,
                 'nearest_station' => $nearestStation,
                 'lat' => $lat,

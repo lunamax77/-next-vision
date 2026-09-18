@@ -38,6 +38,11 @@
       <input type="text" id="newGroup" placeholder="営業チーム">
       <div class="group-chips" id="newGroupChips"></div>
     </div>
+    <div class="field">
+      <label for="newArea">エリア(任意・メール通知用)</label>
+      <input type="text" id="newArea" placeholder="関西">
+      <div class="group-chips" id="newAreaChips"></div>
+    </div>
   </div>
   <div class="form-row">
     <button type="button" class="btn" id="createBtn">アカウント発行</button>
@@ -54,6 +59,7 @@
           <th>パスワード</th>
           <th>氏名</th>
           <th>グループ</th>
+          <th>エリア</th>
           <th>電話番号</th>
           <th>最寄駅</th>
           <th>状態</th>
@@ -64,6 +70,51 @@
       <tbody id="tbody"></tbody>
     </table>
   </div>
+
+  <section class="notify-section">
+    <h2 class="group-title">エリア別メール通知</h2>
+    <p class="note">スタッフに設定した「エリア」ごとに、打刻があったときメールを送る宛先を登録します。エリアが未設定のスタッフは通知されません。</p>
+    <div class="form-row">
+      <div class="field">
+        <label for="ruleArea">エリア名 <span class="req">*</span></label>
+        <input type="text" id="ruleArea" placeholder="関西">
+        <div class="group-chips" id="ruleAreaChips"></div>
+      </div>
+      <div class="field" style="flex:2;">
+        <label for="ruleEmails">通知先メールアドレス <span class="req">*</span>(複数はカンマ区切り)</label>
+        <input type="text" id="ruleEmails" placeholder="kansai@example.com, manager@example.com">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>通知する種別</label>
+        <div class="type-checks">
+          <label><input type="checkbox" class="rule-type" value="wakeup" checked> 起床確認</label>
+          <label><input type="checkbox" class="rule-type" value="checkin" checked> 出勤確認</label>
+          <label><input type="checkbox" class="rule-type" value="move" checked> 移動確認</label>
+          <label><input type="checkbox" class="rule-type" value="checkout" checked> 退勤確認</label>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <button type="button" class="btn" id="ruleSaveBtn">保存</button>
+      <button type="button" class="btn" id="ruleTestBtn">テストメール送信</button>
+    </div>
+    <div class="status" id="ruleStatus"></div>
+    <div style="overflow-x:auto;">
+      <table id="ruleTable" hidden>
+        <thead>
+          <tr>
+            <th>エリア</th>
+            <th>通知先</th>
+            <th>種別</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="ruleTbody"></tbody>
+      </table>
+    </div>
+  </section>
 </div>
 
 <div class="overlay" id="overlay">
@@ -96,6 +147,11 @@
         <label for="editGroup">グループ名(任意)</label>
         <input type="text" id="editGroup">
         <div class="group-chips" id="editGroupChips"></div>
+      </div>
+      <div class="field">
+        <label for="editArea">エリア(任意・メール通知用)</label>
+        <input type="text" id="editArea">
+        <div class="group-chips" id="editAreaChips"></div>
       </div>
     </div>
     <div class="status" id="editStatus"></div>
@@ -174,6 +230,12 @@ function updateGroupChips(accounts) {
   const groups = [...new Set(accounts.map((a) => a.group_name).filter((g) => g))].sort();
   renderGroupChips("newGroupChips", "newGroup", groups);
   renderGroupChips("editGroupChips", "editGroup", groups);
+  const areas = [...new Set([
+    ...accounts.map((a) => a.area).filter((g) => g),
+    ...notifyRules.map((r) => r.area),
+  ])].sort();
+  renderGroupChips("newAreaChips", "newArea", areas);
+  renderGroupChips("editAreaChips", "editArea", areas);
 }
 
 const FILTER_KEY = "attendance-admin-group-filter";
@@ -235,7 +297,7 @@ function renderTable() {
   const active = currentFilter();
   const rows = allAccounts.filter((a) => !active || (a.group_name || UNGROUPED) === active);
   if (rows.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="9" style="color:var(--text-faint);">該当するアカウントがありません</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10" style="color:var(--text-faint);">該当するアカウントがありません</td></tr>';
     return;
   }
   tbody.innerHTML = rows
@@ -253,12 +315,13 @@ function renderTable() {
               : '<span class="pw-unknown" title="PW再発行を押すと表示できます">不明</span>'}</td>
             <td>${a.display_name}</td>
             <td>${a.group_name || "-"}</td>
+            <td>${a.area || "-"}</td>
             <td>${a.phone_number || "-"}</td>
             <td>${a.nearest_station || "-"}</td>
             <td>${badge}</td>
             <td>${formatDate(a.created_at)}</td>
             <td style="white-space:nowrap;">
-              <button type="button" class="btn small" data-action="edit" data-id="${a.id}" data-name="${a.display_name}" data-phone="${a.phone_number || ""}" data-station="${a.nearest_station || ""}" data-group="${a.group_name || ""}">編集</button>
+              <button type="button" class="btn small" data-action="edit" data-id="${a.id}" data-name="${a.display_name}" data-phone="${a.phone_number || ""}" data-station="${a.nearest_station || ""}" data-group="${a.group_name || ""}" data-area="${a.area || ""}">編集</button>
               <button type="button" class="btn small" data-action="reset" data-id="${a.id}" data-name="${a.display_name}" data-login="${a.login_id}">PW再発行</button>
               <button type="button" class="btn small ${toggleClass}" data-action="toggle" data-id="${a.id}" data-active="${a.is_active ? 0 : 1}">${toggleLabel}</button>
               <button type="button" class="btn small danger" data-action="delete" data-id="${a.id}" data-name="${a.display_name}" data-login="${a.login_id}">削除</button>
@@ -273,11 +336,13 @@ document.getElementById("createBtn").addEventListener("click", async () => {
   const phoneInput = document.getElementById("newPhone");
   const stationInput = document.getElementById("newStation");
   const groupInput = document.getElementById("newGroup");
+  const areaInput = document.getElementById("newArea");
 
   const displayName = nameInput.value.trim();
   const phoneNumber = phoneInput.value.trim();
   const nearestStation = stationInput.value.trim();
   const groupName = groupInput.value.trim();
+  const area = areaInput.value.trim();
 
   if (!displayName || !phoneNumber || !nearestStation) {
     statusEl.textContent = "氏名・電話番号・最寄駅は必須です";
@@ -291,11 +356,13 @@ document.getElementById("createBtn").addEventListener("click", async () => {
       phone_number: phoneNumber,
       nearest_station: nearestStation,
       group_name: groupName,
+      area,
     });
     nameInput.value = "";
     phoneInput.value = "";
     stationInput.value = "";
     groupInput.value = "";
+    areaInput.value = "";
     const note = data.station_geocoded
       ? ""
       : "(最寄駅の位置情報が自動取得できませんでした。出勤時の位置警告は動作しない場合があります)";
@@ -319,6 +386,7 @@ document.getElementById("editSave").addEventListener("click", async () => {
   const phoneNumber = document.getElementById("editPhone").value.trim();
   const nearestStation = document.getElementById("editStation").value.trim();
   const groupName = document.getElementById("editGroup").value.trim();
+  const area = document.getElementById("editArea").value.trim();
 
   if (!displayName || !phoneNumber || !nearestStation) {
     editStatus.textContent = "氏名・電話番号・最寄駅は必須です";
@@ -333,6 +401,7 @@ document.getElementById("editSave").addEventListener("click", async () => {
       phone_number: phoneNumber,
       nearest_station: nearestStation,
       group_name: groupName,
+      area,
     });
     editStatus.textContent = "";
     editStatus.classList.remove("is-error");
@@ -360,6 +429,7 @@ tbody.addEventListener("click", async (e) => {
     document.getElementById("editPhone").value = btn.dataset.phone || "";
     document.getElementById("editStation").value = btn.dataset.station || "";
     document.getElementById("editGroup").value = btn.dataset.group || "";
+    document.getElementById("editArea").value = btn.dataset.area || "";
     editStatus.textContent = "";
     editStatus.classList.remove("is-error");
     editOverlay.classList.add("open");
@@ -407,7 +477,120 @@ tbody.addEventListener("click", async (e) => {
   }
 });
 
+// ===== エリア別メール通知 =====
+const TYPE_LABELS = { wakeup: "起床確認", checkin: "出勤確認", move: "移動確認", checkout: "退勤確認" };
+const ruleStatus = document.getElementById("ruleStatus");
+const ruleTable = document.getElementById("ruleTable");
+const ruleTbody = document.getElementById("ruleTbody");
+let notifyRules = [];
+
+async function notifyApi(body) {
+  const res = await fetch("../server/admin_api/notifications.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json();
+  if (!res.ok || !data.ok) throw new Error(data.error || "HTTP " + res.status);
+  return data;
+}
+
+function setRuleStatus(text, isError) {
+  ruleStatus.textContent = text;
+  ruleStatus.classList.toggle("is-error", Boolean(isError));
+}
+
+function fillRuleForm(rule) {
+  document.getElementById("ruleArea").value = rule.area;
+  document.getElementById("ruleEmails").value = rule.emails;
+  document.querySelectorAll(".rule-type").forEach((cb) => {
+    cb.checked = rule.notify_types.includes(cb.value);
+  });
+}
+
+function renderRules() {
+  const areas = notifyRules.map((r) => r.area).sort();
+  renderGroupChips("ruleAreaChips", "ruleArea", areas);
+  if (notifyRules.length === 0) {
+    ruleTable.hidden = true;
+    return;
+  }
+  ruleTbody.innerHTML = notifyRules
+    .map((r) => `
+      <tr>
+        <td>${r.area}</td>
+        <td style="white-space:normal;">${r.emails}</td>
+        <td>${r.notify_types.map((t) => TYPE_LABELS[t] || t).join("・")}</td>
+        <td>
+          <button type="button" class="btn small" data-rule-action="edit" data-id="${r.id}">編集</button>
+          <button type="button" class="btn small danger" data-rule-action="delete" data-id="${r.id}" data-area="${r.area}">削除</button>
+        </td>
+      </tr>`)
+    .join("");
+  ruleTable.hidden = false;
+}
+
+async function loadRules() {
+  try {
+    const res = await fetch("../server/admin_api/notifications.php");
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || "HTTP " + res.status);
+    notifyRules = data.rules || [];
+    renderRules();
+    if (allAccounts.length) updateGroupChips(allAccounts);
+  } catch (err) {
+    setRuleStatus("通知設定の読み込みに失敗しました: " + err.message + "(DBの更新がまだの可能性があります)", true);
+  }
+}
+
+document.getElementById("ruleSaveBtn").addEventListener("click", async () => {
+  const area = document.getElementById("ruleArea").value.trim();
+  const emails = document.getElementById("ruleEmails").value.trim();
+  const types = [...document.querySelectorAll(".rule-type:checked")].map((cb) => cb.value);
+  try {
+    await notifyApi({ action: "save", area, emails, notify_types: types });
+    setRuleStatus(`${area} の通知設定を保存しました`, false);
+    document.getElementById("ruleArea").value = "";
+    document.getElementById("ruleEmails").value = "";
+    loadRules();
+  } catch (err) {
+    setRuleStatus("保存に失敗しました: " + err.message, true);
+  }
+});
+
+document.getElementById("ruleTestBtn").addEventListener("click", async () => {
+  const emails = document.getElementById("ruleEmails").value.trim();
+  try {
+    setRuleStatus("送信中...", false);
+    await notifyApi({ action: "test", emails });
+    setRuleStatus("テストメールを送信しました。届いているか確認してください(迷惑メールフォルダも)", false);
+  } catch (err) {
+    setRuleStatus("テスト送信に失敗しました: " + err.message, true);
+  }
+});
+
+ruleTbody.addEventListener("click", async (e) => {
+  const btn = e.target.closest("button[data-rule-action]");
+  if (!btn) return;
+  const id = Number(btn.dataset.id);
+  if (btn.dataset.ruleAction === "edit") {
+    const rule = notifyRules.find((r) => r.id === id);
+    if (rule) fillRuleForm(rule);
+    return;
+  }
+  if (btn.dataset.ruleAction === "delete") {
+    if (!window.confirm(`${btn.dataset.area} の通知設定を削除しますか?`)) return;
+    try {
+      await notifyApi({ action: "delete", id });
+      loadRules();
+    } catch (err) {
+      setRuleStatus("削除に失敗しました: " + err.message, true);
+    }
+  }
+});
+
 load();
+loadRules();
 </script>
 </body>
 </html>

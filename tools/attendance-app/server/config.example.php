@@ -27,4 +27,9 @@ return [
         'spreadsheet_id' => 'YOUR_SPREADSHEET_ID',
         'sheet_range' => 'シート1!A:K',
     ],
+
+    // エリア別メール通知の差出人(自分のドメインのアドレスにすると迷惑メール判定されにくい)
+    'notify_from' => 'attendance@your-domain.example.com',
+    // 通知メール末尾に載せる管理画面URL
+    'admin_url' => 'https://your-domain.example.com/attendance/admin/',
 ];

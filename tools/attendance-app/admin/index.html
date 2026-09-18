@@ -80,6 +80,7 @@ function renderStaffCard(s) {
     ? `<img class="staff-photo" src="${primaryPhoto}" alt="">`
     : '<div class="staff-photo placeholder"></div>';
   const metaParts = [s.login_id];
+  if (s.area) metaParts.push(`エリア: ${s.area}`);
   if (s.nearest_station) metaParts.push(`最寄駅: ${s.nearest_station}`);
 
   return `

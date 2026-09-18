@@ -34,7 +34,7 @@ $startUtc = (clone $startJst)->setTimezone($utc)->format('Y-m-d H:i:s');
 $endUtc = (clone $endJst)->setTimezone($utc)->format('Y-m-d H:i:s');
 
 $accountsStmt = $pdo->query(
-    'SELECT login_id, display_name, group_name, nearest_station FROM staff_accounts
+    'SELECT login_id, display_name, group_name, area, nearest_station FROM staff_accounts
      WHERE is_active = 1 ORDER BY group_name IS NULL, group_name, display_name'
 );
 $accounts = $accountsStmt->fetchAll();
@@ -61,6 +61,7 @@ foreach ($accounts as $acc) {
         'login_id' => $loginId,
         'display_name' => $acc['display_name'],
         'group_name' => $acc['group_name'],
+        'area' => $acc['area'],
         'nearest_station' => $acc['nearest_station'],
         'wakeup' => null,
         'checkin' => null,

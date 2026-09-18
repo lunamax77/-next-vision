@@ -6,6 +6,7 @@ header('Content-Type: application/json; charset=utf-8');
 require __DIR__ . '/../lib/db.php';
 require __DIR__ . '/../lib/GoogleSheetsClient.php';
 require __DIR__ . '/../lib/geocode.php';
+require __DIR__ . '/../lib/mailer.php';
 
 function respond(int $status, array $body): void
 {
@@ -63,7 +64,7 @@ if (in_array($type, $typesRequiringTrip, true) && ($transportMethod === null || 
 try {
     $pdo = attendance_db($config);
     $stmt = $pdo->prepare(
-        'SELECT display_name, is_active, nearest_station, nearest_station_lat, nearest_station_lng
+        'SELECT display_name, is_active, group_name, area, nearest_station, nearest_station_lat, nearest_station_lng
          FROM staff_accounts WHERE login_id = :login_id'
     );
     $stmt->execute(['login_id' => $loginId]);
@@ -168,6 +169,11 @@ try {
     respond(500, ['ok' => false, 'error' => 'db error']);
 }
 
+// recorded_at は UTC で保存しているので、人が読む場所(シート・メール)では日本時間に直す
+$recordedAtJst = (new DateTime($recordedAt, new DateTimeZone('UTC')))
+    ->setTimezone(new DateTimeZone('Asia/Tokyo'))
+    ->format('Y-m-d H:i:s');
+
 $sheetSynced = false;
 if (!empty($config['google']['enabled'])) {
     try {
@@ -177,7 +183,7 @@ if (!empty($config['google']['enabled'])) {
             $config['google']['sheet_range']
         );
         $client->appendRow([
-            $recordedAt,
+            $recordedAtJst,
             $staffName,
             $label,
             $transportMethod,
@@ -204,10 +210,48 @@ if (!empty($config['google']['enabled'])) {
     }
 }
 
+// エリア別メール通知(管理画面「エリア別メール通知」で設定したエリアのみ)
+$mailSent = false;
+$area = trim((string)($account['area'] ?? ''));
+if ($area !== '') {
+    try {
+        $stmt = $pdo->prepare('SELECT emails, notify_types FROM area_notifications WHERE area = :area');
+        $stmt->execute(['area' => $area]);
+        $rule = $stmt->fetch();
+        if ($rule && in_array($type, explode(',', $rule['notify_types']), true)) {
+            $recipients = parse_email_list($rule['emails']);
+            [$subject, $body] = build_attendance_mail([
+                'staff_name' => $staffName,
+                'area' => $area,
+                'group_name' => trim((string)($account['group_name'] ?? '')),
+                'label' => $label,
+                'time_jst' => $recordedAtJst,
+                'transport_method' => $transportMethod,
+                'route' => $route,
+                'amount' => $amount,
+                'address' => $address,
+                'maps_url' => $mapsUrl,
+                'photo_url' => $photoUrl,
+                'location_mismatch' => $locationMismatch,
+                'admin_url' => $config['admin_url'] ?? (rtrim(dirname($config['uploads_url_base'], 2), '/') . '/admin/'),
+            ]);
+            $from = $config['notify_from'] ?? ('attendance@' . ($_SERVER['SERVER_NAME'] ?? 'localhost'));
+            $mailSent = send_notification_mail($recipients, $subject, $body, $from);
+            if (!$mailSent) {
+                @file_put_contents(__DIR__ . '/../sheets_debug.log', date('c') . " mail() failed for area {$area}\n", FILE_APPEND);
+            }
+        }
+    } catch (Throwable $e) {
+        error_log('attendance save.php mail error: ' . $e->getMessage());
+        @file_put_contents(__DIR__ . '/../sheets_debug.log', date('c') . ' mail error: ' . $e->getMessage() . "\n", FILE_APPEND);
+    }
+}
+
 respond(200, [
     'ok' => true,
     'id' => $id,
     'sheet_synced' => $sheetSynced,
+    'mail_sent' => $mailSent,
     'address' => $address,
     'maps_url' => $mapsUrl,
     'location_mismatch' => $locationMismatch,

@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS staff_accounts (
   password_plain VARCHAR(50) NULL,
   display_name VARCHAR(100) NOT NULL,
   group_name VARCHAR(100) NULL,           -- 所属グループ(任意)
+  area VARCHAR(100) NULL,                 -- エリア(九州・本社 等。メール通知の振り分けに使用)
   phone_number VARCHAR(20) NULL,          -- 電話番号
   nearest_station VARCHAR(100) NULL,      -- 最寄駅(自由記述)
   nearest_station_lat DECIMAL(10,6) NULL, -- 最寄駅の座標(自動取得・取得失敗時はNULL)
@@ -39,6 +40,17 @@ CREATE TABLE IF NOT EXISTS attendance_records (
   PRIMARY KEY (id),
   KEY idx_staff_time (staff_name, recorded_at),
   KEY idx_login_time (login_id, recorded_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS area_notifications (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  area VARCHAR(100) NOT NULL,                 -- エリア名(staff_accounts.area と一致させる)
+  emails VARCHAR(500) NOT NULL,               -- 通知先メールアドレス(カンマ区切りで複数可)
+  notify_types VARCHAR(100) NOT NULL DEFAULT 'wakeup,checkin,move,checkout',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uniq_area (area)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS push_subscriptions (
