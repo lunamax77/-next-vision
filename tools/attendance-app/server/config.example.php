@@ -32,4 +32,10 @@ return [
     'notify_from' => 'attendance@your-domain.example.com',
     // 通知メール末尾に載せる管理画面URL
     'admin_url' => 'https://your-domain.example.com/attendance/admin/',
+
+    // 出勤状況サマリーメールの集計時間帯(server/cron/daily_summary.php で送信)
+    'summary' => [
+        'from' => '09:00',
+        'to' => '11:00',
+    ],
 ];

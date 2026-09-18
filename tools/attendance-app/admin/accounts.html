@@ -101,6 +101,11 @@
       <button type="button" class="btn" id="ruleTestBtn">テストメール送信</button>
     </div>
     <div class="status" id="ruleStatus"></div>
+    <div class="form-row" style="margin-top:8px;">
+      <button type="button" class="btn" id="summaryPreviewBtn">本日の出勤状況サマリーをプレビュー</button>
+      <button type="button" class="btn" id="summarySendBtn">今すぐ送信</button>
+    </div>
+    <pre class="summary-preview" id="summaryPreview" hidden></pre>
     <div style="overflow-x:auto;">
       <table id="ruleTable" hidden>
         <thead>
@@ -586,6 +591,39 @@ ruleTbody.addEventListener("click", async (e) => {
     } catch (err) {
       setRuleStatus("削除に失敗しました: " + err.message, true);
     }
+  }
+});
+
+document.getElementById("summaryPreviewBtn").addEventListener("click", async () => {
+  const pre = document.getElementById("summaryPreview");
+  try {
+    const res = await fetch("../server/admin_api/summary.php");
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || "HTTP " + res.status);
+    if (data.summaries.length === 0) {
+      pre.textContent = "エリア別メール通知が設定されていないため、サマリーはありません。";
+    } else {
+      pre.textContent = data.summaries
+        .map((s) => `宛先: ${s.emails.join(", ")}\n件名: ${s.subject}\n\n${s.body}`)
+        .join("\n\n----------------------------------------\n\n");
+    }
+    pre.hidden = false;
+  } catch (err) {
+    setRuleStatus("プレビューの取得に失敗しました: " + err.message, true);
+  }
+});
+
+document.getElementById("summarySendBtn").addEventListener("click", async () => {
+  if (!window.confirm("本日の出勤状況サマリーを各エリアの宛先へ送信しますか?")) return;
+  try {
+    const res = await fetch("../server/admin_api/summary.php", { method: "POST" });
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || "HTTP " + res.status);
+    const ok = data.results.filter((r) => r.sent).map((r) => r.area);
+    const ng = data.results.filter((r) => !r.sent).map((r) => r.area);
+    setRuleStatus(`送信: ${ok.join("、") || "なし"}${ng.length ? " / 失敗: " + ng.join("、") : ""}`, ng.length > 0);
+  } catch (err) {
+    setRuleStatus("送信に失敗しました: " + err.message, true);
   }
 });
 
