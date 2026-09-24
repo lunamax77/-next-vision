@@ -95,7 +95,7 @@ def main():
     for p in posts:
         g = norm(p["gender"])
         # 「たま♂、たか♂」のような複数名投稿は1人ずつに分ける
-        for n in re.split(r"[、,，]", norm(p["name"])):
+        for n in re.split(r"[、,，　&＆]", norm(p["name"])):
             if n.strip():
                 people.setdefault((g, n.strip()), classify(p["msg"], p["time"]))
 
