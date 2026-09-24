@@ -59,7 +59,7 @@ def classify(msg, post_time):
         return "2部"
     elif "夕方" in t:
         return "1.5部"
-    elif re.search(r"今から|これから|今日これから|向かいます|戻ります|今行|伺います|お伺いします|行きます|いきます", t):
+    elif re.search(r"今から|これから|向かい|戻ります|今行|伺|行きます|いきます|行かせて", t):
         hh, mm = map(int, post_time.split(":")[:2])
         mins = hh * 60 + mm
         if mins < 13 * 60 - 60 and mins >= 5 * 60:
