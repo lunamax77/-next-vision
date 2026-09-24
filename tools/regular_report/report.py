@@ -101,18 +101,23 @@ def main():
 
     now = now_dt.strftime("%Y-%m-%d %H:%M")
     print(f"■ ご来店予告 集計({now} JST 時点 / 営業日 {today} 5:00〜)")
-    for g in ("女性", "男性"):
-        names = [n for (gg, n) in people if gg == g and people[(gg, n)] != "明日"]
-        r = [n for n in names if n in reg[g]]
-        print(f"\n{g}: 計{len(names)}名(常連 {len(r)} / 非常連 {len(names) - len(r)})")
-        for part in PARTS:
-            ps = [n for n in names if people[(g, n)] == part]
-            if not ps:
-                continue
-            pr = [n for n in ps if n in reg[g]]
-            po = [n for n in ps if n not in reg[g]]
-            print(f"  [{part}] {len(ps)}名(常連 {len(pr)} / 非常連 {len(po)})"
-                  f" 常連: {'、'.join(pr) or '-'} | 非常連: {'、'.join(po) or '-'}")
+    # 部の移動はないものとして、部ごとに表を分けて表示する
+    for part in PARTS:
+        rows = []
+        for g in ("女性", "男性"):
+            ns = [n for (gg, n), pt in people.items() if gg == g and pt == part]
+            rows.append((g, [n for n in ns if n in reg[g]], [n for n in ns if n not in reg[g]]))
+        total = sum(len(r) + len(o) for _, r, o in rows)
+        if part == "時間不明" and not total:
+            continue
+        print(f"\n【{part}】計{total}名")
+        print("| | 常連 | 非常連 | 計 |")
+        print("|---|---|---|---|")
+        for g, r, o in rows:
+            print(f"| {g} | {len(r)} | {len(o)} | {len(r) + len(o)} |")
+        for g, r, o in rows:
+            if r or o:
+                print(f"- {g} 常連: {'、'.join(r) or '-'} / 非常連: {'、'.join(o) or '-'}")
     tomorrow = [f"{n}({g})" for (g, n), part in people.items() if part == "明日"]
     if tomorrow:
         print(f"\n※明日の予告(集計外): {'、'.join(tomorrow)}")
