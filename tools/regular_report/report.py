@@ -80,13 +80,14 @@ def main():
     now_dt = datetime.now(JST)
     start = (now_dt - timedelta(hours=5)).replace(hour=5, minute=0, second=0, microsecond=0)
     start_s = start.strftime("%Y-%m-%d %H:%M:%S")
+    end_s = (start + timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
     today = start.strftime("%Y-%m-%d")
     posts = []
     for page in range(1, 30):
         found = [m.groupdict() for m in POST_RE.finditer(fetch(page))]
         if not found:
             break
-        posts += [p for p in found if f'{p["date"]} {p["time"]}' >= start_s]
+        posts += [p for p in found if start_s <= f'{p["date"]} {p["time"]}' < end_s]
         if any(f'{p["date"]} {p["time"]}' < start_s for p in found):
             break
 
@@ -94,8 +95,11 @@ def main():
     people = {}  # (gender, name) -> 最初の投稿
     for p in posts:
         g = norm(p["gender"])
-        # 「たま♂、たか♂」のような複数名投稿は1人ずつに分ける
-        for n in re.split(r"[、,，　&＆]", norm(p["name"])):
+        if g == "スタッフ":
+            continue
+        # 「たま♂、たか♂」のような複数名投稿は1人ずつに分ける(カップルは1組のまま)
+        names = [norm(p["name"])] if g == "カップル" else re.split(r"[、,，　&＆]", norm(p["name"]))
+        for n in names:
             if n.strip():
                 people.setdefault((g, n.strip()), classify(p["msg"], p["time"]))
 
@@ -107,23 +111,27 @@ def main():
         for g in ("女性", "男性"):
             ns = [n for (gg, n), pt in people.items() if gg == g and pt == part]
             rows.append((g, [n for n in ns if n in reg[g]], [n for n in ns if n not in reg[g]]))
+        couples = [n for (gg, n), pt in people.items() if gg == "カップル" and pt == part]
         total = sum(len(r) + len(o) for _, r, o in rows)
-        if part == "時間不明" and not total:
+        if part == "時間不明" and not total and not couples:
             continue
-        print(f"\n【{part}】計{total}名")
+        print(f"\n【{part}】計{total}名" + (f" + カップル{len(couples)}組" if couples else ""))
         print("| | 常連 | 非常連 | 計 |")
         print("|---|---|---|---|")
         for g, r, o in rows:
             print(f"| {g} | {len(r)} | {len(o)} | {len(r) + len(o)} |")
+        print(f"| カップル | - | - | {len(couples)}組 |")
         for g, r, o in rows:
             if r or o:
                 print(f"- {g} 常連: {'、'.join(r) or '-'} / 非常連: {'、'.join(o) or '-'}")
+        if couples:
+            print(f"- カップル: {'、'.join(couples)}")
     tomorrow = [f"{n}({g})" for (g, n), part in people.items() if part == "明日"]
     if tomorrow:
         print(f"\n※明日の予告(集計外): {'、'.join(tomorrow)}")
-    others = [f"{n}({g})" for (g, n) in people if g not in ("女性", "男性")]
+    others = [f"{n}({g})" for (g, n) in people if g not in ("女性", "男性", "カップル")]
     if others:
-        print(f"その他(カップル・スタッフ等): {'、'.join(others)}")
+        print(f"その他: {'、'.join(others)}")
 
 
 if __name__ == "__main__":
