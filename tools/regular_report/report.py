@@ -65,7 +65,11 @@ def classify(msg, post_time):
         if mins < 13 * 60 - 60 and mins >= 5 * 60:
             return "時間不明"
     else:
-        return "時間不明"
+        # 来店の言い回しがなくても、営業時間中(13:00〜翌5:00)の投稿は投稿時刻で振り分ける
+        hh, mm = map(int, post_time.split(":")[:2])
+        mins = hh * 60 + mm
+        if 5 * 60 <= mins < 13 * 60:
+            return "時間不明"
     if mins < 5 * 60:
         return "2部"
     if mins < 16 * 60 + 30:
