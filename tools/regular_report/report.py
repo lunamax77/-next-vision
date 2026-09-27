@@ -2,6 +2,7 @@
 """madonna-bbs.site の「ご来店予告」から、当日営業分(5:00区切り)の予告者を
 男女別・部別(1部/1.5部/2部)・常連/非常連で集計する。部は予告文から推定。"""
 import html
+import unicodedata
 import re
 import sys
 import urllib.request
@@ -33,6 +34,12 @@ def fetch(page):
     req = urllib.request.Request(f"{BASE}?page={page}", headers={"User-Agent": "Mozilla/5.0"})
     with urllib.request.urlopen(req, timeout=30) as r:
         return r.read().decode("utf-8", "replace")
+
+
+def key(s):
+    """常連照合用: 絵文字・記号を除いて比較する(例: もも🍑 → もも)。句読点は残す。"""
+    s = unicodedata.normalize("NFC", s)
+    return "".join(c for c in s if unicodedata.category(c) not in ("So", "Sk", "Cf", "Mn")).strip()
 
 
 def norm(s):
@@ -95,7 +102,7 @@ def main():
         if any(f'{p["date"]} {p["time"]}' < start_s for p in found):
             break
 
-    reg = {"女性": set(map(norm, REGULAR_FEMALE)), "男性": set(map(norm, REGULAR_MALE))}
+    reg = {"女性": {key(norm(n)) for n in REGULAR_FEMALE}, "男性": {key(norm(n)) for n in REGULAR_MALE}}
     people = {}  # (gender, name) -> 最初の投稿
     for p in posts:
         g = norm(p["gender"])
@@ -114,7 +121,7 @@ def main():
         rows = []
         for g in ("女性", "男性"):
             ns = [n for (gg, n), pt in people.items() if gg == g and pt == part]
-            rows.append((g, [n for n in ns if n in reg[g]], [n for n in ns if n not in reg[g]]))
+            rows.append((g, [n for n in ns if key(n) in reg[g]], [n for n in ns if key(n) not in reg[g]]))
         couples = [n for (gg, n), pt in people.items() if gg == "カップル" and pt == part]
         total = sum(len(r) + len(o) for _, r, o in rows)
         if part == "時間不明" and not total and not couples:
