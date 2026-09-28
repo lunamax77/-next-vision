@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>キッズ・ライセンス・パーク 大型ディスプレイ動画</title>
+<style>
+@font-face { font-family: "KLP"; src: url("assets/mplus800.ttf"); font-weight: 800; }
+html, body { margin: 0; padding: 0; background: #fff; }
+#stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #fff;
+  font-family: "KLP", "Noto Color Emoji", sans-serif; font-weight: 800; }
+.scene { position: absolute; inset: 0; overflow: hidden; display: none; }
+.abs { position: absolute; left: 0; top: 0; }
+.fill { position: absolute; inset: 0; }
+.burst { position: absolute; left: 50%; top: 50%; width: 3400px; height: 3400px; margin: -1700px 0 0 -1700px;
+  background: repeating-conic-gradient(rgba(255,255,255,.28) 0deg 9deg, rgba(255,255,255,0) 9deg 18deg); }
+.tx { position: absolute; left: 0; top: 0; white-space: nowrap; line-height: 1.1;
+  -webkit-text-stroke: 18px #fff; paint-order: stroke fill; text-shadow: 0 10px 0 rgba(0,0,0,.22); }
+.em { -webkit-text-stroke: 0; font-family: "Noto Color Emoji"; font-weight: 400; }
+.ball { position: absolute; left: 0; top: 0; border-radius: 50%; background: #fff center/88% no-repeat;
+  box-shadow: 0 24px 0 rgba(0,0,0,.18); box-sizing: border-box; }
+.line { position: absolute; background: #fff; border-radius: 8px; transform-origin: 0 50%; }
+.cloud { position: absolute; width: 260px; height: 90px; background: #fff; border-radius: 60px; }
+.cloud::before { content: ""; position: absolute; width: 130px; height: 130px; left: 40px; top: -60px; background: #fff; border-radius: 50%; }
+.cloud::after { content: ""; position: absolute; width: 100px; height: 100px; left: 130px; top: -40px; background: #fff; border-radius: 50%; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ① 0〜3秒 オープニング -->
+  <div class="scene" id="s1">
+    <div class="fill" style="background: radial-gradient(circle at 50% 45%, #FFE66D, #FF9F1C 75%);"></div>
+    <div class="burst" id="s1burst"></div>
+    <div id="s1lines"></div>
+    <div class="ball" id="s1car" style="width:600px;height:600px;border:18px solid #FF4D4D;background-image:url(assets/car-gtr.jpg)"></div>
+    <div class="tx" id="s1boon" style="font-size:150px;color:#FF4D4D">ブーン！</div>
+    <div class="tx" id="s1title" style="font-size:108px;color:#1E5AA8"><span class="em">🚗</span> キッズ・ライセンス・パーク！</div>
+  </div>
+
+  <!-- ② 3〜7秒 じぶんで運転！ -->
+  <div class="scene" id="s2">
+    <div class="fill" style="background: radial-gradient(circle at 50% 60%, #BFF0FF, #3EA6E8 80%);"></div>
+    <div class="burst" id="s2burst"></div>
+    <!-- 2a: ハンドルを握るアップ -->
+    <svg id="s2kid" class="abs" width="860" height="860" viewBox="0 0 800 800">
+      <path d="M150 800 Q150 600 400 590 Q650 600 650 800 Z" fill="#3CC36B"/>
+      <line id="armL" stroke="#3CC36B" stroke-width="64" stroke-linecap="round"/>
+      <line id="armR" stroke="#3CC36B" stroke-width="64" stroke-linecap="round"/>
+      <circle cx="232" cy="385" r="34" fill="#FFCFA6"/>
+      <circle cx="568" cy="385" r="34" fill="#FFCFA6"/>
+      <circle cx="400" cy="370" r="172" fill="#FFD9B8"/>
+      <path d="M222 330 Q400 110 578 330 Z" fill="#FF4D4D"/>
+      <ellipse cx="400" cy="330" rx="196" ry="30" fill="#D93636"/>
+      <circle cx="400" cy="232" r="22" fill="#FFD23F"/>
+      <ellipse cx="338" cy="385" rx="17" ry="24" fill="#2a1c05"/>
+      <ellipse cx="462" cy="385" rx="17" ry="24" fill="#2a1c05"/>
+      <circle cx="344" cy="375" r="6" fill="#fff"/><circle cx="468" cy="375" r="6" fill="#fff"/>
+      <circle cx="295" cy="445" r="26" fill="#FF8FA3" opacity=".55"/>
+      <circle cx="505" cy="445" r="26" fill="#FF8FA3" opacity=".55"/>
+      <path d="M335 450 Q400 540 465 450 Z" fill="#B8323A"/>
+      <path d="M370 492 Q400 515 430 492 Q400 480 370 492 Z" fill="#FF7A85"/>
+      <g id="wheel" transform="translate(400 770)">
+        <circle r="220" fill="none" stroke="#2F2F3A" stroke-width="46"/>
+        <circle r="220" fill="none" stroke="#4A4A58" stroke-width="12"/>
+        <rect x="-200" y="-18" width="400" height="36" rx="18" fill="#2F2F3A"/>
+        <rect x="-18" y="0" width="36" height="210" rx="18" fill="#2F2F3A"/>
+        <circle r="62" fill="#FF4D4D" stroke="#2F2F3A" stroke-width="14"/>
+        <circle r="18" fill="#FFD23F"/>
+      </g>
+      <circle id="handL" r="44" fill="#FFD9B8"/>
+      <circle id="handR" r="44" fill="#FFD9B8"/>
+    </svg>
+    <!-- 2b: 走り出す -->
+    <div id="s2road" class="abs" style="top:860px;width:1920px;height:220px;background:#5A5A66;">
+      <div id="s2dash" class="fill" style="top:95px;height:26px;background:repeating-linear-gradient(90deg,#fff 0 120px,transparent 120px 240px);"></div>
+    </div>
+    <div class="cloud" id="c1"></div><div class="cloud" id="c2"></div><div class="cloud" id="c3"></div>
+    <svg id="s2car" class="abs" width="900" height="520" viewBox="0 0 900 520">
+      <line x1="440" y1="250" x2="560" y2="205" stroke="#3E9BD8" stroke-width="40" stroke-linecap="round"/>
+      <circle cx="430" cy="150" r="78" fill="#FFD9B8"/>
+      <path d="M350 140 Q430 40 510 140 Z" fill="#FF4D4D"/>
+      <path d="M470 140 L560 150 L470 160 Z" fill="#D93636"/>
+      <ellipse cx="466" cy="150" rx="10" ry="15" fill="#2a1c05"/>
+      <path d="M455 180 Q485 205 505 175" stroke="#B8323A" stroke-width="9" fill="none" stroke-linecap="round"/>
+      <circle cx="480" cy="182" r="14" fill="#FF8FA3" opacity=".5"/>
+      <rect x="380" y="220" width="120" height="60" rx="20" fill="#3E9BD8"/>
+      <path d="M590 225 L640 130 L660 136 L630 225 Z" fill="#BDEBFF" stroke="#fff" stroke-width="6"/>
+      <path d="M60 290 Q60 225 150 222 L740 218 Q840 222 860 300 L860 360 Q860 390 830 390 L90 390 Q60 390 60 360 Z" fill="#FF4D4D"/>
+      <path d="M90 260 L820 256" stroke="#fff" stroke-width="10" opacity=".5"/>
+      <rect x="560" y="186" width="24" height="70" rx="12" fill="#2F2F3A" transform="rotate(-25 572 221)"/>
+      <circle cx="840" cy="290" r="22" fill="#FFE66D" stroke="#fff" stroke-width="6"/>
+      <g id="wl1" transform="translate(220 390)"><circle r="82" fill="#2F2F3A"/><circle r="40" fill="#E6E6EE"/><rect x="-6" y="-38" width="12" height="76" fill="#9A9AAA"/><rect x="-38" y="-6" width="76" height="12" fill="#9A9AAA"/></g>
+      <g id="wl2" transform="translate(690 390)"><circle r="82" fill="#2F2F3A"/><circle r="40" fill="#E6E6EE"/><rect x="-6" y="-38" width="12" height="76" fill="#9A9AAA"/><rect x="-38" y="-6" width="76" height="12" fill="#9A9AAA"/></g>
+    </svg>
+    <div id="s2puffs"></div>
+    <div class="tx" id="s2t1" style="font-size:128px;color:#FF4D4D"><span class="em">👦👧</span> じぶんで運転できる！</div>
+    <div class="tx" id="s2t2" style="font-size:200px;color:#FF8A00">ブーン！<span class="em">🚗💨</span></div>
+  </div>
+
+  <!-- ③ 7〜12秒 コースを走る -->
+  <div class="scene" id="s3">
+    <div class="fill" style="background: repeating-linear-gradient(90deg,#5CC45C 0 160px,#4FB44F 160px 320px);"></div>
+    <svg id="s3svg" class="abs" width="1920" height="1080" viewBox="0 0 1920 1080">
+      <g id="s3cam">
+        <path id="trackEdge" d="M-40 900 C 450 900, 520 440, 820 440 S 1150 880, 1400 780 S 1640 420, 1980 420" fill="none" stroke="#fff" stroke-width="190" stroke-linecap="round"/>
+        <path id="track" d="M-40 900 C 450 900, 520 440, 820 440 S 1150 880, 1400 780 S 1640 420, 1980 420" fill="none" stroke="#9FDB7A" stroke-width="160"/>
+        <path d="M-40 900 C 450 900, 520 440, 820 440 S 1150 880, 1400 780 S 1640 420, 1980 420" fill="none" stroke="#fff" stroke-width="8" stroke-dasharray="40 40" opacity=".7"/>
+        <g id="goal" transform="translate(1760 420)">
+          <rect x="-24" y="-100" width="48" height="200" fill="#fff"/>
+          <g id="checks"></g>
+          <rect x="-6" y="-230" width="12" height="140" fill="#2F2F3A"/>
+          <path d="M6 -230 L120 -200 L6 -170 Z" fill="#FF4D4D"/>
+        </g>
+        <g id="cones"></g>
+        <g id="s3car">
+          <rect x="-90" y="-52" width="180" height="104" rx="40" fill="#FF4D4D" stroke="#fff" stroke-width="8"/>
+          <rect x="30" y="-40" width="26" height="80" rx="10" fill="#BDEBFF"/>
+          <circle cx="-10" cy="0" r="30" fill="#FF4D4D" stroke="#D93636" stroke-width="8"/>
+          <circle cx="-10" cy="0" r="8" fill="#FFD23F"/>
+          <rect x="-70" y="-66" width="40" height="18" rx="6" fill="#2F2F3A"/><rect x="40" y="-66" width="40" height="18" rx="6" fill="#2F2F3A"/>
+          <rect x="-70" y="48" width="40" height="18" rx="6" fill="#2F2F3A"/><rect x="40" y="48" width="40" height="18" rx="6" fill="#2F2F3A"/>
+        </g>
+      </g>
+    </svg>
+    <div class="tx" id="s3t1" style="font-size:132px;color:#FF4D4D"><span class="em">🚗💨</span> ゴールをめざせ！</div>
+    <div class="tx" id="s3t2" style="font-size:190px;color:#1E5AA8;font-style:italic">Let's Drive！</div>
+  </div>
+
+  <!-- ④ 12〜16秒 ゴール！ -->
+  <div class="scene" id="s4">
+    <div class="fill" style="background: repeating-conic-gradient(#FFD23F 0 25%, #FFC300 0 50%) 0 0/120px 120px;"></div>
+    <div class="fill" style="background: radial-gradient(circle at 50% 45%, rgba(255,255,255,.75), rgba(255,255,255,0) 60%);"></div>
+    <div class="burst" id="s4burst"></div>
+    <div id="confetti"></div>
+    <div id="s4stars"></div>
+    <div class="tx" id="s4t1" style="font-size:250px;color:#FF4D4D"><span class="em">🎉</span> ゴール！！</div>
+    <div class="tx" id="s4t2" style="font-size:150px;color:#1E5AA8">うんてんせいこう！</div>
+    <div id="s4claps"></div>
+  </div>
+
+  <!-- ⑤ 16〜21秒 こども運転免許証 -->
+  <div class="scene" id="s5">
+    <div class="fill" style="background: radial-gradient(circle at 50% 60%, #FFF0F6, #FF8CC0 80%);"></div>
+    <div class="burst" id="s5burst"></div>
+    <div id="s5card" class="abs" style="width:900px;padding:20px;background:#fff;border-radius:36px;box-shadow:0 30px 0 rgba(0,0,0,.18);overflow:hidden;">
+      <img src="assets/license.jpg" style="display:block;width:900px;border-radius:20px">
+      <div id="s5shine" class="abs" style="width:260px;height:1400px;top:-300px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.85),rgba(255,255,255,0));"></div>
+    </div>
+    <div id="s5spark"></div>
+    <div class="tx" id="s5jan" style="font-size:128px;color:#FF8A00">ジャーン！</div>
+    <div class="tx" id="s5t1" style="font-size:120px;color:#D6246E"><span class="em">🪪</span> きみも運転免許証をGET！</div>
+    <div class="tx" id="s5t2" style="font-size:130px;color:#D6246E">思い出を持って帰ろう！</div>
+  </div>
+
+  <!-- ⑥ 21〜25秒 イベント告知 -->
+  <div class="scene" id="s6">
+    <div class="fill" style="background: radial-gradient(circle at 50% 40%, #7FD8FF, #1E6FD0 85%);"></div>
+    <div class="burst" id="s6burst"></div>
+    <div class="tx" id="s6p" style="font-size:62px;color:#1E3A6B">ジョーシン白山イオンモール プレゼンツ</div>
+    <div class="tx" id="s6title" style="font-size:116px;color:#FF4D4D"><span class="em">🚗</span> キッズ・ライセンス・パーク</div>
+    <div class="tx" id="s6date" style="font-size:136px;color:#1E3A6B">11月21日・22日</div>
+    <div class="tx" id="s6place" style="font-size:108px;color:#1E3A6B"><span class="em">📍</span> ジョーシン白山 1F広場</div>
+    <div class="ball s6car" style="width:250px;height:250px;border:12px solid #FFD23F;background-image:url(assets/car-gtr.jpg)"></div>
+    <div class="ball s6car" style="width:250px;height:250px;border:12px solid #FF4D4D;background-image:url(assets/car-lc500.jpg)"></div>
+    <div class="ball s6car" style="width:250px;height:250px;border:12px solid #3CC36B;background-image:url(assets/car-540k.jpg)"></div>
+    <div class="ball s6car" style="width:250px;height:250px;border:12px solid #FF8A00;background-image:url(assets/car-gx550.jpg)"></div>
+  </div>
+
+  <!-- ⑦ 25〜28秒 ラスト -->
+  <div class="scene" id="s7">
+    <div class="fill" style="background: radial-gradient(circle at 50% 50%, #FFF3A8, #FFB400 80%);"></div>
+    <div class="burst" id="s7burst"></div>
+    <div id="s7lines"></div>
+    <div class="ball" id="s7car" style="width:520px;height:520px;border:18px solid #FF4D4D;background-image:url(assets/car-lc500.jpg)"></div>
+    <div class="tx" id="s7t1" style="font-size:170px;color:#FF4D4D"><span class="em">🚗💨</span> あそびにきてね！</div>
+    <div class="tx" id="s7t2" style="font-size:112px;color:#1E5AA8">きみも運転してみよう！</div>
+    <div id="s7end" class="fill" style="background: radial-gradient(circle at 50% 45%, #FF6B6B, #D62839 80%);">
+      <div class="burst" id="s7burst2"></div>
+      <div class="tx" id="e1" style="font-size:190px;color:#fff;-webkit-text-stroke-color:#8A0F1E">KIDS LICENSE PARK</div>
+      <div class="tx" id="e2" style="font-size:84px;color:#fff;-webkit-text-stroke-color:#8A0F1E">キッズ・ライセンス・パーク</div>
+      <div class="tx" id="e3" style="font-size:150px;color:#FFE14D;-webkit-text-stroke-color:#8A0F1E">11.21 SAT / 11.22 SUN</div>
+      <div class="tx" id="e4" style="font-size:76px;color:#fff;-webkit-text-stroke-color:#8A0F1E"><span class="em">📍</span> ジョーシン白山 1F広場</div>
+    </div>
+  </div>
+
+</div>
+<script>
+const DURATION = 28, FPS = 30;
+const $ = id => document.getElementById(id);
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, k) => a + (b - a) * k;
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const eOut = k => 1 - Math.pow(1 - k, 3);
+const eInOut = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+const eBack = k => { const c = 1.9, d = c + 1; return k <= 0 ? 0 : 1 + d * Math.pow(k - 1, 3) + c * Math.pow(k - 1, 2); };
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+// 中心座標(x,y)に配置
+function put(el, x, y, s = 1, r = 0, o = 1) {
+  el.style.transform = `translate(${x}px,${y}px) translate(-50%,-50%) rotate(${r}deg) scale(${s})`;
+  el.style.opacity = o;
+}
+// ポップイン(a秒から) 〜 ポップアウト(b秒まで)
+function popIn(t, a, b = 1e9, dur = .4) {
+  if (t < a || t > b) return 0;
+  const k = eBack(prog(t, a, a + dur));
+  const out = b < 1e8 ? 1 - eOut(prog(t, b - .18, b)) : 1;
+  return Math.max(0, k * out);
+}
+
+// ---------- 生成物 ----------
+function makeLines(host, n, seed) {
+  const R = rng(seed), arr = [];
+  for (let i = 0; i < n; i++) {
+    const d = document.createElement('div'); d.className = 'line'; host.appendChild(d);
+    arr.push({ el: d, a: R() * 360, off: R(), w: 120 + R() * 220, h: 8 + R() * 10 });
+  }
+  return arr;
+}
+const s1lines = makeLines($('s1lines'), 30, 3);
+const s7lines = makeLines($('s7lines'), 22, 9);
+s7lines.forEach(l => l.y = 150 + rng(l.a * 100)() * 780);
+
+const puffs = [];
+for (let i = 0; i < 8; i++) { const d = document.createElement('div'); d.className = 'abs';
+  d.style.cssText += 'width:110px;height:110px;border-radius:50%;background:#fff;'; $('s2puffs').appendChild(d); puffs.push(d); }
+
+// コース: コーン配置とゴールの市松
+const track = $('track'), TL = track.getTotalLength();
+const conesG = $('cones'), coneF = [0.14, 0.27, 0.40, 0.53, 0.66, 0.79];
+coneF.forEach((f, i) => {
+  const p = track.getPointAtLength(f * TL), q = track.getPointAtLength(Math.min(TL, f * TL + 2));
+  const ang = Math.atan2(q.y - p.y, q.x - p.x), side = i % 2 ? 1 : -1;
+  const x = p.x - Math.sin(ang) * 105 * side, y = p.y + Math.cos(ang) * 105 * side;
+  conesG.insertAdjacentHTML('beforeend',
+    `<g transform="translate(${x} ${y})"><rect x="-38" y="16" width="76" height="16" rx="6" fill="#E0561B"/>
+     <path d="M-28 20 L-9 -52 L9 -52 L28 20 Z" fill="#FF7A1A"/><path d="M-21 -6 L21 -6 L17 -22 L-17 -22 Z" fill="#fff"/></g>`);
+});
+for (let r = 0; r < 10; r++) for (let c = 0; c < 2; c++) if ((r + c) % 2)
+  $('checks').insertAdjacentHTML('beforeend', `<rect x="${-24 + c * 24}" y="${-100 + r * 20}" width="24" height="20" fill="#2F2F3A"/>`);
+
+// 紙吹雪・星・拍手
+const conf = [], CR = rng(42), colors = ['#FF4D4D', '#3E9BD8', '#3CC36B', '#FF8A00', '#B45CFF', '#FF6FAE', '#fff'];
+for (let i = 0; i < 170; i++) { const d = document.createElement('div'); d.className = 'abs';
+  const w = 18 + CR() * 20; d.style.cssText += `width:${w}px;height:${w * .55}px;background:${colors[i % colors.length]};border-radius:4px;`;
+  $('confetti').appendChild(d); conf.push({ el: d, x: CR() * 1920, d: CR() * .9, v: 420 + CR() * 420, sw: CR() * 6, r: CR() * 720 - 360 }); }
+function makeEmoji(host, list, size) {
+  return list.map(([x, y, ch, dl]) => { const d = document.createElement('div'); d.className = 'abs em';
+    d.style.fontSize = size + 'px'; d.textContent = ch; host.appendChild(d); return { el: d, x, y, dl }; });
+}
+const stars = makeEmoji($('s4stars'), [[180,160,'⭐',0],[1740,170,'⭐',.2],[300,900,'✨',.35],[1640,900,'✨',.1],[960,90,'🌟',.5],[120,560,'⭐',.6],[1800,560,'⭐',.45]], 120);
+const claps = makeEmoji($('s4claps'), [[150,720,'👏',.9],[1770,720,'👏',1.1]], 170);
+const sparks = makeEmoji($('s5spark'), [[180,330,'✨',0],[1400,300,'✨',.25],[160,950,'⭐',.4],[1500,900,'✨',.15],[1780,330,'⭐',.55],[1790,860,'✨',.7]], 110);
+
+// ---------- シーン ----------
+const scenes = [
+  ['s1', 0, 3, s1], ['s2', 3, 7, s2], ['s3', 7, 12, s3], ['s4', 12, 16, s4],
+  ['s5', 16, 21, s5], ['s6', 21, 25, s6], ['s7', 25, 28.01, s7],
+];
+
+function s1(t) {
+  $('s1burst').style.transform = `rotate(${t * 18}deg)`;
+  const k = eOut(prog(t, 0, 1.3));
+  s1lines.forEach(l => { const d = (t * 1.6 + l.off) % 1;
+    l.el.style.cssText += `left:960px;top:470px;width:${l.w * (0.4 + d)}px;height:${l.h}px;opacity:${(1 - d) * .9};transform:rotate(${l.a}deg) translateX(${260 + d * 1100}px);`; });
+  const shake = Math.sin(t * 70) * 5 * (1 - k * .6);
+  put($('s1car'), 960 + shake, lerp(430, 470, k), lerp(.08, 1, k), Math.sin(t * 40) * 1.5);
+  const b = popIn(t, .45);
+  put($('s1boon'), 1500 + Math.sin(t * 50) * 6, 200, b, -10);
+  put($('s1title'), 960, 945, popIn(t, 1.05));
+}
+
+function wheelKid(t) {
+  const rot = Math.sin(t * 3.4) * 26;
+  $('wheel').setAttribute('transform', `translate(400 770) rotate(${rot})`);
+  const hand = (deg) => { const a = (deg + rot) * Math.PI / 180; return [400 + 220 * Math.cos(a), 770 + 220 * Math.sin(a)]; };
+  const [lx, ly] = hand(-150), [rx, ry] = hand(-30);
+  $('handL').setAttribute('cx', lx); $('handL').setAttribute('cy', ly);
+  $('handR').setAttribute('cx', rx); $('handR').setAttribute('cy', ry);
+  const arm = (el, sx, sy, ex, ey) => { el.setAttribute('x1', sx); el.setAttribute('y1', sy); el.setAttribute('x2', ex); el.setAttribute('y2', ey); };
+  arm($('armL'), 215, 640, lx, ly); arm($('armR'), 585, 640, rx, ry);
+}
+function s2(t) {
+  const lt = t - 3, drive = lt >= 2.2;
+  $('s2burst').style.transform = `rotate(${-t * 14}deg)`;
+  // 2a アップ
+  $('s2kid').style.display = drive ? 'none' : 'block';
+  wheelKid(lt);
+  put($('s2kid'), 960, lerp(700, 650, eOut(prog(lt, 0, .5))), lerp(.85, 1, eOut(prog(lt, 0, .5))));
+  put($('s2t1'), 960, 120, popIn(lt, .1, 2.2));
+  // 2b 走り出す
+  ['s2road', 's2car', 'c1', 'c2', 'c3', 's2puffs'].forEach(id => $(id).style.display = drive ? 'block' : 'none');
+  const dt = lt - 2.2;
+  $('s2dash').style.backgroundPosition = `${-dt * 1400}px 0`;
+  [['c1', 300, 180], ['c2', 1100, 110], ['c3', 1800, 260]].forEach(([id, x, y]) =>
+    $(id).style.transform = `translate(${((x - dt * 500) % 2300 + 2300) % 2300 - 250}px,${y}px)`);
+  const cx = lerp(-500, 900, eOut(prog(dt, 0, .7))) + dt * 40;
+  const bob = Math.abs(Math.sin(dt * 14)) * -10;
+  put($('s2car'), cx, 700 + bob, 1, Math.sin(dt * 14) * .8);
+  $('wl1').setAttribute('transform', `translate(220 390) rotate(${dt * 900})`);
+  $('wl2').setAttribute('transform', `translate(690 390) rotate(${dt * 900})`);
+  puffs.forEach((p, i) => { const d = (dt * 2.2 + i / puffs.length) % 1;
+    put(p, cx - 470 - d * 420, 820 - d * 90 + (i % 3) * 20, .4 + d * 1.1, 0, (1 - d) * .85); });
+  put($('s2t2'), 1000, 250, popIn(dt, .35), -4 + Math.sin(dt * 30) * 1.5);
+}
+
+function s3(t) {
+  const lt = t - 7, f = eInOut(prog(lt, .2, 4.7));
+  const p = track.getPointAtLength(f * (TL - 180)), q = track.getPointAtLength(Math.min(TL, f * (TL - 180) + 4));
+  const ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI;
+  $('s3car').setAttribute('transform', `translate(${p.x} ${p.y}) rotate(${ang})`);
+  let amp = 0; coneF.forEach(cf => amp += 12 * Math.max(0, 1 - Math.abs(f - cf) / .035));
+  const zoom = 1.12;
+  const camX = clamp(960 - p.x * zoom, 1920 - 1980 * zoom + 60, 0), camY = clamp(560 - p.y * zoom, 1080 - 1080 * zoom, 0);
+  $('s3cam').setAttribute('transform', `translate(${camX + Math.sin(t * 80) * amp} ${camY + Math.cos(t * 70) * amp}) scale(${zoom})`);
+  put($('s3t1'), 960, 125, popIn(lt, .1, 2.6));
+  put($('s3t2'), 960, 140, popIn(lt, 2.6), -6);
+}
+
+function s4(t) {
+  const lt = t - 12;
+  $('s4burst').style.transform = `rotate(${t * 22}deg)`;
+  put($('s4t1'), 960, 420, popIn(lt, .05) * (1 + Math.sin(lt * 8) * .03), Math.sin(lt * 5) * 3);
+  put($('s4t2'), 960, 720, popIn(lt, 1.3));
+  conf.forEach(c => { const lc = lt - c.d; const y = -60 + lc * c.v;
+    put(c.el, c.x + Math.sin(lc * 3 + c.sw) * 60, y, 1, c.r * lc, lc > 0 ? 1 : 0); });
+  stars.forEach(s => put(s.el, s.x, s.y, popIn(lt, s.dl) * (0.85 + .2 * Math.sin(lt * 7 + s.x)), lt * 30));
+  claps.forEach(s => put(s.el, s.x, s.y + Math.abs(Math.sin(lt * 10)) * -20, popIn(lt, s.dl), Math.sin(lt * 12) * 10));
+}
+
+function s5(t) {
+  const lt = t - 16;
+  $('s5burst').style.transform = `rotate(${t * 16}deg)`;
+  const k = eBack(prog(lt, .25, .8));
+  put($('s5card'), 770, 640, Math.max(0, k), lerp(-18, -2, clamp(k)) + Math.sin(lt * 2) * 1.2);
+  $('s5shine').style.transform = `translateX(${lerp(-400, 1300, prog(lt, 1.0, 1.9))}px) rotate(20deg)`;
+  put($('s5jan'), 1580, 560, popIn(lt, .7, 2.6), 8 + Math.sin(lt * 20) * 2);
+  sparks.forEach(s => put(s.el, s.x, s.y, popIn(lt, .8 + s.dl) * (.8 + .25 * Math.sin(lt * 8 + s.y)), lt * 40));
+  put($('s5t1'), 960, 125, popIn(lt, .05, 2.8));
+  put($('s5t2'), 960, 125, popIn(lt, 2.8));
+}
+
+function s6(t) {
+  const lt = t - 21;
+  $('s6burst').style.transform = `rotate(${t * 12}deg)`;
+  put($('s6p'), 960, 80, popIn(lt, .05));
+  put($('s6title'), 960, 215, popIn(lt, .2));
+  put($('s6date'), 960, 440, popIn(lt, .6), Math.sin(lt * 4) * 1.5);
+  put($('s6place'), 960, 620, popIn(lt, .95));
+  document.querySelectorAll('.s6car').forEach((el, i) => {
+    const k = eBack(prog(lt, 1.2 + i * .15, 1.7 + i * .15));
+    put(el, 480 + i * 320, lerp(1300, 890, k) + Math.sin(lt * 9 + i) * 8, 1, Math.sin(lt * 6 + i) * 4);
+  });
+}
+
+function s7(t) {
+  const lt = t - 25;
+  $('s7burst').style.transform = `rotate(${t * 20}deg)`;
+  const go = eInOut(prog(lt, .9, 1.55));
+  put($('s7car'), lerp(960, 2500, go) + Math.sin(lt * 50) * 3, 520 + Math.abs(Math.sin(lt * 12)) * -12, popIn(lt, 0), go * 4);
+  s7lines.forEach(l => { const d = (lt * 2.5 + l.off) % 1;
+    l.el.style.cssText += `left:${1920 - d * 2400}px;top:${l.y}px;width:${l.w * 1.5}px;height:${l.h}px;opacity:${go > 0 ? .8 : .35};transform:none;`; });
+  put($('s7t1'), 960, 150, popIn(lt, .05));
+  put($('s7t2'), 960, 935, popIn(lt, .35));
+  // 最後の画面(固定表示)
+  const e = lt >= 1.6;
+  $('s7end').style.display = e ? 'block' : 'none';
+  if (e) {
+    const et = lt - 1.6;
+    $('s7end').style.clipPath = `circle(${eOut(prog(et, 0, .35)) * 1200}px at 50% 50%)`;
+    $('s7burst2').style.transform = `rotate(${t * 10}deg)`;
+    put($('e1'), 960, 300, popIn(et, .05));
+    put($('e2'), 960, 470, popIn(et, .15));
+    put($('e3'), 960, 680, popIn(et, .25));
+    put($('e4'), 960, 890, popIn(et, .35));
+  }
+}
+
+window.renderAt = function (t) {
+  for (const [id, a, b, fn] of scenes) {
+    const on = t >= a && t < b;
+    const el = $(id); el.style.display = on ? 'block' : 'none';
+    if (on) {
+      const k = a === 0 ? 1 : eOut(prog(t - a, 0, .22));
+      el.style.transform = `scale(${lerp(1.12, 1, k)})`; el.style.opacity = lerp(.2, 1, k);
+      fn(t);
+    }
+  }
+};
+window.DURATION = DURATION; window.FPS = FPS;
+
+// ブラウザで開いたときはリアルタイム再生(ループ)
+if (!navigator.webdriver) {
+  const st = document.getElementById('stage');
+  const fit = () => { const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+    st.style.transformOrigin = '0 0'; st.style.transform = `scale(${s})`; };
+  addEventListener('resize', fit); fit();
+  const t0 = performance.now();
+  const loop = () => { renderAt(((performance.now() - t0) / 1000) % DURATION); requestAnimationFrame(loop); };
+  loop();
+} else renderAt(0);
+</script>
+</body>
+</html>
