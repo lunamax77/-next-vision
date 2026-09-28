@@ -4,9 +4,11 @@
 |---|---|---|
 | `klp_display.mp4` | レーシング風(ダーク×ネオン、斜めワイプ) | `index.html` |
 | `klp_cinema.mp4` | 映画予告風(シネスコ帯・金文字・フィルムグレイン) | `cinema.html` |
+| `klp_photo.mp4` | 実写写真版(過去開催の写真+レーシング風テロップ) | `photo.html` |
 
 - 共通: 1920×1080 / 28秒 / 30fps / 音声なし。台本(仮)の7シーン構成どおり。
 - 素材: `site/images` の車写真・こども免許証画像を使用。ロゴは使用していない。
+- 実写写真版: `site/images/klp-event1/2.jpg` から、他社ロゴ・人物・掲示物を含まない部分だけを切り出して使用(`assets/photo/`)。
 - フォント(SIL OFL、使用文字のみに削減済み): Dela Gothic One / Shippori Mincho B1 / Cinzel
   - テロップを変えたら、元のフォントを再取得してから書き出すこと(削減で文字が欠けるため)。
 
@@ -19,6 +21,7 @@
    export FFMPEG=$(python3 -c "import imageio_ffmpeg as i;print(i.get_ffmpeg_exe())") NODE_PATH=$(npm root -g)
    node render.js klp_display.mp4
    CRF=24 node render.js klp_cinema.mp4 --page cinema.html
+   CRF=20 node render.js klp_photo.mp4 --page photo.html
    ```
    静止画確認は `node render.js --preview 1.5,4.5,14` のように秒を指定。
 
