@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>キッズ・ライセンス・パーク 実写写真版</title>
+<style>
+@font-face { font-family: "Dela"; src: url("assets/dela.ttf"); }
+:root { --red: #FF2D3A; --yel: #FFD400; --cyan: #22E4FF; --navy: #070A16; }
+html, body { margin: 0; padding: 0; background: #000; }
+#stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--navy);
+  font-family: "Dela", "Noto Color Emoji", sans-serif; }
+.scene { position: absolute; inset: 0; overflow: hidden; display: none; }
+.abs { position: absolute; left: 0; top: 0; }
+.fill { position: absolute; inset: 0; }
+.dark { background: radial-gradient(ellipse at 50% 42%, #22306A 0%, #0C1230 45%, #05070F 85%); }
+.vig { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,.65) 100%); pointer-events: none; }
+.burst { position: absolute; left: 50%; top: 50%; width: 3400px; height: 3400px; margin: -1700px 0 0 -1700px;
+  background: repeating-conic-gradient(rgba(255,255,255,.07) 0deg 6deg, rgba(255,255,255,0) 6deg 14deg); }
+.floor { position: absolute; left: -1000px; width: 3920px; top: 640px; height: 900px; transform-origin: 50% 0;
+  transform: perspective(700px) rotateX(72deg);
+  background-image: linear-gradient(rgba(34,228,255,.75) 3px, transparent 3px), linear-gradient(90deg, rgba(34,228,255,.75) 3px, transparent 3px);
+  background-size: 160px 160px; }
+.floorfade { position: absolute; left: 0; right: 0; top: 600px; height: 200px; background: linear-gradient(#0C1230, rgba(12,18,48,0)); }
+.tx { position: absolute; left: 0; top: 0; white-space: nowrap; line-height: 1.15; color: #fff;
+  -webkit-text-stroke: 16px var(--red); paint-order: stroke fill; text-shadow: 10px 12px 0 #000; }
+.tx.y { color: var(--yel); -webkit-text-stroke-color: #000; text-shadow: 10px 12px 0 var(--red); }
+.em { -webkit-text-stroke: 0; font-family: "Noto Color Emoji"; text-shadow: none; }
+.banner { position: absolute; left: 0; top: 0; height: 190px; background: linear-gradient(90deg, #B80F1C, var(--red));
+  box-shadow: 0 0 0 8px #000, 0 0 60px rgba(255,45,58,.6); }
+.panel { position: absolute; left: 0; top: 0; background: #fff; overflow: hidden; border: 12px solid var(--red);
+  box-shadow: 0 0 0 8px #000, 0 0 80px rgba(255,45,58,.75); }
+.panel > i { position: absolute; inset: -12%; background: center/72% no-repeat; }
+.panel > i.ph { inset: -8%; background-size: cover; transform: skewX(10deg); }
+.photo-bg { background: center/cover no-repeat; filter: blur(16px) brightness(.85) saturate(1.2); transform: scale(1.15); }
+.streak { position: absolute; left: 0; top: 0; border-radius: 6px; }
+.pr { position: absolute; left: 0; top: 0; width: 22px; height: 12px; }
+#wipe { position: absolute; left: 0; top: -100px; width: 3200px; height: 1280px; display: none; z-index: 50; }
+#wipe div { position: absolute; top: 0; height: 100%; transform: skewX(-22deg); }
+.plate { position: absolute; left: 0; top: 0; background: var(--yel); color: #000; white-space: nowrap;
+  padding: 10px 70px 18px; box-shadow: 0 0 0 8px #000, 12px 14px 0 8px var(--red); line-height: 1.1; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ① 0〜3秒 オープニング(実写) -->
+  <div class="scene" id="s1">
+    <div class="fill photo-bg" id="s1bg" style="background-image:url(assets/photo/course1.jpg)"></div>
+    <div class="fill" style="background:radial-gradient(ellipse at 50% 42%, rgba(12,18,48,.35), rgba(5,7,15,.88) 80%)"></div>
+    <div id="s1lines"></div>
+    <div class="panel" id="s1car" style="width:500px;height:640px"><i class="ph" style="background-image:url(assets/photo/police.jpg)"></i></div>
+    <div class="fill" id="s1flash" style="background:#fff"></div>
+    <div class="tx y" id="s1boon" style="font-size:150px">ブーン！</div>
+    <div class="banner" id="s1bar" style="width:1800px"></div>
+    <div class="tx" id="s1title" style="font-size:104px;-webkit-text-stroke-color:#000;text-shadow:none"><span class="em">🚗</span> キッズ・ライセンス・パーク！</div>
+    <div class="vig"></div>
+  </div>
+
+  <!-- ② 3〜7秒 じぶんで運転！(実写) -->
+  <div class="scene" id="s2">
+    <div class="fill dark"></div>
+    <div class="fill photo-bg" id="s2bg" style="background-image:url(assets/photo/wheel.jpg)"></div>
+    <div class="fill" id="s2dim" style="background:rgba(5,7,15,.55)"></div>
+    <div class="panel" id="s2wheel" style="width:1180px;height:733px"><i class="ph" style="background-image:url(assets/photo/wheel.jpg)"></i>
+      <div id="s2ring" class="abs" style="width:300px;height:170px;border:12px solid #FFD400;border-radius:50%;box-shadow:0 0 40px #FFD400, inset 0 0 30px #FFD400"></div></div>
+    <div id="s2lines"></div>
+    <div id="s2road" class="abs" style="top:860px;width:1920px;height:220px;background:linear-gradient(#2A2E3A,#15171F);border-top:8px solid #FFD400">
+      <div id="s2dash" class="fill" style="top:95px;height:24px;background:repeating-linear-gradient(90deg,#fff 0 140px,transparent 140px 300px);"></div>
+    </div>
+    <div class="panel" id="s2car" style="width:760px;height:520px"><i style="background-image:url(assets/car-gtr.jpg)"></i></div>
+    <div class="banner" id="s2bar" style="width:1640px"></div>
+    <div class="tx" id="s2t1" style="font-size:112px;-webkit-text-stroke-color:#000;text-shadow:none"><span class="em">👦👧</span> じぶんで運転できる！</div>
+    <div class="tx y" id="s2t2" style="font-size:190px">ブーン！<span class="em">🚗💨</span></div>
+    <div class="vig"></div>
+  </div>
+
+  <!-- ③ 7〜12秒 コースを走る(実写) -->
+  <div class="scene" id="s3">
+    <div class="fill" id="s3a" style="background:url(assets/photo/course2.jpg) center/cover;filter:contrast(1.08) saturate(1.25)"></div>
+    <div class="fill" id="s3b" style="background:url(assets/photo/course1.jpg) center/cover;filter:contrast(1.08) saturate(1.25)"></div>
+    <div id="s3lines"></div>
+    <div class="fill" style="background:linear-gradient(rgba(5,7,15,.75), rgba(5,7,15,0) 32%, rgba(5,7,15,0) 75%, rgba(5,7,15,.45))"></div>
+    <div class="vig"></div>
+    <div class="tx" id="s3t1" style="font-size:124px"><span class="em">🚗💨</span> ゴールをめざせ！</div>
+    <div class="tx y" id="s3t2" style="font-size:190px">Let's Drive！</div>
+  </div>
+
+  <!-- ④ 12〜16秒 ゴール！ -->
+  <div class="scene" id="s4">
+    <div class="fill" id="s4flag" style="background: repeating-conic-gradient(#111 0 25%, #EDEDED 0 50%) 0 0/150px 150px;"></div>
+    <div class="fill" style="background: radial-gradient(circle at 50% 48%, rgba(255,212,0,.85), rgba(255,140,0,.55) 30%, rgba(0,0,0,.8) 80%);"></div>
+    <div class="burst" id="s4burst" style="background: repeating-conic-gradient(rgba(255,230,120,.22) 0deg 6deg, rgba(255,255,255,0) 6deg 14deg);"></div>
+    <div id="confetti"></div>
+    <div id="s4stars"></div>
+    <div class="tx y" id="s4t1" style="font-size:240px"><span class="em">🎉</span> ゴール！！</div>
+    <div class="tx" id="s4t2" style="font-size:140px">うんてんせいこう！</div>
+    <div id="s4claps"></div>
+  </div>
+
+  <!-- ⑤ 16〜21秒 こども運転免許証 -->
+  <div class="scene" id="s5">
+    <div class="fill dark"></div>
+    <div class="burst" id="s5burst" style="background: repeating-conic-gradient(rgba(255,212,0,.13) 0deg 6deg, rgba(255,255,255,0) 6deg 14deg);"></div>
+    <div id="s5card" class="abs" style="width:900px;padding:20px;background:#fff;border-radius:30px;border:10px solid #FFD400;box-shadow:0 0 0 8px #000,0 0 90px rgba(255,212,0,.8);overflow:hidden;">
+      <img src="assets/license.jpg" style="display:block;width:900px;border-radius:18px">
+      <div id="s5shine" class="abs" style="width:260px;height:1400px;top:-300px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.9),rgba(255,255,255,0));"></div>
+    </div>
+    <div id="s5spark"></div>
+    <div class="tx y" id="s5jan" style="font-size:124px">ジャーン！</div>
+    <div class="tx" id="s5t1" style="font-size:104px"><span class="em">🪪</span> きみも運転免許証をGET！</div>
+    <div class="tx" id="s5t2" style="font-size:120px">思い出を持って帰ろう！</div>
+    <div class="vig"></div>
+  </div>
+
+  <!-- ⑥ 21〜25秒 イベント告知 -->
+  <div class="scene" id="s6">
+    <div class="fill photo-bg" style="background-image:url(assets/photo/course2.jpg)"></div>
+    <div class="fill" style="background:radial-gradient(ellipse at 50% 42%, rgba(34,48,106,.72), rgba(5,7,15,.93) 85%)"></div>
+    <div class="floor" id="s6floor" style="top:760px"></div><div class="floorfade" style="top:720px"></div>
+    <div id="s6lines"></div>
+    <div class="tx" id="s6p" style="font-size:54px;-webkit-text-stroke-width:10px;-webkit-text-stroke-color:#000;text-shadow:none;color:#fff">ジョーシン白山イオンモール プレゼンツ</div>
+    <div class="tx" id="s6title" style="font-size:112px"><span class="em">🚗</span> キッズ・ライセンス・パーク</div>
+    <div class="plate" id="s6date" style="font-size:120px">11月21日・22日</div>
+    <div class="tx" id="s6place" style="font-size:92px;-webkit-text-stroke-color:#1E5AFF"><span class="em">📍</span> ジョーシン白山 1F広場</div>
+    <div class="panel s6car" style="width:300px;height:210px;border-color:#FFD400"><i style="background-image:url(assets/car-gtr.jpg)"></i></div>
+    <div class="panel s6car" style="width:300px;height:210px;border-color:#FF2D3A"><i style="background-image:url(assets/car-lc500.jpg)"></i></div>
+    <div class="panel s6car" style="width:300px;height:210px;border-color:#22E4FF"><i style="background-image:url(assets/car-540k.jpg)"></i></div>
+    <div class="panel s6car" style="width:300px;height:210px;border-color:#3CF07B"><i style="background-image:url(assets/car-gx550.jpg)"></i></div>
+    <div class="vig"></div>
+  </div>
+
+  <!-- ⑦ 25〜28秒 ラスト -->
+  <div class="scene" id="s7">
+    <div class="fill dark"></div>
+    <div class="floor" id="s7floor"></div><div class="floorfade"></div>
+    <div id="s7lines"></div>
+    <div class="panel" id="s7car" style="width:440px;height:560px"><i class="ph" style="background-image:url(assets/photo/police.jpg)"></i></div>
+    <div class="tx y" id="s7t1" style="font-size:156px"><span class="em">🚗💨</span> あそびにきてね！</div>
+    <div class="tx" id="s7t2" style="font-size:104px">きみも運転してみよう！</div>
+    <div class="vig"></div>
+    <div id="s7end" class="fill" style="background:#05070F">
+      <div class="abs" id="slashA" style="width:900px;height:1600px;top:-260px;background:linear-gradient(90deg,#B80F1C,#FF2D3A)"></div>
+      <div class="abs" id="slashB" style="width:120px;height:1600px;top:-260px;background:#FFD400"></div>
+      <div class="abs" id="slashC" style="width:40px;height:1600px;top:-260px;background:#fff"></div>
+      <div class="tx" id="e1" style="font-size:136px">KIDS LICENSE PARK</div>
+      <div class="tx" id="e2" style="font-size:72px;-webkit-text-stroke-width:10px;-webkit-text-stroke-color:#000;text-shadow:none">キッズ・ライセンス・パーク</div>
+      <div class="plate" id="e3" style="font-size:118px">11.21 SAT / 11.22 SUN</div>
+      <div class="tx" id="e4" style="font-size:68px;-webkit-text-stroke-width:10px;-webkit-text-stroke-color:#000;text-shadow:none"><span class="em">📍</span> ジョーシン白山 1F広場</div>
+      <div class="vig"></div>
+    </div>
+  </div>
+
+  <!-- シーン切り替えのスラッシュワイプ -->
+  <div id="wipe">
+    <div style="left:0;width:1100px;background:#FF2D3A"></div>
+    <div style="left:1060px;width:160px;background:#fff"></div>
+    <div style="left:1200px;width:900px;background:#FFD400"></div>
+    <div style="left:2080px;width:1120px;background:#05070F;border-left:14px solid #22E4FF"></div>
+  </div>
+
+</div>
+<script>
+const DURATION = 28, FPS = 30;
+const $ = id => document.getElementById(id);
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, k) => a + (b - a) * k;
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const eOut = k => 1 - Math.pow(1 - k, 3);
+const eInOut = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+const eBack = k => { const c = 1.9, d = c + 1; return k <= 0 ? 0 : 1 + d * Math.pow(k - 1, 3) + c * Math.pow(k - 1, 2); };
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+// 中心座標(x,y)に配置。sk はイタリック風の傾き
+function put(el, x, y, s = 1, r = 0, o = 1, sk = 0) {
+  el.style.transform = `translate(${x}px,${y}px) translate(-50%,-50%) rotate(${r}deg) skewX(${sk}deg) scale(${s})`;
+  el.style.opacity = o;
+}
+const SK = -10;
+// 横からスライドイン(スピード感)
+function slideIn(el, t, a, x, y, from = -1, b = 1e9, sk = SK) {
+  if (t < a || t > b) { el.style.opacity = 0; return; }
+  const k = eOut(prog(t, a, a + .32)), ko = b < 1e8 ? eInOut(prog(t, b - .2, b)) : 0;
+  put(el, x + from * (1 - k) * 1400 - from * ko * 1400, y, 1, 0, 1, sk + (1 - k) * -18 * from);
+}
+function popIn(t, a, b = 1e9, dur = .4) {
+  if (t < a || t > b) return 0;
+  const k = eBack(prog(t, a, a + dur));
+  const out = b < 1e8 ? 1 - eOut(prog(t, b - .18, b)) : 1;
+  return Math.max(0, k * out);
+}
+
+// ---------- 生成物 ----------
+const STREAK_C = ['#22E4FF', '#ffffff', '#FF2D3A', '#FFD400'];
+function makeStreaks(host, n, seed, radial) {
+  const R = rng(seed), arr = [];
+  for (let i = 0; i < n; i++) {
+    const d = document.createElement('div'); d.className = 'streak'; host.appendChild(d);
+    const c = STREAK_C[i % STREAK_C.length];
+    d.style.background = c; d.style.boxShadow = `0 0 18px ${c}`;
+    arr.push({ el: d, a: R() * 360, off: R(), w: 160 + R() * 320, h: 5 + R() * 7, y: 60 + R() * 960 });
+  }
+  return arr;
+}
+function radialStreaks(arr, t, cx, cy, sp = 1.6) {
+  arr.forEach(l => { const d = (t * sp + l.off) % 1;
+    l.el.style.cssText += `left:${cx}px;top:${cy}px;width:${l.w * (0.4 + d)}px;height:${l.h}px;opacity:${(1 - d) * .95};transform-origin:0 50%;transform:rotate(${l.a}deg) translateX(${220 + d * 1200}px);`; });
+}
+function flowStreaks(arr, t, sp = 2.5, op = .8) {
+  arr.forEach(l => { const d = (t * sp + l.off) % 1;
+    l.el.style.cssText += `left:${1920 - d * 2600}px;top:${l.y}px;width:${l.w * 1.6}px;height:${l.h}px;opacity:${op};transform:none;`; });
+}
+const s1lines = makeStreaks($('s1lines'), 34, 3);
+const s2lines = makeStreaks($('s2lines'), 26, 5);
+const s3lines = makeStreaks($('s3lines'), 22, 6);
+const s6lines = makeStreaks($('s6lines'), 18, 7);
+const s7lines = makeStreaks($('s7lines'), 26, 9);
+
+// 紙吹雪(ゴールド・シルバー・レッド)
+const conf = [], CR = rng(42), colors = ['#FFD400', '#FFE88A', '#E6E9F2', '#FF2D3A', '#ffffff', '#22E4FF'];
+for (let i = 0; i < 180; i++) { const d = document.createElement('div'); d.className = 'abs';
+  const w = 18 + CR() * 22; d.style.cssText += `width:${w}px;height:${w * .5}px;background:${colors[i % colors.length]};border-radius:3px;`;
+  $('confetti').appendChild(d); conf.push({ el: d, x: CR() * 1920, d: CR() * .9, v: 460 + CR() * 460, sw: CR() * 6, r: CR() * 720 - 360 }); }
+function makeEmoji(host, list, size) {
+  return list.map(([x, y, ch, dl]) => { const d = document.createElement('div'); d.className = 'abs em';
+    d.style.fontSize = size + 'px'; d.textContent = ch; host.appendChild(d); return { el: d, x, y, dl }; });
+}
+const stars = makeEmoji($('s4stars'), [[180,160,'⭐',0],[1740,170,'⭐',.2],[300,930,'✨',.35],[1640,930,'✨',.1],[960,90,'🌟',.5],[110,560,'⭐',.6],[1810,560,'⭐',.45]], 120);
+const claps = makeEmoji($('s4claps'), [[150,730,'👏',.9],[1770,730,'👏',1.1]], 170);
+const sparks = makeEmoji($('s5spark'), [[170,330,'✨',0],[1400,300,'✨',.25],[160,950,'⭐',.4],[1500,900,'✨',.15],[1780,330,'⭐',.55],[1790,860,'✨',.7]], 110);
+
+// ---------- シーン ----------
+const scenes = [
+  ['s1', 0, 3, s1], ['s2', 3, 7, s2], ['s3', 7, 12, s3], ['s4', 12, 16, s4],
+  ['s5', 16, 21, s5], ['s6', 21, 25, s6], ['s7', 25, 28.01, s7],
+];
+
+function s1(t) {
+  $('s1bg').style.transform = `scale(${1.15 + t * .04})`;
+  radialStreaks(s1lines, t, 960, 430, 1.8);
+  const k = eInOut(prog(t, 0, 1.1));
+  const hit = t >= 1.1, shake = hit ? Math.sin(t * 90) * 14 * Math.exp(-(t - 1.1) * 5) : 0;
+  put($('s1car'), 960 + shake, 450 + shake * .6, lerp(.06, 1, k) * (hit ? 1 + .06 * Math.exp(-(t - 1.1) * 6) : 1), 0, 1, SK);
+  $('s1flash').style.opacity = hit ? Math.max(0, .9 - (t - 1.1) * 4) : 0;
+  put($('s1boon'), 1520 + Math.sin(t * 60) * 5, 220, popIn(t, 1.15), -8, 1, SK);
+  const bk = eOut(prog(t, 1.25, 1.55));
+  put($('s1bar'), lerp(-1000, 960, bk), 920, 1, 0, 1, -18);
+  slideIn($('s1title'), t, 1.4, 960, 915, 1);
+}
+
+function s2(t) {
+  const lt = t - 3, drive = lt >= 2.2;
+  ['s2bg', 's2dim', 's2wheel'].forEach(id => $(id).style.display = drive ? 'none' : 'block');
+  ['s2road', 's2car', 's2lines'].forEach(id => $(id).style.display = drive ? 'block' : 'none');
+  // 2a ハンドルのアップ(実写)
+  $('s2bg').style.transform = `scale(${1.15 + lt * .03})`;
+  const k = eOut(prog(lt, 0, .5));
+  put($('s2wheel'), 960, 610, lerp(.85, 1, k) * (1 + lt * .025), 0, 1, SK);
+  const pulse = .5 + .5 * Math.sin(lt * 8);
+  put($('s2ring'), 700, 560, 1 + .08 * pulse, 0, prog(lt, .6, .9) * (.6 + .4 * pulse));
+  const bk = eOut(prog(lt, .05, .3)), bo = eInOut(prog(lt, 2.0, 2.2));
+  put($('s2bar'), lerp(-900, 960, bk) + bo * 2000, 120, 1, 0, 1, -18);
+  slideIn($('s2t1'), lt, .15, 960, 118, 1, 2.2);
+  // 2b 走り出す
+  const dt = lt - 2.2;
+  flowStreaks(s2lines, dt, 2.8, .75);
+  $('s2dash').style.backgroundPosition = `${-dt * 1800}px 0`;
+  const cx = lerp(-700, 900, eOut(prog(dt, 0, .6))) + dt * 60;
+  put($('s2car'), cx, 600 + Math.abs(Math.sin(dt * 14)) * -8, 1, 0, 1, SK);
+  put($('s2t2'), 1000, 200, popIn(dt, .3), -5 + Math.sin(dt * 30) * 1.2, 1, SK);
+}
+
+function s3(t) {
+  const lt = t - 7, b = lt >= 2.6, sh = Math.sin(t * 60) * 3;
+  $('s3a').style.display = b ? 'none' : 'block';
+  $('s3b').style.display = b ? 'block' : 'none';
+  $('s3a').style.transform = `translate(${-lt * 45 + sh}px,${sh}px) scale(${1.12 + lt * .05}) rotate(${-2 + lt * .8}deg)`;
+  const l2 = lt - 2.6;
+  $('s3b').style.transform = `translate(${-l2 * 50 + sh}px,${sh}px) scale(${1.08 + l2 * .06}) rotate(${1 - l2 * .6}deg)`;
+  flowStreaks(s3lines, lt, 2.2, .55);
+  slideIn($('s3t1'), lt, .1, 960, 120, 1, 2.6);
+  put($('s3t2'), 960, 135, popIn(lt, 2.6), -5, 1, SK);
+}
+
+function s4(t) {
+  const lt = t - 12;
+  $('s4flag').style.transform = `perspective(900px) rotateY(${Math.sin(lt * 2) * 8}deg) skewY(${Math.sin(lt * 3) * 3}deg) scale(1.2)`;
+  $('s4burst').style.transform = `rotate(${t * 22}deg)`;
+  put($('s4t1'), 960, 420, popIn(lt, .05) * (1 + Math.sin(lt * 8) * .03), Math.sin(lt * 5) * 2, 1, SK);
+  put($('s4t2'), 960, 720, popIn(lt, 1.3), 0, 1, SK);
+  conf.forEach(c => { const lc = lt - c.d; const y = -60 + lc * c.v;
+    put(c.el, c.x + Math.sin(lc * 3 + c.sw) * 60, y, 1, c.r * lc, lc > 0 ? 1 : 0); });
+  stars.forEach(s => put(s.el, s.x, s.y, popIn(lt, s.dl) * (0.85 + .2 * Math.sin(lt * 7 + s.x)), lt * 30));
+  claps.forEach(s => put(s.el, s.x, s.y + Math.abs(Math.sin(lt * 10)) * -20, popIn(lt, s.dl), Math.sin(lt * 12) * 10));
+}
+
+function s5(t) {
+  const lt = t - 16;
+  $('s5burst').style.transform = `rotate(${t * 14}deg)`;
+  const k = eBack(prog(lt, .25, .8));
+  put($('s5card'), 770, 640, Math.max(0, k), lerp(-18, -2, clamp(k)) + Math.sin(lt * 2) * 1.2);
+  $('s5shine').style.transform = `translateX(${lerp(-400, 1300, prog(lt, 1.0, 1.9))}px) rotate(20deg)`;
+  put($('s5jan'), 1580, 560, popIn(lt, .7, 2.6), 8 + Math.sin(lt * 20) * 2, 1, SK);
+  sparks.forEach(s => put(s.el, s.x, s.y, popIn(lt, .8 + s.dl) * (.8 + .25 * Math.sin(lt * 8 + s.y)), lt * 40));
+  slideIn($('s5t1'), lt, .05, 960, 120, 1, 2.8);
+  slideIn($('s5t2'), lt, 2.8, 960, 120, -1);
+}
+
+function s6(t) {
+  const lt = t - 21;
+  $('s6floor').style.backgroundPosition = `0 ${t * 400}px`;
+  flowStreaks(s6lines, lt, 1.2, .45);
+  slideIn($('s6p'), lt, .05, 960, 80, -1);
+  slideIn($('s6title'), lt, .2, 960, 210, 1);
+  const dk = eBack(prog(lt, .55, 1.0));
+  put($('s6date'), 960, 420, Math.max(0, dk), 0, 1, -12);
+  slideIn($('s6place'), lt, .9, 960, 610, -1);
+  document.querySelectorAll('.s6car').forEach((el, i) => {
+    const k = eOut(prog(lt, 1.2 + i * .12, 1.6 + i * .12));
+    put(el, lerp(2400, 450 + i * 340, k), 885 + Math.sin(lt * 9 + i) * 5, 1, 0, 1, SK);
+  });
+}
+
+function s7(t) {
+  const lt = t - 25;
+  $('s7floor').style.backgroundPosition = `0 ${t * 900}px`;
+  const go = eInOut(prog(lt, .9, 1.5));
+  flowStreaks(s7lines, lt, go > 0 ? 4 : 1.8, .85);
+  const car = $('s7car');
+  put(car, lerp(960, 2600, go) + Math.sin(lt * 50) * 3, 530 + Math.abs(Math.sin(lt * 12)) * -10, popIn(lt, 0), 0, 1, SK);
+  car.style.filter = go > 0 ? `blur(${go * 8}px)` : 'none';
+  slideIn($('s7t1'), lt, .05, 960, 150, 1);
+  slideIn($('s7t2'), lt, .35, 960, 935, -1);
+  // 最後の画面(固定表示)
+  const e = lt >= 1.6;
+  $('s7end').style.display = e ? 'block' : 'none';
+  if (e) {
+    const et = lt - 1.6;
+    const sk = eOut(prog(et, 0, .3));
+    put($('slashA'), lerp(-900, 60, sk), 540, 1, 0, 1, -22);
+    put($('slashB'), lerp(-900, 560, sk), 540, 1, 0, 1, -22);
+    put($('slashC'), lerp(-900, 660, sk), 540, 1, 0, 1, -22);
+    put($('e1'), 960, 290, popIn(et, .08), 0, 1, SK);
+    slideIn($('e2'), et, .18, 960, 450, 1);
+    put($('e3'), 960, 660, popIn(et, .28), 0, 1, -12);
+    slideIn($('e4'), et, .38, 960, 880, -1);
+  }
+}
+
+const CUTS = [3, 7, 12, 16, 21, 25];
+window.renderAt = function (t) {
+  for (const [id, a, b, fn] of scenes) {
+    const on = t >= a && t < b;
+    const el = $(id); el.style.display = on ? 'block' : 'none';
+    if (on) {
+      const k = a === 0 ? 1 : eOut(prog(t - a, 0, .3));
+      el.style.transform = `scale(${lerp(1.08, 1, k)})`;
+      fn(t);
+    }
+  }
+  // スラッシュワイプ
+  const w = $('wipe'), c = CUTS.find(c => Math.abs(t - c) < .24);
+  w.style.display = c === undefined ? 'none' : 'block';
+  if (c !== undefined) w.style.transform = `translateX(${lerp(2100, -3300, (t - c + .24) / .48)}px)`;
+};
+window.DURATION = DURATION; window.FPS = FPS;
+
+// ブラウザで開いたときはリアルタイム再生(ループ)
+if (!navigator.webdriver) {
+  const st = document.getElementById('stage');
+  const fit = () => { const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+    st.style.transformOrigin = '0 0'; st.style.transform = `scale(${s})`; };
+  addEventListener('resize', fit); fit();
+  const t0 = performance.now();
+  const loop = () => { renderAt(((performance.now() - t0) / 1000) % DURATION); requestAnimationFrame(loop); };
+  loop();
+} else renderAt(0);
+</script>
+</body>
+</html>
