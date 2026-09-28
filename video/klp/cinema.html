@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>キッズ・ライセンス・パーク 映画予告風</title>
+<style>
+@font-face { font-family: "Mincho"; src: url("assets/ShipporiMinchoB1.ttf"); }
+@font-face { font-family: "Cinzel"; src: url("assets/Cinzel.ttf"); }
+html, body { margin: 0; padding: 0; background: #000; }
+#stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #000; font-family: "Mincho", serif; }
+.scene { position: absolute; inset: 0; overflow: hidden; display: none; }
+.abs { position: absolute; left: 0; top: 0; }
+.fill { position: absolute; inset: 0; }
+.tx { position: absolute; left: 0; top: 0; white-space: nowrap; line-height: 1.2; color: #F4F1EA; letter-spacing: .08em;
+  text-shadow: 0 0 30px rgba(0,0,0,.9), 0 4px 12px rgba(0,0,0,.8); }
+.gold { background: linear-gradient(180deg, #FFF6D6 0%, #F2CF7A 38%, #C8932F 62%, #FFE9A8 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none;
+  filter: drop-shadow(0 0 22px rgba(255,190,90,.45)) drop-shadow(0 6px 10px rgba(0,0,0,.9)); }
+.en { font-family: "Cinzel", serif; letter-spacing: .22em; }
+.glow { position: absolute; left: 0; top: 0; border-radius: 50%; }
+.flare { position: absolute; left: 0; top: 0; height: 10px; width: 2600px; border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(220,240,255,.95), rgba(90,170,255,.45) 30%, rgba(40,120,255,0) 70%); mix-blend-mode: screen; }
+.bokeh { position: absolute; left: 0; top: 0; border-radius: 50%; mix-blend-mode: screen; }
+#grade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,120,140,.35), rgba(255,140,40,.25)); mix-blend-mode: soft-light; z-index: 40; pointer-events: none; }
+#vig { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 45%, rgba(0,0,0,.8) 100%); z-index: 41; }
+#grain { position: absolute; inset: -200px; background: url(assets/grain0.png) 0 0/960px 540px; mix-blend-mode: overlay; opacity: .16; z-index: 42; }
+#fade { position: absolute; inset: 0; background: #000; z-index: 43; }
+#flash { position: absolute; inset: 0; background: #FFF4DE; z-index: 44; opacity: 0; }
+.bar { position: absolute; left: 0; width: 1920px; height: 132px; background: #000; z-index: 45; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ① 0〜3秒 ヘッドライト点灯 → タイトル -->
+  <div class="scene" id="s1">
+    <div class="fill" style="background: radial-gradient(ellipse at 50% 60%, #0E1A2A, #000 70%);"></div>
+    <div class="glow" id="hl1"></div><div class="glow" id="hl2"></div>
+    <div class="flare" id="s1flare"></div>
+    <div id="s1dust"></div>
+    <div class="tx en" id="s1en" style="font-size:44px;color:#BFD4E6">KIDS LICENSE PARK</div>
+    <div class="tx gold" id="s1title" style="font-size:120px">キッズ・ライセンス・パーク</div>
+  </div>
+
+  <!-- ② 3〜7秒 じぶんで運転 -->
+  <div class="scene" id="s2">
+    <div class="fill" style="background: radial-gradient(ellipse at 50% 35%, #3A2A1A, #0B1418 65%, #000);"></div>
+    <div class="fill" style="background: radial-gradient(circle at 50% 30%, rgba(255,200,130,.35), rgba(255,200,130,0) 40%);"></div>
+    <svg id="s2kid" class="abs" width="900" height="900" viewBox="0 0 800 800">
+      <path d="M150 800 Q150 600 400 590 Q650 600 650 800 Z" fill="#B3202A"/>
+      <path d="M370 592 L430 592 L445 800 L355 800 Z" fill="#E8E2D6"/>
+      <line id="armL" stroke="#B3202A" stroke-width="64" stroke-linecap="round"/>
+      <line id="armR" stroke="#B3202A" stroke-width="64" stroke-linecap="round"/>
+      <circle cx="232" cy="385" r="34" fill="#E9B98F"/>
+      <circle cx="568" cy="385" r="34" fill="#E9B98F"/>
+      <circle cx="400" cy="370" r="172" fill="#F2C9A2"/>
+      <path d="M222 330 Q400 110 578 330 Z" fill="#E8E2D6"/>
+      <path d="M222 330 Q260 250 330 205 L360 330 Z" fill="#B3202A"/>
+      <path d="M578 330 Q540 250 470 205 L440 330 Z" fill="#B3202A"/>
+      <ellipse cx="400" cy="330" rx="196" ry="30" fill="#15151D"/>
+      <ellipse cx="338" cy="385" rx="17" ry="24" fill="#2a1c05"/>
+      <ellipse cx="462" cy="385" rx="17" ry="24" fill="#2a1c05"/>
+      <circle cx="344" cy="375" r="6" fill="#fff"/><circle cx="468" cy="375" r="6" fill="#fff"/>
+      <circle cx="295" cy="445" r="26" fill="#E88A8A" opacity=".45"/>
+      <circle cx="505" cy="445" r="26" fill="#E88A8A" opacity=".45"/>
+      <path d="M335 450 Q400 540 465 450 Z" fill="#8E2730"/>
+      <g id="wheel" transform="translate(400 770)">
+        <circle r="220" fill="none" stroke="#111118" stroke-width="50"/>
+        <circle r="220" fill="none" stroke="#2E2E38" stroke-width="12"/>
+        <path d="M-60 -208 A220 220 0 0 1 60 -208" stroke="#C8932F" stroke-width="50" fill="none"/>
+        <rect x="-200" y="-18" width="400" height="36" rx="18" fill="#111118"/>
+        <rect x="-18" y="0" width="36" height="210" rx="18" fill="#111118"/>
+        <circle r="64" fill="#111118" stroke="#2E2E38" stroke-width="10"/>
+        <circle r="24" fill="#C8932F"/>
+      </g>
+      <circle id="handL" r="44" fill="#F2C9A2"/>
+      <circle id="handR" r="44" fill="#F2C9A2"/>
+    </svg>
+    <!-- 夜道を走り出す -->
+    <div id="s2night" class="fill" style="background: linear-gradient(#02060C, #0C1826 70%, #1A2230);">
+      <div id="s2lights"></div>
+      <div id="s2road" class="abs" style="top:800px;width:1920px;height:280px;background:linear-gradient(#20242C,#0A0C10);">
+        <div id="s2dash" class="fill" style="top:120px;height:18px;background:repeating-linear-gradient(90deg,rgba(255,240,200,.8) 0 140px,transparent 140px 320px);"></div>
+      </div>
+      <svg id="s2car" class="abs" width="1300" height="520" viewBox="-400 0 1300 520">
+        <defs><linearGradient id="beam" x1="0" x2="1"><stop offset="0" stop-color="#FFF1C8" stop-opacity=".9"/><stop offset="1" stop-color="#FFF1C8" stop-opacity="0"/></linearGradient></defs>
+        <path d="M450 290 L900 150 L900 450 Z" fill="url(#beam)"/>
+        <line x1="440" y1="250" x2="560" y2="205" stroke="#B3202A" stroke-width="40" stroke-linecap="round"/>
+        <circle cx="430" cy="150" r="78" fill="#F2C9A2"/>
+        <path d="M350 140 Q430 40 510 140 Z" fill="#E8E2D6"/>
+        <ellipse cx="466" cy="150" rx="10" ry="15" fill="#2a1c05"/>
+        <path d="M455 180 Q485 205 505 175" stroke="#8E2730" stroke-width="9" fill="none" stroke-linecap="round"/>
+        <rect x="380" y="220" width="120" height="60" rx="20" fill="#B3202A"/>
+        <path d="M590 225 L640 130 L660 136 L630 225 Z" fill="#7FB6CC" stroke="#DDE" stroke-width="6"/>
+        <path d="M60 290 Q60 225 150 222 L740 218 Q840 222 860 300 L860 360 Q860 390 830 390 L90 390 Q60 390 60 360 Z" fill="#C0222D"/>
+        <path d="M70 300 L850 296 L850 322 L70 326 Z" fill="#E8E2D6"/>
+        <circle cx="845" cy="275" r="20" fill="#FFF6D0"/>
+        <circle cx="70" cy="300" r="14" fill="#FF3030"/>
+        <g id="wl1" transform="translate(220 390)"><circle r="82" fill="#111118"/><circle r="42" fill="#9AA0AE"/><rect x="-6" y="-40" width="12" height="80" fill="#555A66"/><rect x="-40" y="-6" width="80" height="12" fill="#555A66"/></g>
+        <g id="wl2" transform="translate(690 390)"><circle r="82" fill="#111118"/><circle r="42" fill="#9AA0AE"/><rect x="-6" y="-40" width="12" height="80" fill="#555A66"/><rect x="-40" y="-6" width="80" height="12" fill="#555A66"/></g>
+      </svg>
+      <div class="glow" id="s2hl"></div>
+      <div class="flare" id="s2flare"></div>
+    </div>
+    <div class="tx" id="s2t1" style="font-size:92px;line-height:1.5;white-space:nowrap;text-align:center">じぶんで、<br>運転できる。</div>
+    <div class="tx gold" id="s2t2" style="font-size:150px">ブーン！</div>
+  </div>
+
+  <!-- ③ 7〜12秒 コースを走る(ドローン視点) -->
+  <div class="scene" id="s3">
+    <div class="fill" id="s3wrap" style="filter: saturate(.75) brightness(.72) contrast(1.15);">
+      <div class="fill" style="background: repeating-linear-gradient(90deg,#2C5A2E 0 160px,#27512A 160px 320px);"></div>
+      <svg class="abs" width="1920" height="1080" viewBox="0 0 1920 1080">
+        <defs><filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="12"/></filter></defs>
+        <g id="s3cam">
+          <path d="M-40 900 C 450 900, 520 440, 820 440 S 1150 880, 1400 780 S 1640 420, 1980 420" fill="none" stroke="#E8E2D6" stroke-width="196"/>
+          <path d="M-40 900 C 450 900, 520 440, 820 440 S 1150 880, 1400 780 S 1640 420, 1980 420" fill="none" stroke="#B3202A" stroke-width="196" stroke-dasharray="44 44"/>
+          <path id="track" d="M-40 900 C 450 900, 520 440, 820 440 S 1150 880, 1400 780 S 1640 420, 1980 420" fill="none" stroke="#3A3F4B" stroke-width="160"/>
+          <g id="goal" transform="translate(1760 420)">
+            <rect x="-24" y="-100" width="48" height="200" fill="#fff"/><g id="checks"></g>
+          </g>
+          <g id="cones"></g>
+          <polyline id="trailGlow" fill="none" stroke="#FFD48A" stroke-width="70" stroke-linecap="round" opacity=".8" filter="url(#blur)"/>
+          <polyline id="trail" fill="none" stroke="#FFF1C8" stroke-width="14" stroke-linecap="round"/>
+          <g id="s3car">
+            <rect x="-90" y="-52" width="180" height="104" rx="40" fill="#C0222D" stroke="#E8E2D6" stroke-width="8"/>
+            <rect x="30" y="-40" width="26" height="80" rx="10" fill="#7FB6CC"/>
+            <circle cx="-10" cy="0" r="30" fill="#E8E2D6" stroke="#B3202A" stroke-width="8"/>
+            <rect x="-70" y="-66" width="40" height="18" rx="6" fill="#111118"/><rect x="40" y="-66" width="40" height="18" rx="6" fill="#111118"/>
+            <rect x="-70" y="48" width="40" height="18" rx="6" fill="#111118"/><rect x="40" y="48" width="40" height="18" rx="6" fill="#111118"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <div class="fill" style="background:linear-gradient(rgba(0,0,0,0) 62%, rgba(0,0,0,.75) 88%)"></div>
+    <div class="tx" id="s3t1" style="font-size:100px">ゴールを、めざせ。</div>
+    <div class="tx gold en" id="s3t2" style="font-size:130px">LET'S DRIVE</div>
+  </div>
+
+  <!-- ④ 12〜16秒 ゴール(スローモーション) -->
+  <div class="scene" id="s4">
+    <div class="fill" style="background: radial-gradient(ellipse at 50% 45%, #5A3A12, #1A0F06 55%, #000);"></div>
+    <div class="fill" id="s4rays" style="background: conic-gradient(from 180deg at 50% -10%, rgba(255,210,130,0) 0deg, rgba(255,210,130,.18) 8deg, rgba(255,210,130,0) 16deg, rgba(255,210,130,.12) 28deg, rgba(255,210,130,0) 36deg, rgba(255,210,130,.16) 50deg, rgba(255,210,130,0) 60deg);"></div>
+    <div id="s4bokeh"></div>
+    <div class="tx gold" id="s4t1" style="font-size:230px">ゴール！！</div>
+    <div class="tx" id="s4t2" style="font-size:96px">うんてんせいこう！</div>
+    <div class="flare" id="s4flare"></div>
+  </div>
+
+  <!-- ⑤ 16〜21秒 免許証(プロダクトショット) -->
+  <div class="scene" id="s5">
+    <div class="fill" style="background: radial-gradient(ellipse at 50% 20%, #2A2330, #0A080C 60%, #000);"></div>
+    <div class="fill" style="background: radial-gradient(ellipse at 50% 55%, rgba(255,220,160,.28), rgba(255,220,160,0) 45%);"></div>
+    <div id="s5wrap" class="abs" style="perspective:1400px;width:1920px;height:1080px;">
+      <div id="s5card" class="abs" style="width:860px;padding:18px;background:#fff;border-radius:28px;box-shadow:0 60px 80px rgba(0,0,0,.8), 0 0 60px rgba(255,210,140,.35);overflow:hidden;">
+        <img src="assets/license.jpg" style="display:block;width:860px;border-radius:16px">
+        <div id="s5shine" class="abs" style="width:220px;height:1400px;top:-300px;background:linear-gradient(90deg,rgba(255,240,210,0),rgba(255,240,210,.85),rgba(255,240,210,0));"></div>
+      </div>
+    </div>
+    <div class="flare" id="s5flare"></div>
+    <div class="tx" id="s5t1" style="font-size:84px">きみも、運転免許証をGET！</div>
+    <div class="tx" id="s5t2" style="font-size:92px">思い出を、持って帰ろう。</div>
+  </div>
+
+  <!-- ⑥ 21〜25秒 予告タイトルカード -->
+  <div class="scene" id="s6">
+    <div class="fill" style="background:#000"></div>
+    <div id="s6dust"></div>
+    <div class="flare" id="s6flare"></div>
+    <div class="tx" id="c1" style="font-size:64px;letter-spacing:.2em;color:#CFC8BA">ジョーシン白山イオンモール プレゼンツ</div>
+    <div class="tx gold" id="c2" style="font-size:132px">キッズ・ライセンス・パーク</div>
+    <div class="tx gold" id="c3" style="font-size:170px">11月21日・22日</div>
+    <div class="tx" id="c4" style="font-size:120px">ジョーシン白山 1F広場</div>
+  </div>
+
+  <!-- ⑦ 25〜28秒 ラスト -->
+  <div class="scene" id="s7">
+    <div class="fill" style="background: radial-gradient(ellipse at 70% 55%, #3A2A14, #080A10 60%, #000);"></div>
+    <div id="s7dust"></div>
+    <div class="tx gold" id="s7t1" style="font-size:150px">あそびにきてね！</div>
+    <div class="tx" id="s7t2" style="font-size:86px">きみも、運転してみよう。</div>
+    <div id="s7end" class="fill" style="background: radial-gradient(ellipse at 50% 50%, #1A1510, #000 70%);">
+      <div class="tx gold en" id="e1" style="font-size:108px">KIDS LICENSE PARK</div>
+      <div class="tx" id="e2" style="font-size:60px;letter-spacing:.3em">キッズ・ライセンス・パーク</div>
+      <div class="abs" id="eline" style="width:900px;height:3px;background:linear-gradient(90deg,rgba(242,207,122,0),#F2CF7A,rgba(242,207,122,0))"></div>
+      <div class="tx en" id="e3" style="font-size:84px;color:#F4F1EA">11.21 SAT / 11.22 SUN</div>
+      <div class="tx" id="e4" style="font-size:52px;letter-spacing:.2em;color:#CFC8BA">ジョーシン白山 1F広場</div>
+      <div class="flare" id="eflare"></div>
+    </div>
+  </div>
+
+  <div id="grade"></div>
+  <div id="vig"></div>
+  <div id="grain"></div>
+  <div style="display:none"><img src="assets/grain0.png"><img src="assets/grain1.png"><img src="assets/grain2.png"><img src="assets/grain3.png"></div>
+  <div id="fade"></div>
+  <div id="flash"></div>
+  <div class="bar" style="top:0"></div>
+  <div class="bar" style="bottom:0"></div>
+</div>
+<script>
+const DURATION = 28, FPS = 30;
+const $ = id => document.getElementById(id);
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, k) => a + (b - a) * k;
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const eOut = k => 1 - Math.pow(1 - k, 3);
+const eInOut = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function put(el, x, y, s = 1, r = 0, o = 1) {
+  el.style.transform = `translate(${x}px,${y}px) translate(-50%,-50%) rotate(${r}deg) scale(${s})`;
+  el.style.opacity = o;
+}
+// 映画風テキスト: ぼかしから浮かび上がり、ゆっくり寄る
+function reveal(el, t, a, b, x, y, drift = .05) {
+  if (t < a || t > b) { el.style.opacity = 0; return; }
+  const kin = eOut(prog(t, a, a + .6)), kout = 1 - prog(t, b - .35, b);
+  const s = 1 + drift * (1 - prog(t, a, b)) + .02;
+  put(el, x, y, s, 0, Math.min(kin, kout));
+  el.style.filter = el.classList.contains('gold') ? '' : `blur(${(1 - kin) * 14}px)`;
+  if (el.classList.contains('gold')) el.style.filter = `blur(${(1 - kin) * 14}px) drop-shadow(0 0 22px rgba(255,190,90,.45)) drop-shadow(0 6px 10px rgba(0,0,0,.9))`;
+}
+function glow(el, x, y, r, a, color = '255,245,225') {
+  el.style.cssText += `width:${r * 2}px;height:${r * 2}px;background:radial-gradient(circle, rgba(255,255,255,${a}) 0%, rgba(${color},${a * .7}) 18%, rgba(${color},0) 70%);mix-blend-mode:screen;`;
+  put(el, x, y);
+}
+function flare(el, x, y, a, w = 2600) { el.style.width = w + 'px'; put(el, x, y, 1, 0, a); }
+
+// 浮遊する光の粒(ボケ)
+function makeBokeh(host, n, seed, col) {
+  const R = rng(seed), arr = [];
+  for (let i = 0; i < n; i++) { const d = document.createElement('div'); d.className = 'bokeh'; host.appendChild(d);
+    const r = 6 + R() * 50; d.style.width = d.style.height = r * 2 + 'px';
+    d.style.background = `radial-gradient(circle, rgba(${col},.9), rgba(${col},.25) 60%, rgba(${col},0) 72%)`;
+    d.style.filter = `blur(${r > 30 ? 6 : 1}px)`;
+    arr.push({ el: d, x: R() * 1920, y: R() * 1080, v: 15 + R() * 50, ph: R() * 6, a: .25 + R() * .6 }); }
+  return arr;
+}
+function driftBokeh(arr, t, up = 1) {
+  arr.forEach(b => put(b.el, b.x + Math.sin(t * .6 + b.ph) * 40, ((b.y - t * b.v * up) % 1200 + 1200) % 1200 - 60, 1, 0, b.a * (0.7 + .3 * Math.sin(t * 2 + b.ph))));
+}
+const s1dust = makeBokeh($('s1dust'), 30, 11, '170,200,255');
+const s4bokeh = makeBokeh($('s4bokeh'), 60, 12, '255,200,110');
+const s6dust = makeBokeh($('s6dust'), 24, 13, '255,210,150');
+const s7dust = makeBokeh($('s7dust'), 36, 14, '255,200,120');
+
+// 夜道の街灯(流れる光)
+const lights = [];
+for (let i = 0; i < 8; i++) { const d = document.createElement('div'); d.className = 'glow'; $('s2lights').appendChild(d); lights.push(d); }
+
+// コース
+const track = $('track'), TL = track.getTotalLength(), coneF = [0.14, 0.27, 0.40, 0.53, 0.66, 0.79];
+coneF.forEach((f, i) => {
+  const p = track.getPointAtLength(f * TL), q = track.getPointAtLength(Math.min(TL, f * TL + 2));
+  const ang = Math.atan2(q.y - p.y, q.x - p.x), side = i % 2 ? 1 : -1;
+  const x = p.x - Math.sin(ang) * 130 * side, y = p.y + Math.cos(ang) * 130 * side;
+  $('cones').insertAdjacentHTML('beforeend', `<g transform="translate(${x} ${y})"><rect x="-38" y="16" width="76" height="16" rx="6" fill="#B84414"/>
+     <path d="M-28 20 L-9 -52 L9 -52 L28 20 Z" fill="#D9601E"/><path d="M-21 -6 L21 -6 L17 -22 L-17 -22 Z" fill="#E8E2D6"/></g>`);
+});
+for (let r = 0; r < 10; r++) for (let c = 0; c < 2; c++) if ((r + c) % 2)
+  $('checks').insertAdjacentHTML('beforeend', `<rect x="${-24 + c * 24}" y="${-100 + r * 20}" width="24" height="20" fill="#111118"/>`);
+
+// ---------- シーン ----------
+function s1(t) {
+  // ヘッドライトがちらついて点灯
+  const on = t < .35 ? 0 : t < .45 ? .8 : t < .55 ? .1 : t < .62 ? 1 : 1;
+  const k = on * (1 + .04 * Math.sin(t * 20));
+  glow($('hl1'), 700, 600, 260 * (0.8 + .2 * prog(t, .6, 2)), .9 * k);
+  glow($('hl2'), 1220, 600, 260 * (0.8 + .2 * prog(t, .6, 2)), .9 * k);
+  flare($('s1flare'), 960, 600, k * .9, 2600);
+  driftBokeh(s1dust, t);
+  const ht = prog(t, 1.2, 1.9);
+  $('hl1').style.opacity = $('hl2').style.opacity = on * (1 - ht * .75);
+  reveal($('s1en'), t, 1.3, 3.2, 960, 420);
+  reveal($('s1title'), t, 1.5, 3.2, 960, 560);
+}
+
+function wheelKid(t) {
+  const rot = Math.sin(t * 2.6) * 22;
+  $('wheel').setAttribute('transform', `translate(400 770) rotate(${rot})`);
+  const hand = (deg) => { const a = (deg + rot) * Math.PI / 180; return [400 + 220 * Math.cos(a), 770 + 220 * Math.sin(a)]; };
+  const [lx, ly] = hand(-150), [rx, ry] = hand(-30);
+  $('handL').setAttribute('cx', lx); $('handL').setAttribute('cy', ly);
+  $('handR').setAttribute('cx', rx); $('handR').setAttribute('cy', ry);
+  const arm = (el, sx, sy, ex, ey) => { el.setAttribute('x1', sx); el.setAttribute('y1', sy); el.setAttribute('x2', ex); el.setAttribute('y2', ey); };
+  arm($('armL'), 215, 640, lx, ly); arm($('armR'), 585, 640, rx, ry);
+}
+function s2(t) {
+  const lt = t - 3, night = lt >= 2.2;
+  wheelKid(lt);
+  put($('s2kid'), 1330, 560, lerp(.9, 1.0, prog(lt, 0, 2.2)));
+  reveal($('s2t1'), lt, .2, 2.2, 600, 540, .03);
+  $('s2night').style.display = night ? 'block' : 'none';
+  const dt = lt - 2.2;
+  $('s2dash').style.backgroundPosition = `${-dt * 1600}px 0`;
+  lights.forEach((l, i) => glow(l, ((i * 300 - dt * 900) % 2400 + 2400) % 2400 - 240, 300 + (i % 2) * 30, 60, .6, '255,190,110'));
+  const cx = lerp(-300, 760, eOut(prog(dt, 0, 1.2))) + dt * 60;
+  put($('s2car'), cx, 610 + Math.sin(dt * 14) * 3);
+  $('wl1').setAttribute('transform', `translate(220 390) rotate(${dt * 1000})`);
+  $('wl2').setAttribute('transform', `translate(690 390) rotate(${dt * 1000})`);
+  glow($('s2hl'), cx + 395, 485, 150, .9);
+  flare($('s2flare'), cx + 395, 485, .8, 1800);
+  reveal($('s2t2'), dt, .3, 1.8, 960, 260, .06);
+}
+
+function s3(t) {
+  const lt = t - 7, f = eInOut(prog(lt, .2, 4.7)), L = TL - 180;
+  const p = track.getPointAtLength(f * L), q = track.getPointAtLength(Math.min(TL, f * L + 4));
+  $('s3car').setAttribute('transform', `translate(${p.x} ${p.y}) rotate(${Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI})`);
+  const pts = [];
+  for (let i = 0; i <= 24; i++) { const pp = track.getPointAtLength(Math.max(0, f - .12 * (1 - i / 24)) * L); pts.push(`${pp.x},${pp.y}`); }
+  $('trail').setAttribute('points', pts.join(' ')); $('trailGlow').setAttribute('points', pts.join(' '));
+  // ドローンのようにゆっくり回り込むカメラ
+  const zoom = 1.25, rot = lerp(-4, 3, lt / 5);
+  const camX = clamp(960 - p.x * zoom, 1920 - 1980 * zoom + 60, 0), camY = clamp(560 - p.y * zoom, 1080 - 1080 * zoom, 0);
+  $('s3cam').setAttribute('transform', `translate(${camX} ${camY}) scale(${zoom}) rotate(${rot} ${p.x} ${p.y})`);
+  reveal($('s3t1'), lt, .2, 2.6, 960, 880, .03);
+  reveal($('s3t2'), lt, 2.7, 5, 960, 880, .05);
+}
+
+function s4(t) {
+  const lt = t - 12;
+  driftBokeh(s4bokeh, lt * .6, 1);
+  $('s4rays').style.opacity = .7 + .3 * Math.sin(lt * 1.5);
+  reveal($('s4t1'), lt, .15, 4, 960, 470, .08);
+  reveal($('s4t2'), lt, 1.3, 4, 960, 720, .03);
+  flare($('s4flare'), lerp(-300, 2200, prog(lt, .2, 1.6)), 470, .7, 2000);
+}
+
+function s5(t) {
+  const lt = t - 16;
+  const card = $('s5card');
+  const ry = lerp(-32, -6, eOut(prog(lt, 0, 4.5))), rx = lerp(14, 4, eOut(prog(lt, 0, 4.5)));
+  card.style.transform = `translate(960px,600px) translate(-50%,-50%) rotateY(${ry}deg) rotateX(${rx}deg) scale(${lerp(.74, .82, prog(lt, 0, 5))})`;
+  card.style.opacity = eOut(prog(lt, 0, .6));
+  $('s5shine').style.transform = `translateX(${lerp(-400, 1300, prog(lt, 1.0, 2.2))}px) rotate(20deg)`;
+  flare($('s5flare'), lerp(400, 1500, prog(lt, 1.0, 2.2)), 330, Math.sin(prog(lt, 1.0, 2.2) * Math.PI) * .9, 1800);
+  reveal($('s5t1'), lt, .3, 2.7, 960, 205, .03);
+  reveal($('s5t2'), lt, 2.8, 5, 960, 205, .03);
+}
+
+function s6(t) {
+  const lt = t - 21;
+  driftBokeh(s6dust, lt);
+  reveal($('c1'), lt, 0, 1.0, 960, 540, .06);
+  reveal($('c2'), lt, 1.0, 2.0, 960, 540, .06);
+  reveal($('c3'), lt, 2.0, 3.0, 960, 540, .06);
+  reveal($('c4'), lt, 3.0, 4.0, 960, 540, .06);
+  const cl = Math.floor(lt), cf = lt - cl;
+  flare($('s6flare'), lerp(200, 1720, cf), 540, Math.sin(cf * Math.PI) * .55, 1600);
+}
+
+function s7(t) {
+  const lt = t - 25;
+  driftBokeh(s7dust, lt);
+  reveal($('s7t1'), lt, .05, 1.6, 960, 470, .05);
+  reveal($('s7t2'), lt, .4, 1.6, 960, 680, .03);
+  const e = lt >= 1.45;
+  $('s7end').style.display = e ? 'block' : 'none';
+  if (e) {
+    const et = lt - 1.45;
+    $('s7end').style.opacity = eOut(prog(et, 0, .3));
+    reveal($('e1'), et, .05, 9, 960, 360, .03);
+    reveal($('e2'), et, .25, 9, 960, 480, .02);
+    put($('eline'), 960, 560, eOut(prog(et, .3, .9)), 0, 1);
+    reveal($('e3'), et, .45, 9, 960, 660, .02);
+    reveal($('e4'), et, .6, 9, 960, 790, .02);
+    flare($('eflare'), lerp(-200, 2100, prog(et, .1, 1.2)), 360, Math.sin(prog(et, .1, 1.2) * Math.PI), 2200);
+  }
+}
+
+const scenes = [['s1', 0, 3, s1], ['s2', 3, 7, s2], ['s3', 7, 12, s3], ['s4', 12, 16, s4], ['s5', 16, 21, s5], ['s6', 21, 25, s6], ['s7', 25, 28.01, s7]];
+const CUTS = [3, 7, 16, 21, 25];
+window.renderAt = function (t) {
+  for (const [id, a, b, fn] of scenes) {
+    const on = t >= a && t < b; $(id).style.display = on ? 'block' : 'none';
+    if (on) fn(t);
+  }
+  // 黒フェードでつなぐ / ゴールは白フラッシュ / 夜道への切り替えも暗転
+  let f = t < .3 ? 1 - t / .3 : 0;
+  [...CUTS, 5.2].forEach(c => { const d = Math.abs(t - c); if (d < .22) f = Math.max(f, 1 - d / .22); });
+  $('fade').style.opacity = f;
+  const fl = [12, 7].map(c => t >= c - .05 && t < c + .5 ? 1 - (t - c + .05) / .55 : 0);
+  $('flash').style.opacity = Math.max(...fl) * .9;
+  $('grain').style.backgroundImage = `url(assets/grain${Math.floor(t * FPS / 2) % 4}.png)`;
+  $('grain').style.transform = `translate(${(Math.floor(t * FPS / 2) * 37) % 180}px,${(Math.floor(t * FPS / 2) * 53) % 150}px)`;
+};
+window.DURATION = DURATION; window.FPS = FPS;
+
+if (!navigator.webdriver) {
+  const st = $('stage');
+  const fit = () => { const s = Math.min(innerWidth / 1920, innerHeight / 1080); st.style.transformOrigin = '0 0'; st.style.transform = `scale(${s})`; };
+  addEventListener('resize', fit); fit();
+  const t0 = performance.now();
+  const loop = () => { renderAt(((performance.now() - t0) / 1000) % DURATION); requestAnimationFrame(loop); };
+  loop();
+} else renderAt(0);
+</script>
+</body>
+</html>
