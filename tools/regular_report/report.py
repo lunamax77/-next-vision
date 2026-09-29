@@ -91,14 +91,34 @@ STAY_HOURS_REGULAR = 5  # 常連の滞在時間(投稿からこの時間まで�
 STAY_HOURS_OTHER = 3  # 常連以外・カップルの滞在時間
 
 
+PART_START = {"1": 13 * 60, "1.5": 16 * 60 + 30, "2": 19 * 60}
+PART_END = {"1部": 19 * 60, "1.5部": 23 * 60 + 30, "2部": 29 * 60}  # 2部は翌5:00
+
+
+def at(day_start, mins):
+    """営業日 day_start の 0:00 から mins 分後(5:00前は翌日扱い)。"""
+    base = day_start.replace(hour=0, minute=0, second=0, microsecond=0)
+    if mins < 5 * 60:
+        mins += 24 * 60
+    return base + timedelta(minutes=mins)
+
+
 def arrival(msg, post_dt, day_start):
-    """来店時刻 = 投稿した時刻とみなす。開店(13:00)前の投稿は13:00来店扱い。明日の予告は対象外。"""
+    """来店時刻の推定。予告文の時刻/部が投稿より後ならそれを、なければ投稿時刻。
+    開店(13:00)前の投稿は13:00来店扱い。明日の予告は対象外。"""
     t = re.sub(r"<[^>]+>", "", html.unescape(msg))
+    t = t.translate(str.maketrans("０１２３４５６７８９．", "0123456789."))
     if "明日" in t:
         return None
-    if 5 <= post_dt.hour < 13:
-        return post_dt.replace(hour=13, minute=0, second=0)
-    return post_dt
+    base = max(post_dt, at(day_start, 13 * 60)) if 5 <= post_dt.hour < 13 else post_dt
+    m = re.search(r"(\d{1,2})\s*(?:時|:(\d{2}))(半)?", t)
+    if m:
+        mins = int(m.group(1)) % 24 * 60 + (int(m.group(2)) if m.group(2) else 30 if m.group(3) else 0)
+        return max(base, at(day_start, mins))
+    m = re.search(r"(1\.5|2|1)部", t)
+    if m:
+        return max(base, at(day_start, PART_START[m.group(1)]))
+    return base
 
 
 def main():
@@ -132,7 +152,8 @@ def main():
                 post_dt = datetime.strptime(f'{p["date"]} {p["time"]}', "%Y-%m-%d %H:%M:%S").replace(tzinfo=JST)
                 k = (g, n.strip() if g == "カップル" else key(n.strip()))
                 if k not in present:  # 新しい投稿を優先
-                    present[k] = (n.strip(), arrival(p["msg"], post_dt, start))
+                    part = classify(p["msg"], p["time"])
+                    present[k] = (n.strip(), arrival(p["msg"], post_dt, start), part)
 
     now = now_dt.strftime("%Y-%m-%d %H:%M")
     print(f"■ ご来店予告 集計({now} JST 時点 / 営業日 {today} 5:00〜)")
@@ -162,20 +183,25 @@ def main():
         g, kk = k
         return STAY_HOURS_REGULAR if g in reg and kk in reg[g] else STAY_HOURS_OTHER
 
-    here = {k: v for k, v in present.items()
-            if v[1] and v[1] <= now_dt < v[1] + timedelta(hours=stay(k))}
-    print(f"\n【今いると思われる人】(投稿から 常連{STAY_HOURS_REGULAR}時間・それ以外{STAY_HOURS_OTHER}時間以内)")
+    def leave(k, v):
+        end = v[1] + timedelta(hours=stay(k))
+        if v[2] in PART_END:  # 部の終了時刻で退店
+            end = min(end, at(start, PART_END[v[2]]))
+        return end
+
+    here = {k: v for k, v in present.items() if v[1] and v[1] <= now_dt < leave(k, v)}
+    print(f"\n【今いると思われる人】(来店から 常連{STAY_HOURS_REGULAR}h・それ以外{STAY_HOURS_OTHER}h、部の終了で退店)")
     print("| | 常連 | 非常連 | 計 |")
     print("|---|---|---|---|")
     lines = []
     for g in ("女性", "男性"):
-        hs = sorted((v for k, v in here.items() if k[0] == g), key=lambda v: v[1])
+        hs = sorted((v[:2] for k, v in here.items() if k[0] == g), key=lambda v: v[1])
         r = [f"{n}({a:%H:%M})" for n, a in hs if key(n) in reg[g]]
         o = [f"{n}({a:%H:%M})" for n, a in hs if key(n) not in reg[g]]
         print(f"| {g} | {len(r)} | {len(o)} | {len(r) + len(o)} |")
         if r or o:
             lines.append(f"- {g} 常連: {'、'.join(r) or '-'} / 非常連: {'、'.join(o) or '-'}")
-    cs = [f"{n}({a:%H:%M})" for (g, _), (n, a) in here.items() if g == "カップル"]
+    cs = [f"{n}({a:%H:%M})" for (g, _), (n, a, _p) in here.items() if g == "カップル"]
     print(f"| カップル | - | - | {len(cs)}組 |")
     print("\n".join(lines))
     if cs:
