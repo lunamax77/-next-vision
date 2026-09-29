@@ -68,6 +68,27 @@ def level(g, n):
     return 1 if k in {key(norm(x)) for x in regs} else 0
 
 
+# 過去の来店回数(予告日数)。build_history で作る history.json を読む
+try:
+    import json, os
+    with open(os.path.join(os.path.dirname(__file__), "history.json"), encoding="utf-8") as f:
+        HISTORY = json.load(f)
+except (OSError, ValueError):
+    HISTORY = {}
+
+
+def label(g, n):
+    """表示名: 常連はレベル、過去に来た人は回数を付ける。"""
+    if n.startswith("予告なし"):
+        return n
+    lv = level(g, n) if g in ("女性", "男性") else 0
+    tag = n + (f"[Lv{lv}]" if lv else "")
+    if not HISTORY:
+        return tag
+    c = HISTORY.get("counts", {}).get(g, {}).get(n if g == "カップル" else key(norm(n)), 0)
+    return tag + (f"({c}回)" if c else "(初)")
+
+
 PARTS = ("1部", "1.5部", "2部", "時間不明")
 
 
@@ -218,9 +239,9 @@ def main():
         print(f"| カップル | - | - | {len(couples)}組 |")
         for g, r, o in rows:
             if r or o:
-                print(f"- {g} 常連: {'、'.join(f'{n}[Lv{level(g, n)}]' for n in r) or '-'} / 非常連: {'、'.join(o) or '-'}")
+                print(f"- {g} 常連: {'、'.join(label(g, n) for n in r) or '-'} / 非常連: {'、'.join(label(g, n) for n in o) or '-'}")
         if couples:
-            print(f"- カップル: {'、'.join(couples)}")
+            print(f"- カップル: {'、'.join(label('カップル', n) for n in couples)}")
     # 在店推定: 投稿時刻から滞在時間以内の人
     def stay(k):
         g, kk = k
@@ -244,15 +265,15 @@ def main():
 
     for g in ("女性", "男性"):
         hs = sorted((v[:2] for k, v in here.items() if k[0] == g), key=lambda v: v[1])
-        r = [f"{n}[Lv{level(g, n)}]({a:%H:%M})" for n, a in sorted(
+        r = [f"{label(g, n)} {a:%H:%M}" for n, a in sorted(
             (x for x in hs if key(x[0]) in reg[g]), key=lambda x: -level(g, x[0]))]
-        o = [f"{n}({a:%H:%M})" for n, a in hs if key(n) not in reg[g]]
+        o = [f"{label(g, n)} {a:%H:%M}" for n, a in hs if key(n) not in reg[g]]
         print(f"| {g} | {len(r)} | {len(o)} | {len(r) + len(o)} | {ratio(len(r), len(o))} |")
         tr += len(r)
         to += len(o)
         if r or o:
             lines.append(f"- {g} 常連: {'、'.join(r) or '-'} / 非常連: {'、'.join(o) or '-'}")
-    cs = [f"{n}({a:%H:%M})" for (g, _), (n, a, _p) in here.items() if g == "カップル"]
+    cs = [f"{label('カップル', n)} {a:%H:%M}" for (g, _), (n, a, _p) in here.items() if g == "カップル"]
     print(f"| 男女計 | {tr} | {to} | {tr + to} | {ratio(tr, to)} |")
     print(f"| カップル | - | - | {len(cs)}組 | - |")
     print("\n".join(lines))
