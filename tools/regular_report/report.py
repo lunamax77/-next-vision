@@ -88,34 +88,15 @@ def classify(msg, post_time):
 
 
 STAY_HOURS = 4  # 来店してから最大この時間まで在店とみなす
-PART_START = {"1": 13 * 60, "1.5": 16 * 60 + 30, "2": 19 * 60}
 
 
 def arrival(msg, post_dt, day_start):
-    """予告文から来店予定時刻を推定する。書いた時刻 > 部の開始 > 夜/夕方 > 投稿時刻。不明なら None。"""
+    """来店時刻 = 投稿した時刻とみなす。開店(13:00)前の投稿は13:00来店扱い。明日の予告は対象外。"""
     t = re.sub(r"<[^>]+>", "", html.unescape(msg))
-    t = t.translate(str.maketrans("０１２３４５６７８９．", "0123456789."))
     if "明日" in t:
         return None
-    base = day_start.replace(hour=0, minute=0)
-
-    def at(mins):
-        d = base + timedelta(minutes=mins)
-        return d + timedelta(days=1) if mins < 5 * 60 else d
-
-    m = re.search(r"(\d{1,2})\s*(?:時|:(\d{2}))(半)?", t)
-    if m:
-        mins = int(m.group(1)) % 24 * 60 + (int(m.group(2)) if m.group(2) else 30 if m.group(3) else 0)
-        return at(mins)
-    m = re.search(r"(1\.5|2|1)部", t)
-    if m:
-        return max(post_dt, at(PART_START[m.group(1)]))
-    if "夜" in t:
-        return max(post_dt, at(20 * 60))
-    if "夕方" in t:
-        return max(post_dt, at(17 * 60))
-    if 5 <= post_dt.hour < 12:
-        return None  # 午前中の投稿で時刻の手がかりなし
+    if 5 <= post_dt.hour < 13:
+        return post_dt.replace(hour=13, minute=0, second=0)
     return post_dt
 
 
@@ -178,7 +159,7 @@ def main():
     # 在店推定: 来店予定時刻から STAY_HOURS 時間以内の人
     here = {k: v for k, v in present.items()
             if v[1] and v[1] <= now_dt < v[1] + timedelta(hours=STAY_HOURS)}
-    print(f"\n【今いると思われる人】(来店予定から{STAY_HOURS}時間以内)")
+    print(f"\n【今いると思われる人】(投稿から{STAY_HOURS}時間以内)")
     print("| | 常連 | 非常連 | 計 |")
     print("|---|---|---|---|")
     lines = []
