@@ -87,7 +87,8 @@ def classify(msg, post_time):
     return "2部"
 
 
-STAY_HOURS = 4  # 来店してから最大この時間まで在店とみなす
+STAY_HOURS_REGULAR = 5  # 常連の滞在時間(投稿からこの時間まで在店とみなす)
+STAY_HOURS_OTHER = 3  # 常連以外・カップルの滞在時間
 
 
 def arrival(msg, post_dt, day_start):
@@ -156,10 +157,14 @@ def main():
                 print(f"- {g} 常連: {'、'.join(r) or '-'} / 非常連: {'、'.join(o) or '-'}")
         if couples:
             print(f"- カップル: {'、'.join(couples)}")
-    # 在店推定: 来店予定時刻から STAY_HOURS 時間以内の人
+    # 在店推定: 投稿時刻から滞在時間以内の人
+    def stay(k):
+        g, kk = k
+        return STAY_HOURS_REGULAR if g in reg and kk in reg[g] else STAY_HOURS_OTHER
+
     here = {k: v for k, v in present.items()
-            if v[1] and v[1] <= now_dt < v[1] + timedelta(hours=STAY_HOURS)}
-    print(f"\n【今いると思われる人】(投稿から{STAY_HOURS}時間以内)")
+            if v[1] and v[1] <= now_dt < v[1] + timedelta(hours=stay(k))}
+    print(f"\n【今いると思われる人】(投稿から 常連{STAY_HOURS_REGULAR}時間・それ以外{STAY_HOURS_OTHER}時間以内)")
     print("| | 常連 | 非常連 | 計 |")
     print("|---|---|---|---|")
     lines = []
