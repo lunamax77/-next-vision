@@ -87,6 +87,38 @@ def classify(msg, post_time):
     return "2部"
 
 
+STAY_HOURS = 4  # 来店してから最大この時間まで在店とみなす
+PART_START = {"1": 13 * 60, "1.5": 16 * 60 + 30, "2": 19 * 60}
+
+
+def arrival(msg, post_dt, day_start):
+    """予告文から来店予定時刻を推定する。書いた時刻 > 部の開始 > 夜/夕方 > 投稿時刻。不明なら None。"""
+    t = re.sub(r"<[^>]+>", "", html.unescape(msg))
+    t = t.translate(str.maketrans("０１２３４５６７８９．", "0123456789."))
+    if "明日" in t:
+        return None
+    base = day_start.replace(hour=0, minute=0)
+
+    def at(mins):
+        d = base + timedelta(minutes=mins)
+        return d + timedelta(days=1) if mins < 5 * 60 else d
+
+    m = re.search(r"(\d{1,2})\s*(?:時|:(\d{2}))(半)?", t)
+    if m:
+        mins = int(m.group(1)) % 24 * 60 + (int(m.group(2)) if m.group(2) else 30 if m.group(3) else 0)
+        return at(mins)
+    m = re.search(r"(1\.5|2|1)部", t)
+    if m:
+        return max(post_dt, at(PART_START[m.group(1)]))
+    if "夜" in t:
+        return max(post_dt, at(20 * 60))
+    if "夕方" in t:
+        return max(post_dt, at(17 * 60))
+    if 5 <= post_dt.hour < 12:
+        return None  # 午前中の投稿で時刻の手がかりなし
+    return post_dt
+
+
 def main():
     # 営業日は 5:00 区切り(2部は翌5:00まで)
     now_dt = datetime.now(JST)
@@ -104,7 +136,8 @@ def main():
             break
 
     reg = {"女性": {key(norm(n)) for n in REGULAR_FEMALE}, "男性": {key(norm(n)) for n in REGULAR_MALE}}
-    people = {}  # (gender, name) -> 最初の投稿
+    people = {}  # (gender, name) -> 部
+    present = {}  # (gender, 照合キー) -> (表示名, 来店予定時刻)
     for p in posts:
         g = norm(p["gender"])
         if g == "スタッフ":
@@ -114,6 +147,10 @@ def main():
         for n in names:
             if n.strip():
                 people.setdefault((g, n.strip()), classify(p["msg"], p["time"]))
+                post_dt = datetime.strptime(f'{p["date"]} {p["time"]}', "%Y-%m-%d %H:%M:%S").replace(tzinfo=JST)
+                k = (g, n.strip() if g == "カップル" else key(n.strip()))
+                if k not in present:  # 新しい投稿を優先
+                    present[k] = (n.strip(), arrival(p["msg"], post_dt, start))
 
     now = now_dt.strftime("%Y-%m-%d %H:%M")
     print(f"■ ご来店予告 集計({now} JST 時点 / 営業日 {today} 5:00〜)")
@@ -138,6 +175,25 @@ def main():
                 print(f"- {g} 常連: {'、'.join(r) or '-'} / 非常連: {'、'.join(o) or '-'}")
         if couples:
             print(f"- カップル: {'、'.join(couples)}")
+    # 在店推定: 来店予定時刻から STAY_HOURS 時間以内の人
+    here = {k: v for k, v in present.items()
+            if v[1] and v[1] <= now_dt < v[1] + timedelta(hours=STAY_HOURS)}
+    print(f"\n【今いると思われる人】(来店予定から{STAY_HOURS}時間以内)")
+    print("| | 常連 | 非常連 | 計 |")
+    print("|---|---|---|---|")
+    lines = []
+    for g in ("女性", "男性"):
+        hs = sorted((v for k, v in here.items() if k[0] == g), key=lambda v: v[1])
+        r = [f"{n}({a:%H:%M})" for n, a in hs if key(n) in reg[g]]
+        o = [f"{n}({a:%H:%M})" for n, a in hs if key(n) not in reg[g]]
+        print(f"| {g} | {len(r)} | {len(o)} | {len(r) + len(o)} |")
+        if r or o:
+            lines.append(f"- {g} 常連: {'、'.join(r) or '-'} / 非常連: {'、'.join(o) or '-'}")
+    cs = [f"{n}({a:%H:%M})" for (g, _), (n, a) in here.items() if g == "カップル"]
+    print(f"| カップル | - | - | {len(cs)}組 |")
+    print("\n".join(lines))
+    if cs:
+        print(f"- カップル: {'、'.join(cs)}")
     tomorrow = [f"{n}({g})" for (g, n), part in people.items() if part == "明日"]
     if tomorrow:
         print(f"\n※明日の予告(集計外): {'、'.join(tomorrow)}")
