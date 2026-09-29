@@ -213,18 +213,26 @@ def main():
 
     here = {k: v for k, v in present.items() if v[1] and v[1] <= now_dt < leave(k, v)}
     print(f"\n【今いると思われる人】(来店から 常連{STAY_HOURS_REGULAR}h・それ以外{STAY_HOURS_OTHER}h、部の終了で退店)")
-    print("| | 常連 | 非常連 | 計 |")
-    print("|---|---|---|---|")
+    print("| | 常連 | 非常連 | 計 | 常連の割合 |")
+    print("|---|---|---|---|---|")
     lines = []
+    tr = to = 0
+
+    def ratio(a, b):
+        return f"{a * 100 // (a + b)}%" if a + b else "-"
+
     for g in ("女性", "男性"):
         hs = sorted((v[:2] for k, v in here.items() if k[0] == g), key=lambda v: v[1])
         r = [f"{n}({a:%H:%M})" for n, a in hs if key(n) in reg[g]]
         o = [f"{n}({a:%H:%M})" for n, a in hs if key(n) not in reg[g]]
-        print(f"| {g} | {len(r)} | {len(o)} | {len(r) + len(o)} |")
+        print(f"| {g} | {len(r)} | {len(o)} | {len(r) + len(o)} | {ratio(len(r), len(o))} |")
+        tr += len(r)
+        to += len(o)
         if r or o:
             lines.append(f"- {g} 常連: {'、'.join(r) or '-'} / 非常連: {'、'.join(o) or '-'}")
     cs = [f"{n}({a:%H:%M})" for (g, _), (n, a, _p) in here.items() if g == "カップル"]
-    print(f"| カップル | - | - | {len(cs)}組 |")
+    print(f"| 男女計 | {tr} | {to} | {tr + to} | {ratio(tr, to)} |")
+    print(f"| カップル | - | - | {len(cs)}組 | - |")
     print("\n".join(lines))
     if cs:
         print(f"- カップル: {'、'.join(cs)}")
