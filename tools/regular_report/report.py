@@ -121,6 +121,18 @@ def arrival(msg, post_dt, day_start):
     return base
 
 
+def walkins(msg):
+    """スタッフの来店お礼投稿から (性別, 人数) を取り出す。予告へのお礼は除く。"""
+    t = re.sub(r"<[^>]+>", "", html.unescape(msg))
+    t = t.translate(str.maketrans("０１２３４５６７８９", "0123456789"))
+    if "ご来店" not in t or "予告" in t:
+        return []
+    out = []
+    for m in re.finditer(r"(女性|男性|カップル)[、,\s]*(?:(\d+)\s*[名組])?\s*様", t):
+        out.append(({"カップル": "カップル"}.get(m.group(1), m.group(1)), int(m.group(2) or 1)))
+    return out
+
+
 def main():
     # 営業日は 5:00 区切り(2部は翌5:00まで)
     now_dt = datetime.now(JST)
@@ -139,10 +151,20 @@ def main():
 
     reg = {"女性": {key(norm(n)) for n in REGULAR_FEMALE}, "男性": {key(norm(n)) for n in REGULAR_MALE}}
     people = {}  # (gender, name) -> 部
-    present = {}  # (gender, 照合キー) -> (表示名, 来店予定時刻)
+    present = {}  # (gender, 照合キー) -> (表示名, 来店予定時刻, 部)
+    walkin_no = 0
     for p in posts:
         g = norm(p["gender"])
         if g == "スタッフ":
+            # 予告なしで来店した人はスタッフが「単独女性2名様ご来店…」と代理投稿する
+            for wg, cnt in walkins(p["msg"]):
+                post_dt = datetime.strptime(f'{p["date"]} {p["time"]}', "%Y-%m-%d %H:%M:%S").replace(tzinfo=JST)
+                for _ in range(cnt):
+                    walkin_no += 1
+                    n = f"予告なし{walkin_no}"
+                    part = classify("", p["time"])
+                    people.setdefault((wg, n), part)
+                    present[(wg, n)] = (n, post_dt, part)
             continue
         # 「たま♂、たか♂」のような複数名投稿は1人ずつに分ける(カップルは1組のまま)
         names = [norm(p["name"])] if g == "カップル" else re.split(r"[、,，　&＆]", norm(p["name"]))
