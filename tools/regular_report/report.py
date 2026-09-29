@@ -47,6 +47,27 @@ def norm(s):
     return html.unescape(s).strip().replace("（", "(").replace("）", ")")
 
 
+# 常連レベル(過去3ヶ月の予告日数: Lv3=39日以上/週3〜, Lv2=26〜38日/週2〜3, Lv1=それ以外の常連)
+REGULAR_LEVEL = {
+    "女性": {3: ["も", "のん", "サトシ", "もえ"],
+             2: ["しずく", "もも", "はるぴ", "みな", "ちょも", "りん", "momo", "雨"]},
+    "男性": {3: ["チャンス", "まる", "リュウ", "れもさわ", "あつし", "つかさ", "ゆう", "よや(しょーや)"],
+             2: ["おた", "そら", "れん", "クロ", "ねじ", "しろ", "Coke", "りく", "ヒロシマ", "ジョンソン"]},
+}
+
+
+def level(g, n):
+    """常連レベル(3/2/1)。常連でなければ 0。"""
+    k = key(norm(n))
+    if g not in REGULAR_LEVEL:
+        return 0
+    for lv, names in REGULAR_LEVEL[g].items():
+        if k in {key(norm(x)) for x in names}:
+            return lv
+    regs = REGULAR_FEMALE if g == "女性" else REGULAR_MALE
+    return 1 if k in {key(norm(x)) for x in regs} else 0
+
+
 PARTS = ("1部", "1.5部", "2部", "時間不明")
 
 
@@ -197,7 +218,7 @@ def main():
         print(f"| カップル | - | - | {len(couples)}組 |")
         for g, r, o in rows:
             if r or o:
-                print(f"- {g} 常連: {'、'.join(r) or '-'} / 非常連: {'、'.join(o) or '-'}")
+                print(f"- {g} 常連: {'、'.join(f'{n}[Lv{level(g, n)}]' for n in r) or '-'} / 非常連: {'、'.join(o) or '-'}")
         if couples:
             print(f"- カップル: {'、'.join(couples)}")
     # 在店推定: 投稿時刻から滞在時間以内の人
@@ -223,7 +244,8 @@ def main():
 
     for g in ("女性", "男性"):
         hs = sorted((v[:2] for k, v in here.items() if k[0] == g), key=lambda v: v[1])
-        r = [f"{n}({a:%H:%M})" for n, a in hs if key(n) in reg[g]]
+        r = [f"{n}[Lv{level(g, n)}]({a:%H:%M})" for n, a in sorted(
+            (x for x in hs if key(x[0]) in reg[g]), key=lambda x: -level(g, x[0]))]
         o = [f"{n}({a:%H:%M})" for n, a in hs if key(n) not in reg[g]]
         print(f"| {g} | {len(r)} | {len(o)} | {len(r) + len(o)} | {ratio(len(r), len(o))} |")
         tr += len(r)
