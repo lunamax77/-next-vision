@@ -4,3 +4,4 @@ uploads/*
 !uploads/.gitkeep
 admin_api/.htpasswd
 deploy.log
+.deployed_sha

@@ -89,3 +89,16 @@ public_html/
 2. `https://your-domain.example.com/attendance/` を開き、発行したID/PWでログイン
 3. いずれかのボタンで位置情報取得 → 撮影 → 記録されることを確認
 4. `admin/index.html` にその記録(写真・住所)が反映されているか確認
+
+## 自動デプロイ(GitHub → サーバー)
+
+`server/deploy.php` がGitHubの対象ブランチから最新版を取得して `/attendance/` に展開する。
+CoreServer の CRON ジョブで5分おきに実行する:
+
+```
+php /virtual/dcreation/public_html/attendance/server/deploy.php
+```
+
+手動で今すぐ反映したいときはブラウザで
+`https://<domain>/attendance/server/deploy.php?token=<config.php の deploy_token>` を開く。
+`config.js` / `config.php` / `google-service-account.json` / `uploads/` / `.htpasswd` は上書きされない。
