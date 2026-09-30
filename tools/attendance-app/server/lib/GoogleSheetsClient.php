@@ -39,17 +39,30 @@ class GoogleSheetsClient
 
     public function appendRow(array $values): void
     {
-        $accessToken = $this->fetchAccessToken();
-        $nextRow = $this->findNextRow($accessToken);
+        $this->appendRows([$values]);
+    }
 
-        $range = sprintf('%s!A%d:%s%d', $this->sheetName, $nextRow, $this->lastColumn, $nextRow);
+    /**
+     * 複数行をまとめて追記する(トークン取得・行数取得は1回だけ)。
+     */
+    public function appendRows(array $rows): void
+    {
+        if (count($rows) === 0) {
+            return;
+        }
+        $accessToken = $this->fetchAccessToken();
+        $this->resolveSheetName($accessToken);
+        $nextRow = $this->findNextRow($accessToken);
+        $lastRow = $nextRow + count($rows) - 1;
+
+        $range = sprintf('%s!A%d:%s%d', $this->sheetName, $nextRow, $this->lastColumn, $lastRow);
         $url = sprintf(
             'https://sheets.googleapis.com/v4/spreadsheets/%s/values/%s?valueInputOption=USER_ENTERED',
             rawurlencode($this->spreadsheetId),
             rawurlencode($range)
         );
 
-        $body = json_encode(['values' => [$values]], JSON_UNESCAPED_UNICODE);
+        $body = json_encode(['values' => array_values($rows)], JSON_UNESCAPED_UNICODE);
 
         $ch = curl_init($url);
         curl_setopt_array($ch, [
@@ -70,6 +83,41 @@ class GoogleSheetsClient
         if ($response === false || $status >= 300) {
             throw new RuntimeException('sheets update failed: HTTP ' . $status . ' ' . $err . ' ' . $response);
         }
+    }
+
+    /**
+     * 設定されたシート名(タブ名)が存在しなければ、1枚目のタブ名に自動で切り替える。
+     * (タブ名を変更されても同期が止まらないようにするため)
+     */
+    private function resolveSheetName(string $accessToken): void
+    {
+        $url = sprintf(
+            'https://sheets.googleapis.com/v4/spreadsheets/%s?fields=sheets.properties.title',
+            rawurlencode($this->spreadsheetId)
+        );
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $accessToken],
+            CURLOPT_TIMEOUT => 10,
+        ]);
+        $response = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($response === false || $status >= 300) {
+            return; // 取得できなければ設定値のまま試す
+        }
+        $data = json_decode($response, true);
+        $titles = [];
+        foreach ($data['sheets'] ?? [] as $sheet) {
+            if (isset($sheet['properties']['title'])) {
+                $titles[] = $sheet['properties']['title'];
+            }
+        }
+        if (count($titles) === 0 || in_array($this->sheetName, $titles, true)) {
+            return;
+        }
+        $this->sheetName = $titles[0];
     }
 
     private function findNextRow(string $accessToken): int
