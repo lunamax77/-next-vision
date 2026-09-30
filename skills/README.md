@@ -33,6 +33,7 @@ Codex/Agent双方向)」参照)。
 | 会社の構成・どの案件がどちらの会社(担当AI)か | `docs/org/02-group-and-routing.md` |
 | 既存データの扱い方(原本不可侵の具体的なルール) | `docs/org/03-data-protection.md` |
 | 定時報告(朝/昼/夕/夜)の設計・文面 | `docs/routines/daily-report-routines.md` |
+| LINE WORKSの定時確認(代表PCローカル限定) | `docs/routines/lineworks-check-routine.md` |
 | 売掛・買掛の変化トラッキングの仕組み全体 | `docs/routines/ledger-daily-diff.md` |
 | 下請け請求書チェックの仕組み | `docs/routines/invoice-check-automation.md` |
 | ブラウザ自動化(Playwrightのバージョン固定、承認ゲートの作り方など) | `.claude/skills/browser/SKILL.md`, `.claude/skills/browser/reference/setup.md` |
