@@ -17,6 +17,7 @@ REGULAR_FEMALE = [
     "もえ", "はち", "雨", "なつ", "まな", "りん", "ゆい", "えむ", "ゆかり", "なな",
     "ちょも", "すい", "はるぴ", "ななせ", "えふ", "m", "momo", "りこ", "ゆき", "あ",
     "キキ",
+    "ミーミ",
 ]
 REGULAR_MALE = [
     "チャンス", "まる", "リュウ♂", "ゆう", "おた", "りく", "あつし", "つかさ", "そら", "れもさわ",
@@ -39,7 +40,7 @@ def fetch(page):
 
 def key(s):
     """常連照合用: 絵文字・記号を除いて比較する(例: もも🍑 → もも)。句読点は残す。"""
-    s = unicodedata.normalize("NFC", s)
+    s = unicodedata.normalize("NFKC", s)  # 半角・全角を同一視
     return "".join(c for c in s if unicodedata.category(c) not in ("So", "Sk", "Cf", "Mn")).strip()
 
 
