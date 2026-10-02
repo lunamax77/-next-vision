@@ -100,6 +100,7 @@ function applySession(s) {
     pruneOldEntries();
     renderTodayLog();
     loadMonthRecords();
+    setTimeout(resendPendingEntries, 1500);
   } else {
     loginBox.hidden = false;
     appBody.hidden = true;
@@ -553,6 +554,8 @@ function addEntry(type, label, location, photo, extra) {
   syncEntry(entry);
 }
 
+let syncing = false;
+
 async function syncEntry(entry) {
   if (!CONFIG.API_URL) return;
 
@@ -577,7 +580,12 @@ async function syncEntry(entry) {
         amount: entry.amount,
       }),
     });
-    const data = await res.json();
+    let data = null;
+    try {
+      data = await res.json();
+    } catch {
+      throw new Error("HTTP " + res.status + "(サーバーの応答が不正)");
+    }
     if (!res.ok || !data.ok) throw new Error(data.error || "HTTP " + res.status);
 
     const entries = loadEntries();
@@ -586,12 +594,41 @@ async function syncEntry(entry) {
       target.synced = true;
       target.address = data.address || null;
       saveEntries(entries);
-      loadMonthRecords();
     }
+    setStatus(`${entry.label} を記録しました`);
+    renderTodayLog();
+    loadMonthRecords();
+    return true;
   } catch (err) {
-    setStatus(`${entry.label}: サーバー送信に失敗(端末内には保存済み)`, true);
+    const reason = err && err.message ? err.message : "通信エラー";
+    setStatus(`${entry.label}: サーバー送信に失敗(${reason})。端末内に保存済みで、自動で再送します`, true);
+    return false;
   }
 }
+
+// 未送信(送信中...)の記録を自動で再送する。アプリを開いたとき・画面に戻ったとき・1分ごと。
+async function resendPendingEntries() {
+  if (syncing || !session || !CONFIG.API_URL || !navigator.onLine) return;
+  const pending = loadEntries().filter((e) => e.loginId === session.login_id && !e.synced);
+  if (pending.length === 0) return;
+  syncing = true;
+  try {
+    // 古いものから順に1件ずつ送る(失敗したらそこで止めて次回に回す)
+    pending.sort((a, b) => new Date(a.time) - new Date(b.time));
+    for (const entry of pending) {
+      const ok = await syncEntry(entry);
+      if (!ok) break;
+    }
+  } finally {
+    syncing = false;
+  }
+}
+
+setInterval(resendPendingEntries, 60 * 1000);
+window.addEventListener("online", resendPendingEntries);
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) resendPendingEntries();
+});
 
 document.querySelectorAll(".action-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
