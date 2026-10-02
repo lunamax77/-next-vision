@@ -218,7 +218,10 @@ def main():
                 k = (g, n.strip() if g == "カップル" else key(n.strip()))
                 if k not in present:  # 新しい投稿を優先
                     part = classify(p["msg"], p["time"])
-                    present[k] = (n.strip(), arrival(p["msg"], post_dt, start), part)
+                    arr = arrival(p["msg"], post_dt, start)
+                    if arr and part in PART_END:  # 部の開始前には来ない
+                        arr = max(arr, at(start, PART_START[part.rstrip("部")]))
+                    present[k] = (n.strip(), arr, part)
 
     now = now_dt.strftime("%Y-%m-%d %H:%M")
     print(f"■ ご来店予告 集計({now} JST 時点 / 営業日 {today} 5:00〜)")
