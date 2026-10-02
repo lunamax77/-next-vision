@@ -198,6 +198,8 @@ def main():
     walkin_no = 0
     for p in posts:
         g = norm(p["gender"])
+        if norm(p["name"]) == "スタッフ":  # 性別を付けたスタッフ投稿もお店側として扱う
+            g = "スタッフ"
         if g == "スタッフ":
             # 予告なしで来店した人はスタッフが「単独女性2名様ご来店…」と代理投稿する
             for wg, cnt in walkins(p["msg"]):
