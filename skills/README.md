@@ -1,9 +1,12 @@
-# skills/ — Agent と Codex の共有ナレッジベース
+# skills/ — Agentの知見置き場
 
-ここは、竹村代表グループのAI組織で**Claude Code(Agent)とCodexの両方**が読み書きする
-共有の知見置き場。どちらかが初めての種類の作業をこなして学んだことは、ここに書き出して、
-もう片方も次回すぐ使えるようにする(`.claude/skills/jobs/SKILL.md` の「スキル習得(永続化・
-Codex/Agent双方向)」参照)。
+ここは、竹村代表グループのAI組織でClaude Code(Agent)が読み書きする知見置き場。
+初めての種類の作業をこなして学んだことは、ここに書き出して、次回すぐ使えるようにする
+(`.claude/skills/jobs/SKILL.md` の「スキル習得(永続化)」参照)。
+
+※2026年10月より、ジョブズ(Claude Code)はCodexへの指示・連携を一切行わない方針になった
+(Codexは代表PC上で独立運用)。このため、以前あった「Agent/Codex双方向の共有」という
+位置づけは廃止し、Agent自身のための知見置き場とした。
 
 `.claude/skills/`(Claude Codeの起動可能なスキル定義。jobs・browserなど)とは別物。
 あちらは「振る舞い方の定義」、こちらは「作業の実務ノウハウの蓄積」。
@@ -37,7 +40,7 @@ Codex/Agent双方向)」参照)。
 | 売掛・買掛の変化トラッキングの仕組み全体 | `docs/routines/ledger-daily-diff.md` |
 | 下請け請求書チェックの仕組み | `docs/routines/invoice-check-automation.md` |
 | ブラウザ自動化(Playwrightのバージョン固定、承認ゲートの作り方など) | `.claude/skills/browser/SKILL.md`, `.claude/skills/browser/reference/setup.md` |
-| ジョブズの役割・Agent/Codexの使い分け・Codexの利用上限ルール | `.claude/skills/jobs/SKILL.md` |
+| ジョブズの役割・Agentの振る舞い方 | `.claude/skills/jobs/SKILL.md` |
 
 ## 書き方の目安
 
