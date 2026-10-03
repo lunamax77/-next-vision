@@ -1,0 +1,4 @@
+# codex-bridge: 使用量ログは代表のローカル環境(既定 ~/.codex-bridge/)に保存する想定。
+# 誤って CODEX_BRIDGE_LOG をリポジトリ内に向けてしまった場合の保険。
+scripts/codex-bridge/*.jsonl
+.codex-bridge/
