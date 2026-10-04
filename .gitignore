@@ -1,3 +1,6 @@
 
 # build artifact
 site/nextvisionsite.zip
+
+# cache-busting build output (deploy.yml が生成)
+dist/

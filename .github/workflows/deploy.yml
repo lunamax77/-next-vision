@@ -11,6 +11,7 @@ on:
       - claude/hp-zip-import-a2ibct
     paths:
       - "site/**"
+      - "tools/cache_bust.py"
   workflow_dispatch:
 
 # 同時に2つ走らないようにする（前の同期が終わってから次を実行）
@@ -27,6 +28,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Build (cache busting -> dist/)
+        run: python3 tools/cache_bust.py site dist
+
       - name: Sync to CORESERVER (FTPS)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -35,7 +39,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
           port: 21
-          local-dir: ./site/
+          local-dir: ./dist/
           server-dir: domains/nextvision.fun/public_html/
           # サーバー側の全ファイルを消して入れ直す「危険モード」は絶対に使わない
           dangerous-clean-slate: false

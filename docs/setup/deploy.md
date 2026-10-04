@@ -81,3 +81,9 @@
 - 手動で今すぐ反映したいときは手順3の「Run workflow」。
 - **サーバー上で直接ファイルを編集しないでください**（次回デプロイで上書きされます）。例外は `.htaccess` `.htpasswd` `config.php` の3つだけです。
 - FTP パスワードを変えたら Secrets の `FTP_PASSWORD` も更新してください。
+
+## キャッシュ対策（2026-10-04 追加）
+
+- デプロイ時に `tools/cache_bust.py` が `site/` を `dist/` にコピーし、HTML 内の画像・動画・JS の参照に内容ハッシュ（例 `images/logo.png?v=ce1de98c`）を付けてから、`dist/` をサーバーへ同期します。
+- ファイルを更新すると URL が変わるため、閲覧者が強制再読み込みをしなくても新しい画像・動画・JS が表示されます。HTML 自体はサーバー設定で最大1時間ブラウザに保存されるので、更新直後の1時間だけは古い HTML が見えることがあります。
+- リポジトリの `site/` は書き換えません（`dist/` は `.gitignore` 済み）。手元で確認したいときは `python3 tools/cache_bust.py site dist` を実行して `dist/` を開きます。
