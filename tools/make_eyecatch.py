@@ -15,7 +15,11 @@ def wbr(t):
     t=html.escape(t)
     t=re.sub(r'(｜|、|・|：|:)',r'\1<wbr>',t)
     t=re.sub(r'(?<=[ぁ-ん])(の|が|と|を|に|は|で|へ|や|も)(?=[^ぁ-ん<])',r'\1<wbr>',t)
-    t=re.sub(r'(?<=[一-龥ァ-ヶa-zA-Z0-9])(の|が|と|を|に|は|で|へ|や|も|から|まで)(?=[一-龥ァ-ヶ「a-zA-Z0-9])',r'\1<wbr>',t)
+    t=re.sub(r'(?<=[一-龥ァ-ヶーa-zA-Z0-9])(の|が|と|を|に|は|で|へ|や|も|から|まで)(?=[一-龥ァ-ヶ「a-zA-Z0-9])',r'\1<wbr>',t)
+    t=re.sub(r'(?<=[一-龥])(?=[ァ-ヶ])','<wbr>',t)
+    t=re.sub(r'(?<=[ァ-ヶー])(?=[一-龥])','<wbr>',t)
+    t=re.sub(r'(?<=[ァ-ヶー])(?=[0-9])','<wbr>',t)
+    t=re.sub(r'(<wbr>)+','<wbr>',t)
     return t
 def du(p):
     mt='image/png' if p.endswith('.png') else 'image/jpeg'
@@ -28,6 +32,8 @@ def make(num):
     photo=fm.get('photo','').strip() or PHOTO_BY_CAT.get(cat,'klp-photo-scene.jpg')
     main,tint,ink=THEMES[theme]; flip=int(num)%2==0
     tshort,_,tsub=title.partition('｜')
+    fs=52 if len(tshort)<=12 else 46 if len(tshort)<=16 else 40
+    ss=28 if len(tsub)<=16 else 24
     mascot=du('site/images/mascot.png'); ph=du('site/images/'+photo)
     page=f'''<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8">
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700;900&display=swap" rel="stylesheet">
@@ -37,13 +43,13 @@ def make(num):
 .photo{{flex:1;position:relative;overflow:hidden}}.photo img{{width:100%;height:100%;object-fit:cover;display:block}}
 .photo:after{{content:"";position:absolute;inset:0;background:linear-gradient({'to left' if flip else 'to right'},rgba(0,0,0,0) 70%,rgba(0,0,0,.12))}}
 .cat{{display:inline-block;background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.7);border-radius:999px;padding:8px 22px;font-size:24px;font-weight:700;align-self:flex-start}}
-.t{{font-size:52px;font-weight:900;line-height:1.4;letter-spacing:.01em;word-break:keep-all;overflow-wrap:anywhere;text-wrap:pretty}}
-.s{{font-size:28px;font-weight:700;opacity:.9;margin-top:14px;line-height:1.5}}
+.t{{font-size:{fs}px;font-weight:900;line-height:1.4;letter-spacing:.01em;word-break:keep-all;overflow-wrap:anywhere;text-wrap:pretty}}
+.s{{font-size:{ss}px;font-weight:700;opacity:.9;margin-top:14px;line-height:1.5}}
 .brand{{display:flex;align-items:center;gap:14px;font-size:24px;font-weight:700;opacity:.95}}.brand img{{width:84px}}
 .dot{{position:absolute;border-radius:50%;background:rgba(255,255,255,.14)}}
 </style></head><body><div class="f">
 <div class="panel"><div class="dot" style="width:360px;height:360px;right:-140px;top:-120px"></div><div class="dot" style="width:220px;height:220px;left:-80px;bottom:120px"></div>
-<span class="cat">{html.escape(cat)}</span><div><div class="t">{wbr(tshort)}</div>{'<div class="s">'+html.escape(tsub)+'</div>' if tsub else ''}</div>
+<span class="cat">{html.escape(cat)}</span><div><div class="t">{wbr(tshort)}</div>{'<div class="s">'+wbr(tsub)+'</div>' if tsub else ''}</div>
 <div class="brand"><img src="{mascot}">NextVision コラム</div></div>
 <div class="photo"><img src="{ph}"></div></div></body></html>'''
     tmp=tempfile.NamedTemporaryFile('w',suffix='.html',delete=False,encoding='utf-8'); tmp.write(page); tmp.close()

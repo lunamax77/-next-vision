@@ -8,7 +8,7 @@ reader: 商業施設・店舗・展示場・携帯キャリアショップの販
 status: published（2026-10-04）　URL: https://nextvision.fun/blog/squeeze-workshop-store.html
 category: ワークショップ
 theme: purple
-photo: punilab-mold.jpg
+photo: punilab-pack.jpg
 cta_heading: 6畳のスペースから、スクイーズ工作を店頭で
 cta_text: 会場の広さ・電源・想定来場者数をお聞かせください。開催できる構成と概算をご案内します。日程未定でもご相談いただけます。
 cta_buttons: index.html#contact|相談・お見積り ; punilab.html|ぷにラボの詳細 ; blog/taiken-stay-time.html|滞在時間が伸びる理由を読む

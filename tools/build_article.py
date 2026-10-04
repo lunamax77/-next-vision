@@ -29,7 +29,11 @@ def wbr(t):
     t=html.escape(t)
     t=re.sub(r'(｜|、|・|：|:)',r'\1<wbr>',t)
     t=re.sub(r'(?<=[ぁ-ん])(の|が|と|を|に|は|で|へ|や|も)(?=[^ぁ-ん<])',r'\1<wbr>',t)
-    t=re.sub(r'(?<=[一-龥ァ-ヶa-zA-Z0-9])(の|が|と|を|に|は|で|へ|や|も|から|まで)(?=[一-龥ァ-ヶ「a-zA-Z0-9])',r'\1<wbr>',t)
+    t=re.sub(r'(?<=[一-龥ァ-ヶーa-zA-Z0-9])(の|が|と|を|に|は|で|へ|や|も|から|まで)(?=[一-龥ァ-ヶ「a-zA-Z0-9])',r'\1<wbr>',t)
+    t=re.sub(r'(?<=[一-龥])(?=[ァ-ヶ])','<wbr>',t)
+    t=re.sub(r'(?<=[ァ-ヶー])(?=[一-龥])','<wbr>',t)
+    t=re.sub(r'(?<=[ァ-ヶー])(?=[0-9])','<wbr>',t)
+    t=re.sub(r'(<wbr>)+','<wbr>',t)
     return t
 def relfix(x): return re.sub(r'((?:href|src|action)=")(?!https?:|#|mailto:|tel:|data:|\.\./)([^"]+)"',r'\1../\2"',x)
 def figure(spec):
