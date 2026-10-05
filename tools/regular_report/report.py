@@ -238,11 +238,12 @@ def main():
         if part == "時間不明" and not total and not couples:
             continue
         print(f"\n【{part}】計{total}名" + (f" + カップル{len(couples)}組" if couples else ""))
-        print("| | 常連 | 非常連 | 計 |")
-        print("|---|---|---|---|")
+        print("| | Lv3 | Lv2 | Lv1 | 常連以外 | 計 |")
+        print("|---|---|---|---|---|---|")
         for g, r, o in rows:
-            print(f"| {g} | {len(r)} | {len(o)} | {len(r) + len(o)} |")
-        print(f"| カップル | - | - | {len(couples)}組 |")
+            lv = [sum(1 for n in r if level(g, n) == x) for x in (3, 2, 1)]
+            print(f"| {g} | {lv[0]} | {lv[1]} | {lv[2]} | {len(o)} | {len(r) + len(o)} |")
+        print(f"| カップル | - | - | - | - | {len(couples)}組 |")
         for g, r, o in rows:
             if r or o:
                 print(f"- {g} 常連: {'、'.join(label(g, n) for n in r) or '-'} / 非常連: {'、'.join(label(g, n) for n in o) or '-'}")
@@ -261,8 +262,9 @@ def main():
 
     here = {k: v for k, v in present.items() if v[1] and v[1] <= now_dt < leave(k, v)}
     print(f"\n【今いると思われる人】(来店から 常連{STAY_HOURS_REGULAR}h・それ以外{STAY_HOURS_OTHER}h、部の終了で退店)")
-    print("| | 常連 | 非常連 | 計 | 常連の割合 |")
-    print("|---|---|---|---|---|")
+    print("| | Lv3 | Lv2 | Lv1 | 常連以外 | 計 | 常連の割合 |")
+    print("|---|---|---|---|---|---|---|")
+    tl = [0, 0, 0]
     lines = []
     tr = to = 0
 
@@ -274,14 +276,16 @@ def main():
         r = [f"{label(g, n)} {a:%H:%M}" for n, a in sorted(
             (x for x in hs if key(x[0]) in reg[g]), key=lambda x: -level(g, x[0]))]
         o = [f"{label(g, n)} {a:%H:%M}" for n, a in hs if key(n) not in reg[g]]
-        print(f"| {g} | {len(r)} | {len(o)} | {len(r) + len(o)} | {ratio(len(r), len(o))} |")
+        lv = [sum(1 for n, _a in hs if key(n) in reg[g] and level(g, n) == x) for x in (3, 2, 1)]
+        tl = [a + b for a, b in zip(tl, lv)]
+        print(f"| {g} | {lv[0]} | {lv[1]} | {lv[2]} | {len(o)} | {len(r) + len(o)} | {ratio(len(r), len(o))} |")
         tr += len(r)
         to += len(o)
         if r or o:
             lines.append(f"- {g} 常連: {'、'.join(r) or '-'} / 非常連: {'、'.join(o) or '-'}")
     cs = [f"{label('カップル', n)} {a:%H:%M}" for (g, _), (n, a, _p) in here.items() if g == "カップル"]
-    print(f"| 男女計 | {tr} | {to} | {tr + to} | {ratio(tr, to)} |")
-    print(f"| カップル | - | - | {len(cs)}組 | - |")
+    print(f"| 男女計 | {tl[0]} | {tl[1]} | {tl[2]} | {to} | {tr + to} | {ratio(tr, to)} |")
+    print(f"| カップル | - | - | - | - | {len(cs)}組 | - |")
     print("\n".join(lines))
     if cs:
         print(f"- カップル: {'、'.join(cs)}")
