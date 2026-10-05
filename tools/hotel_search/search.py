@@ -28,7 +28,6 @@ def fetch(params):
     # 2026年2月以降の新方式: アクセスキー必須・許可サイトのRefererで照合
     req = urllib.request.Request(url, headers={
         "Referer": REFERER, "Origin": REFERER.rstrip("/"),
-        "Authorization": "Bearer " + params["accessKey"],
     })
     try:
         with urllib.request.urlopen(req, timeout=20) as r:
