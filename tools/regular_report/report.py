@@ -92,6 +92,10 @@ def label(g, n):
     return tag + (f"({c}回)" if c else "(初)")
 
 
+# 集計から除外する名前(代表ご本人)
+EXCLUDE = {"たっぴー"}
+
+
 PARTS = ("1部", "1.5部", "2部", "時間不明")
 
 
@@ -216,7 +220,7 @@ def main():
         # 「たま♂、たか♂」のような複数名投稿は1人ずつに分ける(カップルは1組のまま)
         names = [norm(p["name"])] if g == "カップル" else re.split(r"[、,，　&＆]", norm(p["name"]))
         for n in names:
-            if n.strip():
+            if n.strip() and key(norm(n)) not in EXCLUDE:
                 people.setdefault((g, n.strip()), classify(p["msg"], p["time"]))
                 post_dt = datetime.strptime(f'{p["date"]} {p["time"]}', "%Y-%m-%d %H:%M:%S").replace(tzinfo=JST)
                 k = (g, n.strip() if g == "カップル" else key(n.strip()))
