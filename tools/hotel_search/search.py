@@ -2,7 +2,8 @@
 """楽天トラベル空室検索API で、会場周辺の空いている宿を探す。
 
 使い方:
-  export RAKUTEN_APP_ID=xxxxxxxx   # 楽天ウェブサービスのアプリID
+  export RAKUTEN_APP_ID=...        # 楽天ウェブサービスのアプリID
+  export RAKUTEN_ACCESS_KEY=pk_... # アクセスキー
   python3 search.py --lat 36.7550 --lng 137.0200 --in 2026-11-14 --out 2026-11-15 \
       --adults 2 --rooms 2 --radius 3 --max 12000 --csv result.csv
 """
@@ -15,16 +16,22 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+REFERER = os.environ.get("RAKUTEN_REFERER", "https://nextvision.fun/")
 ENDPOINT = os.environ.get(
     "RAKUTEN_VACANT_URL",
-    "https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426",
+    "https://openapi.rakuten.co.jp/engine/api/Travel/VacantHotelSearch/20170426",
 )
 
 
 def fetch(params):
     url = ENDPOINT + "?" + urllib.parse.urlencode(params)
+    # 2026年2月以降の新方式: アクセスキー必須・許可サイトのRefererで照合
+    req = urllib.request.Request(url, headers={
+        "Referer": REFERER, "Origin": REFERER.rstrip("/"),
+        "Authorization": "Bearer " + params["accessKey"],
+    })
     try:
-        with urllib.request.urlopen(url, timeout=20) as r:
+        with urllib.request.urlopen(req, timeout=20) as r:
             return json.load(r)
     except urllib.error.HTTPError as e:
         body = json.loads(e.read() or b"{}")
@@ -73,11 +80,12 @@ def main():
     a = ap.parse_args()
 
     app_id = os.environ.get("RAKUTEN_APP_ID")
-    if not app_id:
-        sys.exit("環境変数 RAKUTEN_APP_ID を設定してください")
+    access_key = os.environ.get("RAKUTEN_ACCESS_KEY")
+    if not (app_id and access_key):
+        sys.exit("環境変数 RAKUTEN_APP_ID と RAKUTEN_ACCESS_KEY を設定してください")
 
     params = {
-        "applicationId": app_id, "format": "json", "formatVersion": 1,
+        "applicationId": app_id, "accessKey": access_key, "format": "json", "formatVersion": 1,
         "checkinDate": a.checkin, "checkoutDate": a.checkout,
         "adultNum": a.adults, "roomNum": a.rooms,
         "latitude": a.lat, "longitude": a.lng, "datumType": 1,
@@ -85,8 +93,6 @@ def main():
     }
     if a.max:
         params["maxCharge"] = a.max
-    if os.environ.get("RAKUTEN_ACCESS_KEY"):  # 新API基盤で必要な場合
-        params["accessKey"] = os.environ["RAKUTEN_ACCESS_KEY"]
 
     rows, page = [], 1
     while True:

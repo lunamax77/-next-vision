@@ -5,8 +5,8 @@
 ## 準備(初回のみ・要代表承認)
 
 1. 楽天ウェブサービス(https://webservice.rakuten.co.jp/)で楽天IDでログインし、アプリIDを発行
-2. `export RAKUTEN_APP_ID=発行したID`
-   (アクセスキーも発行された場合は `export RAKUTEN_ACCESS_KEY=...`)
+2. 環境変数 `RAKUTEN_APP_ID`(アプリID)と `RAKUTEN_ACCESS_KEY`(アクセスキー)を設定
+   - 許可されたウェブサイトに `nextvision.fun` を登録しておく(Refererで照合されるため)
 
 ## 使い方
 
