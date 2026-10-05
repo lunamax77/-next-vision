@@ -295,6 +295,21 @@ def main():
     print("\n".join(lines))
     if cs:
         print(f"- カップル: {'、'.join(cs)}")
+    # 代表の実測との比較(補正倍率)
+    try:
+        import csv
+        with open(os.path.join(os.path.dirname(__file__), "observations.csv"), encoding="utf-8") as f:
+            obs = [r for r in csv.DictReader(x for x in f if not x.startswith("#"))]
+    except OSError:
+        obs = []
+    if obs:
+        pf = sum(int(r["pred_female"]) for r in obs); af = sum(int(r["actual_female"]) for r in obs)
+        pm = sum(int(r["pred_male"]) for r in obs); am = sum(int(r["actual_male"]) for r in obs)
+        nf = sum(1 for k in here if k[0] == "女性"); nm = sum(1 for k in here if k[0] == "男性")
+        rf = af / pf if pf else 1; rm = am / pm if pm else 1
+        print(f"\n【実測補正】(代表の実測{len(obs)}件: 女性 実測/推定={rf:.1f}倍、男性={rm:.1f}倍)")
+        print(f"- 補正後の推定: 女性 約{round(nf * rf)}名、男性 約{round(nm * rm)}名"
+              f"(未把握・滞在超過の割合 女性{max(0, 1 - 1 / rf) * 100:.0f}% / 男性{max(0, 1 - 1 / rm) * 100:.0f}%)")
     tomorrow = [f"{n}({g})" for (g, n), part in people.items() if part == "明日"]
     if tomorrow:
         print(f"\n※明日の予告(集計外): {'、'.join(tomorrow)}")
