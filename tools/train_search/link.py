@@ -18,12 +18,15 @@ import urllib.parse
 import urllib.request
 
 BASE = os.environ.get("EKISPERT_URL", "https://api.ekispert.jp/v1/json")
+# 登録ドメイン(nextvision.fun)で照合される場合に備えて Referer を付ける
+REFERER = os.environ.get("EKISPERT_REFERER", "https://nextvision.fun/")
 
 
 def get(path, params):
     url = f"{BASE}{path}?" + urllib.parse.urlencode({**params, "key": KEY})
     try:
-        with urllib.request.urlopen(url, timeout=20) as r:
+        req = urllib.request.Request(url, headers={"Referer": REFERER})
+        with urllib.request.urlopen(req, timeout=20) as r:
             return json.load(r)
     except urllib.error.HTTPError as e:
         sys.exit(f"APIエラー {e.code}: {e.read().decode(errors='replace')[:300]}")
