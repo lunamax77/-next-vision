@@ -315,27 +315,42 @@ def main():
         print(f"\n【実測補正】(代表の実測{len(obs)}件: 女性 実測/推定={rf:.1f}倍、男性={rm:.1f}倍)")
         print(f"- 補正後の推定: 女性 約{round(nf * rf)}名、男性 約{round(nm * rm)}名"
               f"(未把握・滞在超過の割合 女性{max(0, 1 - 1 / rf) * 100:.0f}% / 男性{max(0, 1 - 1 / rm) * 100:.0f}%)")
-    # 代表の判断基準: Lv4が2名以上いる時は行かない
+    # 代表の判断基準: Lv4が2名以上 または 男性の常連が50%超 の時は行かない
     lv4 = [(k, v) for k, v in present.items() if k[0] in reg and v[1] and level(k[0], v[0]) == 4]
-    lv4_now = [v[0] for k, v in lv4 if v[1] <= now_dt < leave(k, v)]
-    verdict = "✕ 行かない方がいい(Lv4が2名以上)" if len(lv4_now) >= 2 else "○ OK(Lv4は1名以下)"
-    print(f"\n**判定: {verdict}** 今いるLv4: {'、'.join(lv4_now) or 'なし'}")
-    # この先(閉店まで)Lv4が2名以上重なる時間帯
+    men = [(k, v) for k, v in present.items() if k[0] == "男性" and v[1]]
+
+    def judge(t):
+        n4 = [v[0] for k, v in lv4 if v[1] <= t < leave(k, v)]
+        m = [(k, v) for k, v in men if v[1] <= t < leave(k, v)]
+        mr = sum(1 for k, v in m if key(v[0]) in reg["男性"])
+        why = []
+        if len(n4) >= 2:
+            why.append(f"Lv4が{len(n4)}名")
+        if m and mr * 2 > len(m):
+            why.append(f"男性常連{mr * 100 // len(m)}%")
+        return why, n4, (mr, len(m))
+
+    why, lv4_now, (mr, mn) = judge(now_dt)
+    verdict = f"✕ 行かない方がいい({'・'.join(why)})" if why else "○ OK"
+    print(f"\n**判定: {verdict}** 今いるLv4: {'、'.join(lv4_now) or 'なし'} / 男性常連 {mr}/{mn}名")
+    # この先(閉店まで)の✕の時間帯
     t, close, bad, cur = now_dt.replace(minute=now_dt.minute // 10 * 10, second=0, microsecond=0), at(start, 29 * 60), [], None
     while t < close:
-        n4 = sum(1 for k, v in lv4 if v[1] <= t < leave(k, v))
-        if n4 >= 2 and cur is None:
-            cur = t
-        if n4 < 2 and cur is not None:
-            bad.append(f"{cur:%H:%M}〜{t:%H:%M}")
+        w = {"Lv4が2名以上" if x.startswith("Lv4") else "男性常連50%超" for x in judge(t)[0]}
+        if w and cur is None:
+            cur, cw = t, set()
+        if w:
+            cw |= w
+        if not w and cur is not None:
+            bad.append(f"{cur:%H:%M}〜{t:%H:%M}({'・'.join(sorted(cw))})")
             cur = None
         t += timedelta(minutes=10)
     if cur is not None:
-        bad.append(f"{cur:%H:%M}〜閉店")
+        bad.append(f"{cur:%H:%M}〜閉店({'・'.join(sorted(cw))})")
     for k, v in lv4:
         if v[1] > now_dt:
             print(f"- これから来るLv4: {v[0]}({v[1]:%H:%M}〜{leave(k, v):%H:%M})")
-    print(f"- この先 Lv4が2名以上重なる時間帯: {'、'.join(bad) or 'なし(今の予告では)'}")
+    print(f"- この先 ✕になる時間帯: {'、'.join(bad) or 'なし(今の予告では)'}")
     tomorrow = [f"{n}({g})" for (g, n), part in people.items() if part == "明日"]
     if tomorrow:
         print(f"\n※明日の予告(集計外): {'、'.join(tomorrow)}")
