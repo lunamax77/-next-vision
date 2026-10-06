@@ -59,11 +59,16 @@ REGULAR_LEVEL = {
 }
 
 
+LV4_DAYS = 100  # 半年の予告日数がこれ以上ならLv4
+
+
 def level(g, n):
     """常連レベル(3/2/1)。常連でなければ 0。"""
     k = key(norm(n))
     if g not in REGULAR_LEVEL:
         return 0
+    if HISTORY.get("counts", {}).get(g, {}).get(k, 0) >= LV4_DAYS:
+        return 4
     for lv, names in REGULAR_LEVEL[g].items():
         if k in {key(norm(x)) for x in names}:
             return lv
