@@ -42,7 +42,7 @@ const COMPANIES = {
     tel: '06-4967-1038',
     mail: 'data@nextvision.fun',
     contactPerson: '浦田',
-    stampFileId: '1SJ8-RRieFxn-STh8OysUcRINvr1Y65Th', // Next丸印鑑.PNG
+    stampFileId: '1Y-HXtSm84qQnrzOAmGeMRQvDNK5qn8Ms', // Next丸印鑑_透過.png
   },
 };
 
@@ -68,7 +68,9 @@ const LEDGER_HEADERS = [
 
 /** 初回に1回だけ実行：フォーム作成・管理簿作成・トリガー登録 */
 function setup() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (!ss) ss = SpreadsheetApp.create('内定通知書 管理簿'); // スプレッドシート外から実行した場合は新規作成
+  PropertiesService.getScriptProperties().setProperty('SPREADSHEET_ID', ss.getId());
 
   // 1. フォーム作成＆このスプレッドシートに回答を連携
   const form = FormApp.create('内定通知書 発行フォーム');
@@ -107,6 +109,7 @@ function setup() {
     .forEach(t => ScriptApp.deleteTrigger(t));
   ScriptApp.newTrigger('onFormSubmit').forSpreadsheet(ss).onFormSubmit().create();
 
+  Logger.log('管理簿スプレッドシート: ' + ss.getUrl());
   Logger.log('フォーム（回答用URL）: ' + form.getPublishedUrl());
   Logger.log('フォーム（編集用URL）: ' + form.getEditUrl());
 }
@@ -126,7 +129,7 @@ function onFormSubmit(e) {
 
 /** 手動テスト用：回答シートの最終行を処理する */
 function processLastResponse() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = getSpreadsheet();
   const sheet = ss.getSheets().find(s => s.getFormUrl());
   const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getDisplayValues()[0];
   const values = sheet.getRange(sheet.getLastRow(), 1, 1, headers.length).getDisplayValues()[0];
@@ -151,7 +154,7 @@ function normalize(named) {
 }
 
 function processEntry(d) {
-  const ledger = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(CONFIG.LEDGER_SHEET);
+  const ledger = getSpreadsheet().getSheetByName(CONFIG.LEDGER_SHEET);
   const company = COMPANIES[d.company];
   const now = new Date();
   const row = ledger.getLastRow() + 1;
@@ -176,6 +179,11 @@ function processEntry(d) {
     ledger.getRange(row, 13, 1, 2).setValues([['エラー', String(err && err.message || err)]]);
     notifyError(d, err);
   }
+}
+
+function getSpreadsheet() {
+  const id = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');
+  return id ? SpreadsheetApp.openById(id) : SpreadsheetApp.getActiveSpreadsheet();
 }
 
 /** 発行番号：DC-2026-0001 形式（会社・年ごとに連番） */
