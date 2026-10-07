@@ -83,6 +83,13 @@ function setup() {
   if (!ss) ss = SpreadsheetApp.create('内定通知書 管理簿'); // スプレッドシート外から実行した場合は新規作成
   PropertiesService.getScriptProperties().setProperty('SPREADSHEET_ID', ss.getId());
 
+  // 2回目以降の実行でフォームが増えないようにする
+  const linked = ss.getSheets().map(sh => sh.getFormUrl()).filter(Boolean);
+  if (linked.length) {
+    Logger.log('セットアップ済みです（フォームは作成しません）。連携中のフォーム: ' + linked.join(' , '));
+    return;
+  }
+
   // 1. フォーム作成＆このスプレッドシートに回答を連携
   const form = FormApp.create('内定通知書 発行フォーム');
   form.setDescription(`入力・送信すると、内定通知書PDFが自動で発行され、${CONFIG.RECIPIENT} に送付されます。送信前に内容をよく確認してください。`);
