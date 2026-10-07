@@ -59,6 +59,9 @@ const Q = {
   salary: '給与',
 };
 
+// 勤務地は空欄なら発行会社の所在地を自動で入れる
+const LOCATION_HELP = '空欄のままなら、選んだ発行会社の所在地が自動で入ります（別の勤務地の場合のみ入力）';
+
 const LEDGER_HEADERS = [
   '発行番号', '発行日時', '発行会社', '氏名', '送付先', '入社予定日',
   '雇用形態', '配属先', '職種', '勤務地', '給与', 'PDF', '送信状況', '備考',
@@ -85,7 +88,7 @@ function setup() {
     .setValidation(FormApp.createTextValidation().requireNumber().build());
   form.addTextItem().setTitle(Q.department).setRequired(true);
   form.addTextItem().setTitle(Q.job).setHelpText('例：エアー遊具レンタルの営業・運営業務').setRequired(true);
-  form.addTextItem().setTitle(Q.location).setRequired(true);
+  form.addTextItem().setTitle(Q.location).setHelpText(LOCATION_HELP).setRequired(false);
   form.addParagraphTextItem().setTitle(Q.salary)
     .setHelpText('例：月給250,000円（基本給220,000円、諸手当30,000円）').setRequired(true);
   form.setDestination(FormApp.DestinationType.SPREADSHEET, ss.getId());
@@ -112,6 +115,17 @@ function setup() {
   Logger.log('管理簿スプレッドシート: ' + ss.getUrl());
   Logger.log('フォーム（回答用URL）: ' + form.getPublishedUrl());
   Logger.log('フォーム（編集用URL）: ' + form.getEditUrl());
+}
+
+/** 既存フォームの「勤務地」を任意入力に変更する（setup済みの場合に1回だけ実行） */
+function updateLocationQuestion() {
+  const formUrl = getSpreadsheet().getFormUrl();
+  if (!formUrl) throw new Error('フォームが見つかりません');
+  const item = FormApp.openByUrl(formUrl).getItems()
+    .find(i => i.getTitle() === Q.location);
+  if (!item) throw new Error('「勤務地」の質問が見つかりません');
+  item.asTextItem().setRequired(false).setHelpText(LOCATION_HELP);
+  Logger.log('「勤務地」を任意入力に変更しました');
 }
 
 // ===================== メイン処理 =====================
@@ -159,6 +173,7 @@ function processEntry(d) {
   const now = new Date();
   const row = ledger.getLastRow() + 1;
   const issueNo = company ? nextIssueNo(ledger, company.code, now) : '';
+  if (company && !d.location) d.location = company.address; // 勤務地が空欄なら会社所在地
 
   // 先に管理簿へ記録（途中で失敗しても痕跡が残るように）
   ledger.getRange(row, 1, 1, LEDGER_HEADERS.length).setValues([[
