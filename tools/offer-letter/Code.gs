@@ -55,12 +55,20 @@ const Q = {
   probation: '試用期間（か月）',
   department: '配属先',
   job: '職種・業務内容',
-  location: '勤務地',
+  location: '勤務地（選択）',
   salary: '給与',
 };
 
-// 勤務地は空欄なら発行会社の所在地を自動で入れる
-const LOCATION_HELP = '空欄のままなら、選んだ発行会社の所在地が自動で入ります（別の勤務地の場合のみ入力）';
+// 勤務地の選択肢：先頭を選ぶと発行会社の所在地が自動で入る。「その他」で自由入力
+const LOCATION_AUTO = '発行会社の所在地（自動）';
+const LOCATION_HELP = '「発行会社の所在地（自動）」を選ぶと、選んだ会社の住所が入ります。別の場所は「その他」に入力';
+
+function addLocationItem(form) {
+  const choices = [LOCATION_AUTO].concat(
+    Object.values(COMPANIES).map(c => c.address).filter((v, i, a) => a.indexOf(v) === i));
+  return form.addMultipleChoiceItem().setTitle(Q.location).setHelpText(LOCATION_HELP)
+    .setChoiceValues(choices).showOtherOption(true).setRequired(true);
+}
 
 const LEDGER_HEADERS = [
   '発行番号', '発行日時', '発行会社', '氏名', '送付先', '入社予定日',
@@ -88,7 +96,7 @@ function setup() {
     .setValidation(FormApp.createTextValidation().requireNumber().build());
   form.addTextItem().setTitle(Q.department).setRequired(true);
   form.addTextItem().setTitle(Q.job).setHelpText('例：エアー遊具レンタルの営業・運営業務').setRequired(true);
-  form.addTextItem().setTitle(Q.location).setHelpText(LOCATION_HELP).setRequired(false);
+  addLocationItem(form);
   form.addParagraphTextItem().setTitle(Q.salary)
     .setHelpText('例：月給250,000円（基本給220,000円、諸手当30,000円）').setRequired(true);
   form.setDestination(FormApp.DestinationType.SPREADSHEET, ss.getId());
@@ -117,15 +125,22 @@ function setup() {
   Logger.log('フォーム（編集用URL）: ' + form.getEditUrl());
 }
 
-/** 既存フォームの「勤務地」を任意入力に変更する（setup済みの場合に1回だけ実行） */
+/** 既存フォームの「勤務地」を選択式に差し替える（setup済みの場合に1回だけ実行） */
 function updateLocationQuestion() {
-  const formUrl = getSpreadsheet().getFormUrl();
-  if (!formUrl) throw new Error('フォームが見つかりません');
-  const item = FormApp.openByUrl(formUrl).getItems()
-    .find(i => i.getTitle() === Q.location);
-  if (!item) throw new Error('「勤務地」の質問が見つかりません');
-  item.asTextItem().setRequired(false).setHelpText(LOCATION_HELP);
-  Logger.log('「勤務地」を任意入力に変更しました');
+  const ss = getSpreadsheet();
+  const urls = ss.getSheets().map(sh => sh.getFormUrl()).filter(Boolean);
+  if (!urls.length) throw new Error('フォームが見つかりません');
+  urls.forEach(url => {
+    const form = FormApp.openByUrl(url);
+    const items = form.getItems();
+    if (items.some(i => i.getTitle() === Q.location)) return; // 変更済み
+    const old = items.find(i => i.getTitle().indexOf('勤務地') === 0);
+    if (!old) return;
+    const index = old.getIndex();
+    form.deleteItem(old);
+    form.moveItem(addLocationItem(form), index);
+    Logger.log('勤務地を選択式に変更: ' + form.getEditUrl());
+  });
 }
 
 // ===================== メイン処理 =====================
@@ -171,9 +186,9 @@ function processEntry(d) {
   const ledger = getSpreadsheet().getSheetByName(CONFIG.LEDGER_SHEET);
   const company = COMPANIES[d.company];
   const now = new Date();
-  const row = ledger.getLastRow() + 1;
+  const row = lastDataRow(ledger) + 1;
   const issueNo = company ? nextIssueNo(ledger, company.code, now) : '';
-  if (company && !d.location) d.location = company.address; // 勤務地が空欄なら会社所在地
+  if (company && (!d.location || d.location === LOCATION_AUTO)) d.location = company.address;
 
   // 先に管理簿へ記録（途中で失敗しても痕跡が残るように）
   ledger.getRange(row, 1, 1, LEDGER_HEADERS.length).setValues([[
@@ -196,6 +211,13 @@ function processEntry(d) {
   }
 }
 
+/** 記録の最終行（発行番号か氏名がある行）。右側の集計欄に影響されないようにする */
+function lastDataRow(sheet) {
+  const values = sheet.getRange(1, 1, sheet.getMaxRows(), 4).getValues();
+  for (let i = values.length - 1; i >= 0; i--) if (values[i][0] !== '' || values[i][3] !== '') return i + 1;
+  return 1;
+}
+
 function getSpreadsheet() {
   const id = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');
   return id ? SpreadsheetApp.openById(id) : SpreadsheetApp.getActiveSpreadsheet();
@@ -204,7 +226,7 @@ function getSpreadsheet() {
 /** 発行番号：DC-2026-0001 形式（会社・年ごとに連番） */
 function nextIssueNo(ledger, code, now) {
   const prefix = `${code}-${now.getFullYear()}-`;
-  const last = ledger.getLastRow();
+  const last = lastDataRow(ledger);
   let max = 0;
   if (last >= 2) {
     ledger.getRange(2, 1, last - 1, 1).getValues().forEach(([v]) => {
