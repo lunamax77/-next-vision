@@ -2,7 +2,7 @@
  * 内定通知書 自動発行システム（Google Apps Script）
  *
  * Googleフォームの回答 → 内定通知書＋内定承諾書をPDF化（印影入り）
- * → Googleドライブに保存 → 本人へGmailで送付 → 管理簿に記録
+ * → Googleドライブに保存 → 送付先（RECIPIENT）へGmailで送付 → 管理簿に記録
  *
  * セットアップ手順は README.md を参照。最初に setup() を1回だけ実行する。
  */
@@ -10,18 +10,14 @@
 // ===================== 設定 =====================
 
 const CONFIG = {
-  // 送信元（Gmailの「送信元アドレス」に登録済みであること。空なら実行アカウントのアドレス）
-  SENDER_ADDRESS: 'info@xpr0615.com',
+  // 内定通知書PDFの送付先（全件ここに届く）
+  RECIPIENT: 'info@xpr0615.com',
 
   // PDFの保存先フォルダ名（マイドライブ直下に自動作成）
   PDF_FOLDER_NAME: '内定通知書_発行済みPDF',
 
   // 管理簿シート名
   LEDGER_SHEET: '管理簿',
-
-  // テストモード：true の間は応募者ではなく TEST_RECIPIENT にだけ送る
-  TEST_MODE: true,
-  TEST_RECIPIENT: 'info@xpr0615.com',
 };
 
 // フォームの「会社」選択肢 → 会社情報
@@ -45,7 +41,7 @@ const COMPANIES = {
     address: '大阪府大阪市西区北堀江1丁目23番25号 シティタワー堀江2501号室',
     tel: '06-4967-1038',
     mail: 'data@nextvision.fun',
-    contactPerson: '', // ※要確認（空なら担当行を出さない）
+    contactPerson: '浦田',
     stampFileId: '1SJ8-RRieFxn-STh8OysUcRINvr1Y65Th', // Next丸印鑑.PNG
   },
 };
@@ -54,7 +50,6 @@ const COMPANIES = {
 const Q = {
   company: '発行会社',
   name: '氏名',
-  email: 'メールアドレス',
   joinDate: '入社予定日',
   employment: '雇用形態',
   probation: '試用期間（か月）',
@@ -65,7 +60,7 @@ const Q = {
 };
 
 const LEDGER_HEADERS = [
-  '発行番号', '発行日時', '発行会社', '氏名', 'メールアドレス', '入社予定日',
+  '発行番号', '発行日時', '発行会社', '氏名', '送付先', '入社予定日',
   '雇用形態', '配属先', '職種', '勤務地', '給与', 'PDF', '送信状況', '備考',
 ];
 
@@ -77,12 +72,10 @@ function setup() {
 
   // 1. フォーム作成＆このスプレッドシートに回答を連携
   const form = FormApp.create('内定通知書 発行フォーム');
-  form.setDescription('入力・送信すると、内定通知書PDFが自動で本人に送付されます。送信前に内容をよく確認してください。');
+  form.setDescription(`入力・送信すると、内定通知書PDFが自動で発行され、${CONFIG.RECIPIENT} に送付されます。送信前に内容をよく確認してください。`);
   form.setConfirmationMessage('送信しました。内定通知書は自動で発行・送付されます。');
   form.addMultipleChoiceItem().setTitle(Q.company).setChoiceValues(Object.keys(COMPANIES)).setRequired(true);
   form.addTextItem().setTitle(Q.name).setRequired(true);
-  form.addTextItem().setTitle(Q.email).setRequired(true)
-    .setValidation(FormApp.createTextValidation().requireTextIsEmail().build());
   form.addDateItem().setTitle(Q.joinDate).setRequired(true);
   form.addMultipleChoiceItem().setTitle(Q.employment)
     .setChoiceValues(['正社員', '契約社員', 'パート・アルバイト']).showOtherOption(true).setRequired(true);
@@ -147,7 +140,6 @@ function normalize(named) {
   return {
     company: get(Q.company),
     name: get(Q.name),
-    email: get(Q.email),
     joinDate: get(Q.joinDate),
     employment: get(Q.employment),
     probation: get(Q.probation),
@@ -167,7 +159,7 @@ function processEntry(d) {
 
   // 先に管理簿へ記録（途中で失敗しても痕跡が残るように）
   ledger.getRange(row, 1, 1, LEDGER_HEADERS.length).setValues([[
-    issueNo, now, d.company, d.name, d.email, d.joinDate,
+    issueNo, now, d.company, d.name, CONFIG.RECIPIENT, d.joinDate,
     d.employment, d.department, d.job, d.location, d.salary, '', '処理中', '',
   ]]);
 
@@ -178,11 +170,8 @@ function processEntry(d) {
     const file = getPdfFolder().createFile(pdf);
     ledger.getRange(row, 12).setValue(file.getUrl());
 
-    const to = CONFIG.TEST_MODE ? CONFIG.TEST_RECIPIENT : d.email;
-    sendMail(to, d, company, pdf);
-    ledger.getRange(row, 13, 1, 2).setValues([[
-      '送信済み', CONFIG.TEST_MODE ? `テスト送信（宛先: ${to}）` : '',
-    ]]);
+    sendMail(CONFIG.RECIPIENT, d, company, issueNo, pdf, file.getUrl());
+    ledger.getRange(row, 13).setValue('送信済み');
   } catch (err) {
     ledger.getRange(row, 13, 1, 2).setValues([['エラー', String(err && err.message || err)]]);
     notifyError(d, err);
@@ -296,33 +285,24 @@ function renderHtml(d, c, issueNo, issueDate, stampSrc) {
 
 // ===================== メール =====================
 
-function sendMail(to, d, c, pdf) {
-  const subject = `【${c.name}】内定通知書のご送付`;
+function sendMail(to, d, c, issueNo, pdf, pdfUrl) {
+  const subject = `【内定通知書発行】${c.name}／${d.name} 様（${issueNo}）`;
   const body = [
-    `${d.name} 様`,
+    '内定通知書を発行しました。PDFを添付します。',
     '',
-    `${c.name}でございます。`,
-    'このたびは当社の採用選考にご応募いただき、誠にありがとうございました。',
+    `発行番号：${issueNo}`,
+    `発行会社：${c.name}`,
+    `氏名：${d.name} 様`,
+    `入社予定日：${formatJpDateStr(d.joinDate)}`,
+    `雇用形態：${d.employment}`,
+    `配属先：${d.department}`,
+    `職種・業務内容：${d.job}`,
+    `勤務地：${d.location}`,
+    `給与：${d.salary}`,
     '',
-    '選考の結果、採用を内定いたしましたので、内定通知書を添付にてお送りいたします。',
-    '内容をご確認のうえ、2ページ目の「内定承諾書」にご記入・ご捺印いただき、ご返送をお願いいたします。',
-    '',
-    'ご不明な点がございましたら、下記までお気軽にお問い合わせください。',
-    '',
-    '――――――――――――――――',
-    c.name,
-    c.contactPerson ? `担当：${c.contactPerson}` : null,
-    `TEL：${c.tel}`,
-    `MAIL：${c.mail}`,
-    '――――――――――――――――',
-  ].filter(v => v !== null).join('\n');
-
-  const options = { attachments: [pdf], name: c.name };
-  if (CONFIG.SENDER_ADDRESS) {
-    options.from = CONFIG.SENDER_ADDRESS;
-    options.replyTo = CONFIG.SENDER_ADDRESS;
-  }
-  GmailApp.sendEmail(to, subject, body, options);
+    `PDF（ドライブ）：${pdfUrl}`,
+  ].join('\n');
+  GmailApp.sendEmail(to, subject, body, { attachments: [pdf], name: '内定通知書 自動発行' });
 }
 
 function notifyError(d, err) {
