@@ -40,9 +40,9 @@ const COMPANIES = {
   '株式会社NextVision': {
     code: 'NV',
     name: '株式会社NextVision',
-    representative: '代表取締役　竹村公助', // ※要確認
+    representative: '代表取締役　竹本友哉',
     postal: '〒550-0014',
-    address: '大阪府大阪市西区北堀江1丁目23番25号 シティタワー堀江2501号室', // ※要確認
+    address: '大阪府大阪市西区北堀江1丁目23番25号 シティタワー堀江2501号室',
     tel: '06-4967-1038',
     mail: 'data@nextvision.fun',
     contactPerson: '', // ※要確認（空なら担当行を出さない）
