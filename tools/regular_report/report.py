@@ -2,6 +2,8 @@
 """madonna-bbs.site の「ご来店予告」から、当日営業分(5:00区切り)の予告者を
 男女別・部別(1部/1.5部/2部)・常連/非常連で集計する。部は予告文から推定。"""
 import html
+import json
+import os
 import unicodedata
 import re
 import sys
@@ -157,9 +159,20 @@ def at(day_start, mins):
     return base + timedelta(minutes=mins)
 
 
-def arrival(msg, post_dt, day_start):
-    """来店時刻の推定。予告文の時刻/部が投稿より後ならそれを、なければ投稿時刻。
-    開店(13:00)前の投稿は13:00来店扱い。明日の予告は対象外。"""
+# 時間の書いていない予告の来店時刻(過去半年の「時刻を書いた予告」から算出)
+#   personal: 本人の記載時刻の中央値(3回以上) / morning: 朝(5-13時)投稿の記載時刻の中央値
+#   delay: 13時以降の投稿→記載時刻までの中央値(分)。昼=13-17時 夕=17-19時 夜=19時以降
+try:
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "arrival_stats.json"), encoding="utf-8") as f:
+        ARR = json.load(f)
+except OSError:
+    ARR = {"personal": {}, "morning": {}, "delay": {}}
+NOW_RE = r"今から|これから|今より|向かい|向かって|今行|到着|戻ります|出発"
+
+
+def arrival(msg, post_dt, day_start, g="", k=""):
+    """来店時刻の推定。予告文の時刻/部が投稿より後ならそれを、なければ過去の傾向から予測。
+    開店(13:00)前の投稿は13:00以降。明日の予告は対象外。"""
     t = re.sub(r"<[^>]+>", "", html.unescape(msg))
     t = t.translate(str.maketrans("０１２３４５６７８９．", "0123456789."))
     if "明日" in t:
@@ -172,7 +185,31 @@ def arrival(msg, post_dt, day_start):
     m = re.search(r"(1\.5|2|1)部", t)
     if m:
         return max(base, at(day_start, PART_START[m.group(1)]))
-    return base
+    if "夜" in t:
+        return max(base, at(day_start, 19 * 60))
+    if "夕方" in t:
+        return max(base, at(day_start, 16 * 60 + 30))
+    if re.search(NOW_RE, t) or not g:
+        return base
+    # 時間の記載なし → 本人の傾向 > 投稿時間帯ごとの一般的な傾向
+    pm = ARR["personal"].get(f"{g}|{k}")
+    if pm is not None and at(day_start, pm) >= base:
+        return at(day_start, pm)
+    if 5 <= post_dt.hour < 13:
+        return max(base, at(day_start, ARR["morning"].get(g, 13 * 60)))
+    b = "昼" if post_dt.hour < 17 and post_dt.hour >= 13 else "夕" if 17 <= post_dt.hour < 19 else "夜"
+    return base + timedelta(minutes=ARR["delay"].get(f"{g}|{b}", 0))
+
+
+def explicit(msg):
+    """予告文に時刻・部・夜/夕方の記載があるか"""
+    t = html.unescape(msg).translate(str.maketrans("０１２３４５６７８９．", "0123456789."))
+    return bool(re.search(r"\d{1,2}\s*(?:時|:\d{2})|部|夜|夕方|明日", t))
+
+
+def part_of(dt, day_start):
+    mins = int((dt - day_start).total_seconds() // 60) + 5 * 60
+    return "1部" if mins < 16 * 60 + 30 else "1.5部" if mins < 19 * 60 else "2部"
 
 
 def walkins(msg):
@@ -226,14 +263,16 @@ def main():
         names = [norm(p["name"])] if g == "カップル" else re.split(r"[、,，　&＆]", norm(p["name"]))
         for n in names:
             if n.strip() and key(norm(n)) not in EXCLUDE:
-                people.setdefault((g, n.strip()), classify(p["msg"], p["time"]))
                 post_dt = datetime.strptime(f'{p["date"]} {p["time"]}', "%Y-%m-%d %H:%M:%S").replace(tzinfo=JST)
                 k = (g, n.strip() if g == "カップル" else key(n.strip()))
+                part = classify(p["msg"], p["time"])
+                arr = arrival(p["msg"], post_dt, start, g, key(n.strip()))
+                if arr and not explicit(p["msg"]):  # 時間の記載がなければ予測した来店時刻で部を決める
+                    part = part_of(arr, start)
+                elif arr and part in PART_END:  # 部の開始前には来ない
+                    arr = max(arr, at(start, PART_START[part.rstrip("部")]))
+                people.setdefault((g, n.strip()), part)
                 if k not in present:  # 新しい投稿を優先
-                    part = classify(p["msg"], p["time"])
-                    arr = arrival(p["msg"], post_dt, start)
-                    if arr and part in PART_END:  # 部の開始前には来ない
-                        arr = max(arr, at(start, PART_START[part.rstrip("部")]))
                     present[k] = (n.strip(), arr, part)
 
     now = now_dt.strftime("%Y-%m-%d %H:%M")
