@@ -395,6 +395,19 @@ def main():
         if v[1] > now_dt:
             print(f"- これから来るLv4: {v[0]}({v[1]:%H:%M}〜{leave(k, v):%H:%M})")
     print(f"- この先 ✕になる時間帯: {'、'.join(bad) or 'なし(今の予告では)'}")
+    # 時間帯別(1時間ごと)の推定
+    print("\n【時間帯別】(各時刻にいると思われる人数)")
+    print("| 時刻 | 女性 | 男性 | カップル | 女性率 | 男性常連 | Lv4 | 判定 |")
+    print("|---|---|---|---|---|---|---|---|")
+    for h in range(13, 29):
+        t = at(start, h * 60)
+        why, n4, (mr, mn) = judge(t)
+        nw = sum(1 for k, v in women if v[1] <= t < leave(k, v))
+        nc = sum(1 for k, v in present.items() if k[0] == "カップル" and v[1] and v[1] <= t < leave(k, v))
+        fr = f"{nw * 100 // (nw + mn)}%" if nw + mn else "-"
+        mark = "✕" if why else "○"
+        past = "(済)" if t + timedelta(hours=1) <= now_dt else ""
+        print(f"| {h % 24}:00{past} | {nw} | {mn} | {nc}組 | {fr} | {mr}/{mn} | {len(n4)} | {mark} |")
     tomorrow = [f"{n}({g})" for (g, n), part in people.items() if part == "明日"]
     if tomorrow:
         print(f"\n※明日の予告(集計外): {'、'.join(tomorrow)}")
