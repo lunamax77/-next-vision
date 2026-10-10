@@ -354,7 +354,7 @@ def main():
         print(f"\n【実測補正】(代表の実測{len(obs)}件: 女性 実測/推定={rf:.1f}倍、男性={rm:.1f}倍)")
         print(f"- 補正後の推定: 女性 約{round(nf * rf)}名、男性 約{round(nm * rm)}名"
               f"(未把握・滞在超過の割合 女性{max(0, 1 - 1 / rf) * 100:.0f}% / 男性{max(0, 1 - 1 / rm) * 100:.0f}%)")
-    # 代表の判断基準: Lv4が2名以上 / 男性の常連が50%超 / 女性率50%以下 の時は行かない
+    # 代表の判断基準: Lv4が2名以上 / 男性の常連が50%超 / 女性率40%以下 の時は行かない
     lv4 = [(k, v) for k, v in present.items() if k[0] in reg and v[1] and level(k[0], v[0]) == 4]
     men = [(k, v) for k, v in present.items() if k[0] == "男性" and v[1]]
     women = [(k, v) for k, v in present.items() if k[0] == "女性" and v[1]]
@@ -369,7 +369,7 @@ def main():
         if m and mr * 2 > len(m):
             why.append(f"男性常連{mr * 100 // len(m)}%")
         nw = sum(1 for k, v in women if v[1] <= t < leave(k, v))
-        if nw + len(m) and nw * 2 <= nw + len(m):
+        if nw + len(m) and nw * 10 <= (nw + len(m)) * 4:
             why.append(f"女性率{nw * 100 // (nw + len(m))}%")
         return why, n4, (mr, len(m))
 
@@ -379,7 +379,7 @@ def main():
     # この先(閉店まで)の✕の時間帯
     t, close, bad, cur = now_dt.replace(minute=now_dt.minute // 10 * 10, second=0, microsecond=0), at(start, 29 * 60), [], None
     while t < close:
-        lab = {"Lv4": "Lv4が2名以上", "男性": "男性常連50%超", "女性": "女性率50%以下"}
+        lab = {"Lv4": "Lv4が2名以上", "男性": "男性常連50%超", "女性": "女性率40%以下"}
         w = {lab[x[:3] if x.startswith("Lv4") else x[:2]] for x in judge(t)[0]}
         if w and cur is None:
             cur, cw = t, set()
