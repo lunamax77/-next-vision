@@ -167,7 +167,7 @@ try:
         ARR = json.load(f)
 except OSError:
     ARR = {"personal": {}, "morning": {}, "delay": {}}
-NOW_RE = r"今から|これから|今より|向かい|向かって|今行|到着|戻ります|出発"
+NOW_RE = r"間もなく|まもなく|もうすぐ|着きます|着く|今から|これから|今より|向かい|向かって|今行|到着|戻ります|出発"
 
 
 def arrival(msg, post_dt, day_start, g="", k=""):
