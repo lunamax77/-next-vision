@@ -354,10 +354,11 @@ def main():
         print(f"\n【実測補正】(代表の実測{len(obs)}件: 女性 実測/推定={rf:.1f}倍、男性={rm:.1f}倍)")
         print(f"- 補正後の推定: 女性 約{round(nf * rf)}名、男性 約{round(nm * rm)}名"
               f"(未把握・滞在超過の割合 女性{max(0, 1 - 1 / rf) * 100:.0f}% / 男性{max(0, 1 - 1 / rm) * 100:.0f}%)")
-    # 代表の判断基準: Lv4が2名以上 / 男性の常連が50%超 / 女性率40%以下 の時は行かない
+    # 代表の判断基準: Lv4が2名以上 / 男性の常連が50%超 / 女性率40%以下(Lv3以上の女性常連は数えない) の時は行かない
     lv4 = [(k, v) for k, v in present.items() if k[0] in reg and v[1] and level(k[0], v[0]) == 4]
     men = [(k, v) for k, v in present.items() if k[0] == "男性" and v[1]]
-    women = [(k, v) for k, v in present.items() if k[0] == "女性" and v[1]]
+    # 女性率は Lv3以上の女性常連を女性として数えない(代表の基準)
+    women = [(k, v) for k, v in present.items() if k[0] == "女性" and v[1] and level("女性", v[0]) < 3]
 
     def judge(t):
         n4 = [v[0] for k, v in lv4 if v[1] <= t < leave(k, v)]
@@ -396,7 +397,7 @@ def main():
             print(f"- これから来るLv4: {v[0]}({v[1]:%H:%M}〜{leave(k, v):%H:%M})")
     print(f"- この先 ✕になる時間帯: {'、'.join(bad) or 'なし(今の予告では)'}")
     # 時間帯別(1時間ごと)の推定
-    print("\n【時間帯別】(各時刻にいると思われる人数)")
+    print("\n【時間帯別】(各時刻にいると思われる人数。女性・女性率はLv3以上の女性常連を除く)")
     print("| 時刻 | 女性 | 男性 | カップル | 女性率 | 女性常連率 | 男性常連率 | 全体常連率 | Lv4 | 判定 |")
     print("|---|---|---|---|---|---|---|---|---|---|")
     for h in range(13, 29):
