@@ -45,6 +45,8 @@ $lat = isset($input['lat']) ? (float)$input['lat'] : null;
 $lng = isset($input['lng']) ? (float)$input['lng'] : null;
 $accuracy = isset($input['accuracy']) ? (int)round((float)$input['accuracy']) : null;
 $photoDataUrl = $input['photo'] ?? null;
+$clientId = isset($input['client_id']) ? substr(trim((string)$input['client_id']), 0, 64) : '';
+if ($clientId === '') $clientId = null;
 $transportMethod = isset($input['transport_method']) && $input['transport_method'] !== null
     ? trim((string)$input['transport_method']) : null;
 $route = isset($input['route']) && $input['route'] !== null ? trim((string)$input['route']) : null;
@@ -85,6 +87,42 @@ try {
     $recordedAt = $dt->format('Y-m-d H:i:s');
 } catch (Exception $e) {
     // fall back to server time
+}
+
+// 重複防止: 端末が応答を受け取れず再送してきた場合、同じ打刻は登録しない。
+//   1) 端末が付けたID(client_id)が同じ
+//   2) 旧バージョンの端末向け: 同じ人・同じ種別・同じ秒の打刻
+$hasClientIdColumn = true;
+try {
+    $dupe = null;
+    if ($clientId !== null) {
+        try {
+            $stmt = $pdo->prepare('SELECT id, address, lat, lng, location_mismatch FROM attendance_records WHERE login_id = :l AND client_id = :c LIMIT 1');
+            $stmt->execute(['l' => $loginId, 'c' => $clientId]);
+            $dupe = $stmt->fetch();
+        } catch (Throwable $e) {
+            $hasClientIdColumn = false; // DB更新(client_id列の追加)がまだの環境
+        }
+    }
+    if (!$dupe) {
+        $stmt = $pdo->prepare('SELECT id, address, lat, lng, location_mismatch FROM attendance_records WHERE login_id = :l AND type = :t AND recorded_at = :r LIMIT 1');
+        $stmt->execute(['l' => $loginId, 't' => $type, 'r' => $recordedAt]);
+        $dupe = $stmt->fetch();
+    }
+    if ($dupe) {
+        respond(200, [
+            'ok' => true,
+            'id' => (int)$dupe['id'],
+            'duplicate' => true,
+            'sheet_synced' => true,
+            'address' => $dupe['address'],
+            'maps_url' => ($dupe['lat'] !== null && $dupe['lng'] !== null) ? maps_link((float)$dupe['lat'], (float)$dupe['lng']) : null,
+            'location_mismatch' => (int)$dupe['location_mismatch'] === 1,
+        ]);
+    }
+} catch (Throwable $e) {
+    error_log('attendance save.php dedupe check error: ' . $e->getMessage());
+    // 重複チェックに失敗しても登録自体は続行する(client_id 列が無い旧DB等)
 }
 
 $photoPath = null;
@@ -143,12 +181,19 @@ if (
 }
 
 try {
+    if (!$hasClientIdColumn) {
+        $clientId = null;
+    }
     $stmt = $pdo->prepare(
-        'INSERT INTO attendance_records (login_id, staff_name, type, label, transport_method, route, amount, recorded_at, lat, lng, address, accuracy_m, photo_path, location_mismatch)
+        $hasClientIdColumn
+        ? 'INSERT INTO attendance_records (login_id, client_id, staff_name, type, label, transport_method, route, amount, recorded_at, lat, lng, address, accuracy_m, photo_path, location_mismatch)
+         VALUES (:login_id, :client_id, :staff_name, :type, :label, :transport_method, :route, :amount, :recorded_at, :lat, :lng, :address, :accuracy_m, :photo_path, :location_mismatch)'
+        : 'INSERT INTO attendance_records (login_id, staff_name, type, label, transport_method, route, amount, recorded_at, lat, lng, address, accuracy_m, photo_path, location_mismatch)
          VALUES (:login_id, :staff_name, :type, :label, :transport_method, :route, :amount, :recorded_at, :lat, :lng, :address, :accuracy_m, :photo_path, :location_mismatch)'
     );
-    $stmt->execute([
+    $params = [
         'login_id' => $loginId,
+        'client_id' => $clientId,
         'staff_name' => $staffName,
         'type' => $type,
         'label' => $label,
@@ -162,7 +207,24 @@ try {
         'accuracy_m' => $accuracy,
         'photo_path' => $photoPath,
         'location_mismatch' => $locationMismatch ? 1 : 0,
-    ]);
+    ];
+    if (!$hasClientIdColumn) {
+        unset($params['client_id']);
+    }
+    try {
+        $stmt->execute($params);
+    } catch (Throwable $e) {
+        if (!$hasClientIdColumn) {
+            throw $e;
+        }
+        // client_id 列が無いDBだった場合は旧形式で登録し直す
+        unset($params['client_id']);
+        $stmt = $pdo->prepare(
+            'INSERT INTO attendance_records (login_id, staff_name, type, label, transport_method, route, amount, recorded_at, lat, lng, address, accuracy_m, photo_path, location_mismatch)
+             VALUES (:login_id, :staff_name, :type, :label, :transport_method, :route, :amount, :recorded_at, :lat, :lng, :address, :accuracy_m, :photo_path, :location_mismatch)'
+        );
+        $stmt->execute($params);
+    }
     $id = (int)$pdo->lastInsertId();
 } catch (Throwable $e) {
     error_log('attendance save.php DB error: ' . $e->getMessage());

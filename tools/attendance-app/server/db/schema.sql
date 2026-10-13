@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS staff_accounts (
 CREATE TABLE IF NOT EXISTS attendance_records (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   login_id VARCHAR(30) NULL,        -- staff_accounts.login_id
+  client_id VARCHAR(64) NULL,       -- 端末が付ける打刻ID(二重登録防止)
   staff_name VARCHAR(100) NOT NULL,
   type VARCHAR(20) NOT NULL,        -- wakeup / checkin / move / checkout
   label VARCHAR(50) NOT NULL,       -- 表示名(起床確認 等)

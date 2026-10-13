@@ -543,6 +543,7 @@ function addEntry(type, label, location, photo, extra) {
     transportMethod: extra ? extra.transportMethod : null,
     route: extra ? extra.route : null,
     amount: extra ? extra.amount : null,
+    clientId: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now().toString(36) + Math.random().toString(36).slice(2)),
     synced: false,
   };
   const entries = loadEntries();
@@ -555,9 +556,17 @@ function addEntry(type, label, location, photo, extra) {
 }
 
 let syncing = false;
+const inFlight = new Set(); // 送信中の記録(同じ記録を同時に二重送信しないため)
+
+function entryKey(e) {
+  return e.clientId || (e.type + "|" + e.time);
+}
 
 async function syncEntry(entry) {
-  if (!CONFIG.API_URL) return;
+  if (!CONFIG.API_URL) return false;
+  const key = entryKey(entry);
+  if (inFlight.has(key)) return false;
+  inFlight.add(key);
 
   try {
     const res = await fetch(CONFIG.API_URL, {
@@ -578,6 +587,7 @@ async function syncEntry(entry) {
         transport_method: entry.transportMethod,
         route: entry.route,
         amount: entry.amount,
+        client_id: entry.clientId || null,
       }),
     });
     let data = null;
@@ -603,6 +613,8 @@ async function syncEntry(entry) {
     const reason = err && err.message ? err.message : "通信エラー";
     setStatus(`${entry.label}: サーバー送信に失敗(${reason})。端末内に保存済みで、自動で再送します`, true);
     return false;
+  } finally {
+    inFlight.delete(key);
   }
 }
 
