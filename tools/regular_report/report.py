@@ -145,6 +145,7 @@ def classify(msg, post_time):
 
 STAY_HOURS_REGULAR = 5  # 常連の滞在時間(投稿からこの時間まで在店とみなす)
 STAY_HOURS_OTHER = 3  # 常連以外・カップルの滞在時間
+REGULAR_MAX_HOURS = 6  # 常連は部の終了までいるが最大この時間
 
 
 PART_START = {"1": 13 * 60, "1.5": 16 * 60 + 30, "2": 19 * 60}
@@ -305,15 +306,15 @@ def main():
         return STAY_HOURS_REGULAR if g in reg and kk in reg[g] else STAY_HOURS_OTHER
 
     def leave(k, v):
-        if v[2] in PART_END and stay(k) == STAY_HOURS_REGULAR:  # 常連は部の終了までいる
-            return at(start, PART_END[v[2]])
+        if v[2] in PART_END and stay(k) == STAY_HOURS_REGULAR:  # 常連は部の終了まで(最大6h)
+            return min(at(start, PART_END[v[2]]), v[1] + timedelta(hours=REGULAR_MAX_HOURS))
         end = v[1] + timedelta(hours=stay(k))
         if v[2] in PART_END:  # 部の終了時刻で退店
             end = min(end, at(start, PART_END[v[2]]))
         return end
 
     here = {k: v for k, v in present.items() if v[1] and v[1] <= now_dt < leave(k, v)}
-    print(f"\n【今いると思われる人】(常連は部の終了まで在店・それ以外は来店から{STAY_HOURS_OTHER}h、部の終了で退店)")
+    print(f"\n【今いると思われる人】(常連は部の終了まで在店[最大{REGULAR_MAX_HOURS}h]・それ以外は来店から{STAY_HOURS_OTHER}h、部の終了で退店)")
     print("| | Lv4 | Lv3 | Lv2 | Lv1 | 常連以外 | 計 | 常連の割合 |")
     print("|---|---|---|---|---|---|---|---|")
     tl = [0, 0, 0, 0]
