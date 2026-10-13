@@ -305,13 +305,15 @@ def main():
         return STAY_HOURS_REGULAR if g in reg and kk in reg[g] else STAY_HOURS_OTHER
 
     def leave(k, v):
+        if v[2] in PART_END and stay(k) == STAY_HOURS_REGULAR:  # 常連は部の終了までいる
+            return at(start, PART_END[v[2]])
         end = v[1] + timedelta(hours=stay(k))
         if v[2] in PART_END:  # 部の終了時刻で退店
             end = min(end, at(start, PART_END[v[2]]))
         return end
 
     here = {k: v for k, v in present.items() if v[1] and v[1] <= now_dt < leave(k, v)}
-    print(f"\n【今いると思われる人】(来店から 常連{STAY_HOURS_REGULAR}h・それ以外{STAY_HOURS_OTHER}h、部の終了で退店)")
+    print(f"\n【今いると思われる人】(常連は部の終了まで在店・それ以外は来店から{STAY_HOURS_OTHER}h、部の終了で退店)")
     print("| | Lv4 | Lv3 | Lv2 | Lv1 | 常連以外 | 計 | 常連の割合 |")
     print("|---|---|---|---|---|---|---|---|")
     tl = [0, 0, 0, 0]
