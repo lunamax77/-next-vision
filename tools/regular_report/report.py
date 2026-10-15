@@ -106,10 +106,15 @@ EXCLUDE = {"たっぴー"}
 PARTS = ("1部", "1.5部", "2部", "時間不明")
 
 
+def kanji_part(t):
+    """「一部」「一・五部」「二部」を数字表記にそろえる"""
+    return re.sub(r"一[.・]?五部", "1.5部", t).replace("一部", "1部").replace("二部", "2部")
+
+
 def classify(msg, post_time):
     """予告メッセージから部を推定する。明示 > 時刻記載 > 今から等(投稿時刻) の順。"""
     t = re.sub(r"<[^>]+>", "", html.unescape(msg))
-    t = t.translate(str.maketrans("０１２３４５６７８９．", "0123456789."))
+    t = kanji_part(t.translate(str.maketrans("０１２３４５６７８９．", "0123456789.")))
     if "明日" in t:
         return "明日"
     m = re.search(r"(1\.5|１．５|2|1)部", t)
@@ -175,7 +180,7 @@ def arrival(msg, post_dt, day_start, g="", k=""):
     """来店時刻の推定。予告文の時刻/部が投稿より後ならそれを、なければ過去の傾向から予測。
     開店(13:00)前の投稿は13:00以降。明日の予告は対象外。"""
     t = re.sub(r"<[^>]+>", "", html.unescape(msg))
-    t = t.translate(str.maketrans("０１２３４５６７８９．", "0123456789."))
+    t = kanji_part(t.translate(str.maketrans("０１２３４５６７８９．", "0123456789.")))
     if "明日" in t:
         return None
     base = max(post_dt, at(day_start, 13 * 60)) if 5 <= post_dt.hour < 13 else post_dt
@@ -204,8 +209,8 @@ def arrival(msg, post_dt, day_start, g="", k=""):
 
 def explicit(msg):
     """予告文に時刻・部・夜/夕方の記載があるか"""
-    t = html.unescape(msg).translate(str.maketrans("０１２３４５６７８９．", "0123456789."))
-    return bool(re.search(r"\d{1,2}\s*(?:時|:\d{2})|部|夜|夕方|明日", t))
+    t = kanji_part(html.unescape(msg).translate(str.maketrans("０１２３４５６７８９．", "0123456789.")))
+    return bool(re.search(r"\d{1,2}\s*(?:時|:\d{2})|(?:1\.5|1|2)部|夜|夕方|明日", t))
 
 
 def part_of(dt, day_start):
@@ -244,6 +249,7 @@ def main():
     reg = {"女性": {key(norm(n)) for n in REGULAR_FEMALE}, "男性": {key(norm(n)) for n in REGULAR_MALE}}
     people = {}  # (gender, name) -> 部
     present = {}  # (gender, 照合キー) -> (表示名, 来店予定時刻, 部)
+    eta = {}  # (gender, 表示名) -> (来店予定時刻, 予測かどうか)
     walkin_no = 0
     for p in posts:
         g = norm(p["gender"])
@@ -258,6 +264,7 @@ def main():
                     n = f"予告なし{walkin_no}"
                     part = classify("", p["time"])
                     people.setdefault((wg, n), part)
+                    eta[(wg, n)] = (post_dt, False)
                     present[(wg, n)] = (n, post_dt, part)
             continue
         # 「たま♂、たか♂」のような複数名投稿は1人ずつに分ける(カップルは1組のまま)
@@ -273,6 +280,7 @@ def main():
                 elif arr and part in PART_END:  # 部の開始前には来ない
                     arr = max(arr, at(start, PART_START[part.rstrip("部")]))
                 people.setdefault((g, n.strip()), part)
+                eta.setdefault((g, n.strip()), (arr, not explicit(p["msg"]) and not re.search(NOW_RE, p["msg"])))
                 if k not in present:  # 新しい投稿を優先
                     present[k] = (n.strip(), arr, part)
 
@@ -295,11 +303,15 @@ def main():
             lv = [sum(1 for n in r if level(g, n) == x) for x in (4, 3, 2, 1)]
             print(f"| {g} | {' | '.join(map(str, lv))} | {len(o)} | {len(r) + len(o)} |")
         print(f"| カップル | - | - | - | - | - | {len(couples)}組 |")
+        # 名前の後ろに到着時刻(記載/来店の言い回しから)、予測は「予測」と付ける
+        def lt(g, n):
+            a, guess = eta.get((g, n), (None, False))
+            return label(g, n) + (f" {a:%H:%M}" + ("予測" if guess else "") if a else " 時刻不明")
         for g, r, o in rows:
             if r or o:
-                print(f"- {g} 常連: {'、'.join(label(g, n) for n in r) or '-'} / 非常連: {'、'.join(label(g, n) for n in o) or '-'}")
+                print(f"- {g} 常連: {'、'.join(lt(g, n) for n in r) or '-'} / 非常連: {'、'.join(lt(g, n) for n in o) or '-'}")
         if couples:
-            print(f"- カップル: {'、'.join(label('カップル', n) for n in couples)}")
+            print(f"- カップル: {'、'.join(lt('カップル', n) for n in couples)}")
     # 在店推定: 投稿時刻から滞在時間以内の人
     def stay(k):
         g, kk = k
