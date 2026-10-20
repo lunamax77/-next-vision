@@ -1,46 +1,46 @@
-// クリスマスワークショップパッケージ 企画書（PPTX）生成スクリプト
+// ドコモイベント支援向けコンテンツ提案（クリスマスWS）PPTX 生成スクリプト
+// ドコモ様向け資料は薄い赤を基調にする
 // 使い方: node build_deck.js <出力先.pptx>   ※ pptxgenjs が必要
 const path = require("path");
 const pptxgen = require("pptxgenjs");
 
 const OUT = process.argv[2] || path.join(__dirname, "企画書_NTTドコモ_クリスマスWS.pptx");
 const IMG = {
-  squeeze: path.join(__dirname, "../../../site/images/squeeze.jpg"),
   squeezeEvent: path.join(__dirname, "../../../site/images/squeeze-event.jpg"),
-  punilab: path.join(__dirname, "../../../site/images/punilab-animals.jpg"),
+  punilabPaw: path.join(__dirname, "../../../site/images/punilab-paw.jpg"),
   arch: path.join(__dirname, "assets/arch_reference.jpg"),
   snowdome: path.join(__dirname, "assets/snowdome_image.jpg"),
 };
 
 const FONT = "メイリオ";
 const THEME = {
-  name: "NextVision Christmas",
+  name: "Docomo Light Red",
   headFontFace: FONT,
   bodyFontFace: FONT,
   colors: {
-    dk1: "222222", lt1: "FFFFFF", dk2: "1E4D2B", lt2: "EEF3EF",
-    accent1: "B3202E", accent2: "1E4D2B", accent3: "C9A227",
-    accent4: "6B8F71", accent5: "DCE7DF", accent6: "7A1420",
-    hlink: "B3202E", folHlink: "7A1420",
+    dk1: "333333", lt1: "FFFFFF", dk2: "B8283A", lt2: "FDEFF1",
+    accent1: "E0485A", accent2: "2E7D4F", accent3: "D9A21B",
+    accent4: "8A6A6E", accent5: "FBE3E6", accent6: "8E1F2C",
+    hlink: "B8283A", folHlink: "8E1F2C",
   },
 };
 
 const pres = new pptxgen();
 pres.layout = "LAYOUT_16x9"; // 10 x 5.625 in
 pres.theme = { headFontFace: FONT, bodyFontFace: FONT };
-pres.title = "クリスマスワークショップパッケージ ご提案";
+pres.title = "ドコモイベント支援向けコンテンツ提案";
 pres.author = "株式会社DreamCreation";
 const C = pres.SchemeColor;
 
 // ---------- レイアウト ----------
 pres.defineSlideMaster({
   title: "TITLE_DARK",
-  background: { color: C.text2 },
+  background: { color: C.accent5 },
   objects: [
-    { placeholder: { options: { name: "title", type: "title", x: 0.6, y: 1.55, w: 8.8, h: 1.3,
-      fontSize: 34, bold: true, color: C.background1, valign: "middle" }, text: "" } },
-    { placeholder: { options: { name: "body", type: "body", x: 0.6, y: 2.9, w: 8.8, h: 0.9,
-      fontSize: 16, color: C.accent5, valign: "top" }, text: "" } },
+    { placeholder: { options: { name: "title", type: "title", x: 0.6, y: 1.5, w: 5.6, h: 1.4,
+      fontSize: 30, bold: true, color: C.text2, valign: "middle", margin: 0 }, text: "" } },
+    { placeholder: { options: { name: "body", type: "body", x: 0.6, y: 3.0, w: 5.6, h: 0.9,
+      fontSize: 15, color: C.text1, valign: "top", margin: 0 }, text: "" } },
   ],
 });
 pres.defineSlideMaster({
@@ -50,7 +50,7 @@ pres.defineSlideMaster({
   objects: [
     { placeholder: { options: { name: "title", type: "title", x: 0.5, y: 0.28, w: 9.0, h: 0.6,
       fontSize: 24, bold: true, color: C.text2, valign: "middle", margin: 0 }, text: "" } },
-    { text: { text: "株式会社DreamCreation ｜ クリスマスワークショップパッケージ ご提案",
+    { text: { text: "株式会社DreamCreation ｜ ドコモイベント支援向けコンテンツ提案",
       options: { x: 0.5, y: 5.25, w: 7.5, h: 0.25, fontSize: 9, color: C.accent4, margin: 0 } } },
   ],
   slideNumber: { x: 9.0, y: 5.25, w: 0.5, h: 0.25, fontSize: 9, color: C.accent4, align: "right" },
@@ -72,24 +72,16 @@ function badge(s, x, y, label, fill, name, d = 0.5) {
   s.addShape(pres.shapes.OVAL, { x, y, w: d, h: d, fill: { color: fill }, line: { color: fill }, objectName: name });
   s.addText(label, tx({ x, y, w: d, h: d, fontSize: 13, bold: true, color: C.background1, align: "center", valign: "middle", margin: 0 }));
 }
-// スノードームのアイコン(図形のみ)
-function snowGlobe(s, x, y, d, name) {
-  s.addShape(pres.shapes.OVAL, { x, y, w: d, h: d, fill: { color: "DDEFF7" }, line: { color: "9CC9DD", width: 1.5 }, objectName: name + "_globe" });
-  s.addShape(pres.shapes.ISOSCELES_TRIANGLE, { x: x + d * 0.33, y: y + d * 0.3, w: d * 0.34, h: d * 0.45, fill: { color: C.accent2 }, line: { color: C.accent2 }, objectName: name + "_tree" });
-  [[0.2, 0.25], [0.7, 0.2], [0.25, 0.6], [0.75, 0.55], [0.5, 0.15], [0.62, 0.7]].forEach(([a, b], i) =>
-    s.addShape(pres.shapes.OVAL, { x: x + d * a, y: y + d * b, w: d * 0.06, h: d * 0.06, fill: { color: "FFFFFF" }, line: { color: "9CC9DD", width: 0.5 }, objectName: `${name}_snow${i}` }));
-  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: x + d * 0.1, y: y + d * 0.88, w: d * 0.8, h: d * 0.25, rectRadius: 0.05, fill: { color: C.accent1 }, line: { color: C.accent1 }, objectName: name + "_base" });
-}
-
 // ---------- 1. 表紙 ----------
 sec("表紙");
 {
   const s = pres.addSlide({ masterName: "TITLE_DARK", sectionTitle: "表紙" });
-  s.addText("ドコモショップ\nクリスマスワークショップパッケージ", { placeholder: "title" });
-  s.addText("毎週ちがう“つくる体験”で、12月の来店を4回に。", { placeholder: "body" });
-  s.addText("株式会社NTTドコモ　チャネル統括部　イベントマネジメント担当 御中", tx({ x: 0.6, y: 0.55, w: 8.8, h: 0.4, fontSize: 14, color: C.background1 }));
-  s.addText("2026年10月　株式会社DreamCreation", tx({ x: 0.6, y: 4.6, w: 6, h: 0.4, fontSize: 14, color: C.background1 }));
-  snowGlobe(s, 8.1, 3.75, 1.1, "cover");
+  s.addText("ドコモ様向け 提案書", tx({ x: 0.6, y: 0.6, w: 3.2, h: 0.4, fontSize: 13, bold: true, color: C.background1, fill: { color: C.text2 }, align: "center", valign: "middle" }));
+  s.addText("ドコモイベント支援向け\nコンテンツ提案", { placeholder: "title" });
+  s.addText("クリスマス限定ワークショップで、\n家族の来店と商談のきっかけを毎週つくる", { placeholder: "body" });
+  s.addText("株式会社NTTドコモ　チャネル統括部　イベントマネジメント担当 御中\n2026年10月　株式会社DreamCreation", tx({ x: 0.6, y: 4.35, w: 5.8, h: 0.7, fontSize: 12, color: C.text1 }));
+  s.addImage({ path: IMG.snowdome, x: 6.5, y: 1.0, w: 3.0, h: 3.0, rounding: true, altText: "スノードームの完成イメージ", objectName: "cover_img" });
+  s.addText("2026.11.28 ─ 12.25", tx({ x: 6.5, y: 4.15, w: 3.0, h: 0.4, fontSize: 15, bold: true, color: C.text2, align: "center" }));
 }
 
 // ---------- 2. ご依頼内容 ----------
@@ -105,7 +97,7 @@ sec("ご提案の概要");
     ["数量・配送", "上記10セット ／ 全国10地区へ配送"],
   ];
   s.addTable(rows.map(([a, b]) => [
-    { text: a, options: { bold: true, color: C.background1, fill: { color: C.accent2 } } },
+    { text: a, options: { bold: true, color: C.background1, fill: { color: C.accent1 } } },
     { text: b, options: { color: C.text1, fill: { color: C.background2 } } },
   ]), { x: 0.5, y: 1.15, w: 5.6, colW: [1.5, 4.1], fontSize: 13, rowH: 0.52, valign: "middle",
     border: { type: "solid", pt: 2, color: "FFFFFF" }, objectName: "request_table" });
@@ -120,21 +112,21 @@ sec("ご提案の概要");
   });
 }
 
-// ---------- 3. コンセプト ----------
+// ---------- 3. 本企画の3つの目的 ----------
 {
-  const s = content("ご提案の概要", "企画コンセプト");
-  s.addText("毎週ちがう“つくる体験”で、\n12月の来店を4回に。", tx({ x: 0.5, y: 1.15, w: 9, h: 1.1, fontSize: 24, bold: true, color: C.accent1 }));
+  const s = content("ご提案の概要", "本企画の3つの目的");
+  s.addText("無料のクリスマス体験で家族連れを惹きつけ、毎週の来店と商談機会を創出します。", tx({ x: 0.5, y: 1.1, w: 9, h: 0.45, fontSize: 15, bold: true, color: C.accent1 }));
   const items = [
-    ["1", "飽きさせない", "スノードームとスクイーズを週替わりで実施。型・モチーフも毎週変えて「来週は何がつくれる？」をつくる。"],
-    ["2", "足を止める", "クリスマスアーチ＋スタッフのコスプレ（全週・週替わり）で、通行客に開催中がひと目で伝わる。"],
-    ["3", "着座につなげる", "制作時間（約15〜20分）が保護者様との会話・商談時間になる。"],
+    ["1", "家族連れが\n自然に集まる", "クリスマスアーチ＋コスプレ＋B0ボードPOPで、通行中のファミリー層をブースへ誘導。"],
+    ["2", "毎週ちがう\n作品で再来店", "スノードームとスクイーズを週替わりで。型・モチーフも変え、4週連続の来店動機に。"],
+    ["3", "親子分離で\n商談機会を創出", "お子様は約20分の制作に集中。その間に保護者様をカウンターへご案内できます。"],
   ];
   items.forEach(([no, h, b], i) => {
     const x = 0.5 + i * 3.05;
-    card(s, x, 2.55, 2.85, 2.4, "concept_" + no);
-    badge(s, x + 0.2, 2.72, no, C.accent1, "concept_badge_" + no);
-    s.addText(h, tx({ x: x + 0.8, y: 2.75, w: 1.95, h: 0.45, fontSize: 16, bold: true, color: C.text2, valign: "middle" }));
-    s.addText(b, tx({ x: x + 0.2, y: 3.35, w: 2.5, h: 1.5, fontSize: 13 }));
+    card(s, x, 1.75, 2.85, 3.2, "goal_" + no);
+    badge(s, x + 0.2, 1.95, no, C.accent1, "goal_badge_" + no, 0.6);
+    s.addText(h, tx({ x: x + 0.95, y: 1.9, w: 1.8, h: 0.75, fontSize: 15, bold: true, color: C.text2, valign: "middle" }));
+    s.addText(b, tx({ x: x + 0.2, y: 2.85, w: 2.5, h: 1.9, fontSize: 13 }));
   });
 }
 
@@ -145,7 +137,7 @@ sec("ご提案の概要");
     ["WS", "WSキット", "スノードーム／スクイーズ\n300個／週 × 4週＝1,200個", C.accent1],
     ["装", "クリスマスアーチ", "エアーディスプレイ（期間中レンタル）", C.accent2],
     ["衣", "コスプレ衣装", "サンタ・トナカイ・雪だるま・エルフ ほか", C.accent3],
-    ["掲", "B0ポスター 10枚", "4週の内容がひと目でわかるデザイン", C.accent6],
+    ["掲", "B0ボードPOP", "10枚。4週の内容がひと目でわかるデザイン", C.accent6],
     ["飾", "開催中ツール", "スタンド看板・のぼり・テーブル装飾 ほか", C.accent4],
     ["手", "運用マニュアル", "店舗スタッフ様だけで運営できる手順書", C.text2],
   ];
@@ -180,19 +172,21 @@ sec("ワークショップ");
 
 // ---------- 6. スクイーズ ----------
 {
-  const s = content("ワークショップ", "目玉②　スクイーズ作り");
-  s.addImage({ path: IMG.squeeze, x: 0.5, y: 1.15, w: 2.0, h: 2.0, rounding: true, altText: "スクイーズ作品", objectName: "img_squeeze" });
-  s.addImage({ path: IMG.punilab, x: 1.6, y: 2.75, w: 2.0, h: 2.0, rounding: true, altText: "ぷにラボの動物型スクイーズ", objectName: "img_punilab" });
+  const s = content("ワークショップ", "目玉②　スクイーズ作り（ぷにラボ）");
+  s.addImage({ path: IMG.squeezeEvent, x: 0.5, y: 1.1, w: 2.25, h: 3.0, altText: "ドコモ店頭でのスクイーズ作成体験ブース", objectName: "img_squeeze_event" });
+  s.addImage({ path: IMG.punilabPaw, x: 2.9, y: 1.1, w: 3.0, h: 3.0, altText: "肉球スクイーズの完成品", objectName: "img_punilab_paw" });
+  s.addText("ドコモ店頭での実施風景\n（ヨドバシ梅田）", tx({ x: 0.5, y: 4.15, w: 2.25, h: 0.5, fontSize: 10, color: C.accent4 }));
+  s.addText("完成品（肉球スクイーズ）", tx({ x: 2.9, y: 4.15, w: 3.0, h: 0.3, fontSize: 10, color: C.accent4 }));
   const rows = [
-    ["内容", "型とカラーを選び、型から剥がしてマジックパウダーで仕上げる人気コンテンツ「ぷにラボ」をクリスマス仕様に"],
-    ["クリスマス仕様", "ツリー・ブーツ・雪だるま・プレゼント型／赤・緑・白カラー"],
-    ["所要時間", "約20分／人"],
-    ["実績", "ドコモショップ店頭で実施実績あり"],
+    ["内容", "型とカラーを選び、液を混ぜて型に流し込む。型のまま持ち帰り、おうちで完成"],
+    ["クリスマス仕様", "ツリー・ブーツ・雪だるま・プレゼント型／赤・緑・白"],
+    ["所要時間", "会場作業 約20分（＋自宅仕上げ）"],
+    ["実績", "ドコモショップ・量販店のドコモブースで実施済み"],
   ];
   rows.forEach(([h, b], i) => {
-    const y = 1.2 + i * 0.95;
-    s.addText(h, tx({ x: 4.1, y, w: 1.6, h: 0.8, fontSize: 14, bold: true, color: C.accent1 }));
-    s.addText(b, tx({ x: 5.7, y, w: 3.8, h: 0.8, fontSize: 14 }));
+    const y = 1.1 + i * 0.95;
+    s.addText(h, tx({ x: 6.15, y, w: 3.35, h: 0.3, fontSize: 13, bold: true, color: C.accent1 }));
+    s.addText(b, tx({ x: 6.15, y: y + 0.3, w: 3.35, h: 0.62, fontSize: 12 }));
   });
 }
 
@@ -201,8 +195,8 @@ sec("ワークショップ");
   const s = content("ワークショップ", "4週ローテーション計画（11月最終週〜12月）");
   const weeks = [
     ["第1週", "11/28(土)〜12/4(金)", "スノードーム", "サンタモチーフ", "サンタ／トナカイ", C.accent1],
-    ["第2週", "12/5(土)〜12/11(金)", "スクイーズ", "ツリー・ブーツ型", "雪だるま／エルフ", C.accent2],
-    ["第3週", "12/12(土)〜12/18(金)", "スクイーズ", "雪だるま・プレゼント型", "トナカイ／ジンジャーブレッド", C.accent2],
+    ["第2週", "12/5(土)〜12/11(金)", "スクイーズ", "ツリー・ブーツ型", "雪だるま／エルフ", C.text2],
+    ["第3週", "12/12(土)〜12/18(金)", "スクイーズ", "雪だるま・プレゼント型", "トナカイ／ジンジャーブレッド", C.text2],
     ["第4週", "12/19(土)〜12/25(金)", "スノードーム", "雪だるま・トナカイモチーフ", "サンタ（男女）／ツリー", C.accent1],
   ];
   weeks.forEach(([w, d, ws, motif, cos, col], i) => {
@@ -222,6 +216,27 @@ sec("ワークショップ");
   });
   s.addText("同じワークショップが続く週も、型・モチーフ・衣装を変えて“新作”として訴求。毎週来ても新しい体験になります。",
     tx({ x: 0.5, y: 4.45, w: 9, h: 0.6, fontSize: 13, color: C.text1 }));
+}
+
+// ---------- 親子分離の運用 ----------
+{
+  const s = content("ワークショップ", "親子分離の運用設計");
+  const cols = [
+    ["お子様", "約20分", ["スノードーム／スクイーズを選ぶ", "見本と手順カードを見ながら制作に集中", "完成（スクイーズは型のまま袋へ）", "作品を持って保護者様と合流"], C.accent1],
+    ["保護者様", "約20分", ["隣接の商談カウンターへご案内", "料金プラン・機種変更のご相談", "見積ご依頼でクリスマス特典をご案内", "お子様の完成作品を一緒に確認"], C.text2],
+  ];
+  cols.forEach(([who, t, steps, col], ci) => {
+    const x = 0.5 + ci * 4.6;
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 1.1, w: 4.4, h: 0.6, rectRadius: 0.08, fill: { color: col }, line: { color: col }, objectName: "pc_head_" + ci });
+    s.addText(who + "　" + t, tx({ x, y: 1.1, w: 4.4, h: 0.6, fontSize: 16, bold: true, color: C.background1, align: "center", valign: "middle", margin: 0 }));
+    steps.forEach((st, i) => {
+      const y = 1.85 + i * 0.68;
+      card(s, x, y, 4.4, 0.58, `pc_${ci}_${i}`);
+      badge(s, x + 0.12, y + 0.09, String(i + 1), col, `pc_b_${ci}_${i}`, 0.4);
+      s.addText(st, tx({ x: x + 0.65, y, w: 3.65, h: 0.58, fontSize: 13, valign: "middle" }));
+    });
+  });
+  s.addText("運営スタッフの派遣はなし。店舗スタッフ様1名でも回せるよう、手順カードと運用マニュアルを同梱します。", tx({ x: 0.5, y: 4.62, w: 9, h: 0.4, fontSize: 12, color: C.accent4 }));
 }
 
 // ---------- 8. クリスマスアーチ ----------
@@ -258,7 +273,7 @@ sec("店頭演出");
     const colI = i % 2, row = Math.floor(i / 2);
     const x = 0.5 + colI * 4.6, y = 1.15 + row * 1.3;
     card(s, x, y, 4.4, 1.15, "tool_" + i);
-    badge(s, x + 0.2, y + 0.3, ic, i % 2 ? C.accent2 : C.accent1, "tool_badge_" + i);
+    badge(s, x + 0.2, y + 0.3, ic, i % 2 ? C.text2 : C.accent1, "tool_badge_" + i);
     s.addText(h, tx({ x: x + 0.85, y: y + 0.12, w: 3.4, h: 0.4, fontSize: 15, bold: true, color: C.text2 }));
     s.addText(b, tx({ x: x + 0.85, y: y + 0.52, w: 3.4, h: 0.55, fontSize: 12 }));
   });
@@ -289,7 +304,7 @@ sec("店頭演出");
 
 // ---------- 11. B0ポスター ----------
 {
-  const s = content("店頭演出", "B0ポスター　デザイン案");
+  const s = content("店頭演出", "B0ボードPOP　デザイン案");
   const ideas = [
     ["A", "スノードーム主役", "大きなスノードームの中に雪景色とお店。「あなただけのスノードームをつくろう」", false],
     ["B", "4週カレンダー型", "4週の内容をアドベントカレンダー風に配置。「毎週かわる！クリスマスワークショップ」", true],
@@ -298,8 +313,8 @@ sec("店頭演出");
   ideas.forEach(([no, h, b, rec], i) => {
     const x = 0.5 + i * 3.05;
     // B0の縦横比(1:1.41)を模したポスター枠
-    s.addShape(pres.shapes.RECTANGLE, { x: x + 0.75, y: 1.15, w: 1.35, h: 1.9, fill: { color: rec ? C.accent1 : C.accent2 }, line: { color: rec ? C.accent1 : C.accent2 }, objectName: "poster_" + no });
-    s.addText(no, tx({ x: x + 0.75, y: 1.15, w: 1.35, h: 1.9, fontSize: 40, bold: true, color: C.background1, align: "center", valign: "middle", margin: 0 }));
+    s.addShape(pres.shapes.RECTANGLE, { x: x + 0.75, y: 1.15, w: 1.35, h: 1.9, fill: { color: rec ? C.text2 : C.accent5 }, line: { color: rec ? C.text2 : C.accent1 }, objectName: "poster_" + no });
+    s.addText(no, tx({ x: x + 0.75, y: 1.15, w: 1.35, h: 1.9, fontSize: 40, bold: true, color: rec ? C.background1 : C.text2, align: "center", valign: "middle", margin: 0 }));
     s.addText(h + (rec ? "（推奨）" : ""), tx({ x, y: 3.15, w: 2.85, h: 0.4, fontSize: 15, bold: true, color: rec ? C.accent1 : C.text2, align: "center" }));
     s.addText(b, tx({ x: x + 0.1, y: 3.6, w: 2.65, h: 1.0, fontSize: 12 }));
   });
@@ -313,13 +328,13 @@ sec("運用・お見積");
   const steps = [
     ["ご発注", "10月下旬〜\n11月上旬"],
     ["制作・調達", "キット・ポスター\n衣装・ツール"],
-    ["配送", "10地区へ\n11月下旬着"],
+    ["配送・検品", "11月下旬着\n検品確認書を返送"],
     ["店舗で実施", "11/28〜12/25\n4週間"],
-    ["回収", "期間終了後\nアーチを回収"],
+    ["返却", "アーチを梱包\n着払い伝票で返送"],
   ];
   steps.forEach(([h, b], i) => {
     const x = 0.5 + i * 1.84;
-    s.addShape(pres.shapes.CHEVRON, { x, y: 1.3, w: 1.75, h: 0.8, fill: { color: i === 3 ? C.accent1 : C.accent2 }, line: { color: C.background1 }, objectName: "step_" + i });
+    s.addShape(pres.shapes.CHEVRON, { x, y: 1.3, w: 1.75, h: 0.8, fill: { color: i === 3 ? C.text2 : C.accent1 }, line: { color: C.background1 }, objectName: "step_" + i });
     s.addText(h, tx({ x: x + 0.2, y: 1.3, w: 1.4, h: 0.8, fontSize: 13, bold: true, color: C.background1, align: "center", valign: "middle", margin: 0 }));
     s.addText(b, tx({ x, y: 2.2, w: 1.75, h: 0.75, fontSize: 12, align: "center" }));
   });
@@ -327,7 +342,8 @@ sec("運用・お見積");
   s.addText([
     { text: "店舗スタッフ様だけで運営できる体制", options: { bold: true, color: C.text2, fontSize: 15, breakLine: true } },
     { text: "運営スタッフの派遣はなし。キット・物品と運用マニュアル（準備・受付・制作手順・片付け）をお届けします。", options: { bullet: true, breakLine: true } },
-    { text: "週替わりの内容に合わせ、キットは週ごとに仕分けして納品します。", options: { bullet: true } },
+    { text: "週替わりの内容に合わせ、キットは週ごとに仕分けして納品します。", options: { bullet: true, breakLine: true } },
+    { text: "アーチの返却は箱・緩衝材を再利用し、同梱の着払い伝票で発送いただくだけです。", options: { bullet: true } },
   ], tx({ x: 0.7, y: 3.3, w: 8.6, h: 1.55, fontSize: 13, paraSpaceAfter: 4 }));
 }
 
@@ -339,17 +355,17 @@ sec("運用・お見積");
     tx({ x: 0.5, y: 1.35, w: 5.8, h: 0.55, fontSize: 11 }));
   s.addText("株式会社DreamCreation\n〒550-0015 大阪府大阪市西区南堀江1-10-1 KT堀江801\nTEL 06-4967-1038　担当：竹村",
     tx({ x: 6.3, y: 1.0, w: 3.2, h: 0.85, fontSize: 9, color: C.text1 }));
-  const H = (t, al) => ({ text: t, options: { bold: true, color: C.background1, fill: { color: C.accent2 }, align: al || "center" } });
+  const H = (t, al) => ({ text: t, options: { bold: true, color: C.background1, fill: { color: C.text2 }, align: al || "center" } });
   const R = (cells) => cells.map((t, i) => ({ text: t, options: { align: [1, 6].includes(i) ? "left" : (i === 0 ? "center" : "right") } }));
   const rows = [
     [H("No"), H("御見積内容", "left"), H("数量"), H("日数"), H("単価"), H("金額"), H("摘要", "left")],
     R(["1", "ワークショップキット（スノードーム／スクイーズ）", "10", "1", "400,000", "4,000,000", "1地区300個/週×4週"]),
-    R(["2", "販促物一式（クリスマスアーチ・B0ポスター10枚・開催中ツール・コスプレ）", "10", "1", "80,000", "800,000", "アーチは期間中レンタル"]),
+    R(["2", "販促物一式（クリスマスアーチ・B0ボードPOP10枚・開催中ツール・コスプレ）", "10", "1", "80,000", "800,000", "アーチは期間中レンタル"]),
     R(["3", "企画・ディレクション・運用マニュアル", "10", "1", "20,000", "200,000", ""]),
     R(["4", "配送料（10地区 往復）", "10", "1", "別途", "別途請求", "実費"]),
   ];
   s.addTable(rows, { x: 0.5, y: 2.0, w: 9.0, colW: [0.4, 3.5, 0.5, 0.5, 0.85, 1.05, 2.2], fontSize: 10, rowH: 0.36,
-    valign: "middle", color: C.text1, border: { type: "solid", pt: 0.75, color: "B9C6BC" }, objectName: "quote_table" });
+    valign: "middle", color: C.text1, border: { type: "solid", pt: 0.75, color: "E9B9C0" }, objectName: "quote_table" });
   const tot = [["小計", "5,000,000"], ["消費税（10%）", "500,000"], ["合計金額", "5,500,000"]];
   tot.forEach(([k, v], i) => {
     const y = 4.05 + i * 0.36, last = i === 2;
@@ -365,8 +381,9 @@ sec("運用・お見積");
   const s = pres.addSlide({ masterName: "TITLE_DARK", sectionTitle: "運用・お見積" });
   s.addText("株式会社DreamCreation", { placeholder: "title" });
   s.addText("こどもが夢中になる体験を、企画から当日の準備物まで一社でお届けします。", { placeholder: "body" });
-  s.addText("主な実績：大手家電量販店・大型商業施設・携帯キャリア店頭イベント（全国対応）\nTEL 070-1319-2126　／　MAIL data@d-creation-o.com",
-    tx({ x: 0.6, y: 4.0, w: 8.8, h: 0.8, fontSize: 13, color: C.background1 }));
+  s.addImage({ path: IMG.punilabPaw, x: 6.5, y: 1.0, w: 3.0, h: 3.0, rounding: true, altText: "肉球スクイーズ", objectName: "end_img" });
+  s.addText("主な実績：ドコモショップ・量販店ドコモブース・大型商業施設でのイベント（全国対応）\nTEL 070-1319-2126　／　MAIL data@d-creation-o.com",
+    tx({ x: 0.6, y: 4.1, w: 8.8, h: 0.8, fontSize: 13, color: C.text1 }));
 }
 
 (async () => {
