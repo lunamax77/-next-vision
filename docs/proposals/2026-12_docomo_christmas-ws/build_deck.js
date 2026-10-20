@@ -12,6 +12,7 @@ const IMG = {
   snowdome: path.join(__dirname, "assets/snowdome_image.jpg"),
 };
 
+const G = (name) => path.join(__dirname, "assets/gen_" + name + ".jpg"); // OpenAI生成イメージ(assets/gen_images.py)
 const FONT = "メイリオ";
 const THEME = {
   name: "Docomo Light Red",
@@ -190,6 +191,26 @@ sec("ワークショップ");
   });
 }
 
+// ---------- ワークショップキット ----------
+{
+  const s = content("ワークショップ", "ワークショップキット（イメージ）");
+  const kits = [
+    ["kit_snowdome", "スノードームキット", "ドーム・台座・ミニフィギュア（サンタ/ツリー/雪だるま）・ラメ雪・のり"],
+    ["kit_squeeze", "スクイーズキット", "クリスマス型モールド・計量カップ・カラー液（赤/緑/白）・マジックパウダー"],
+  ];
+  kits.forEach(([img, h, b], i) => {
+    const x = 0.5 + i * 4.6;
+    s.addImage({ path: G(img), x, y: 1.05, w: 2.45, h: 2.45, altText: h + "のイメージ", objectName: "img_" + img });
+    s.addText(h, tx({ x: x + 2.55, y: 1.1, w: 1.9, h: 0.4, fontSize: 13, bold: true, color: C.text2 }));
+    s.addText(b, tx({ x: x + 2.55, y: 1.55, w: 1.9, h: 1.9, fontSize: 11 }));
+  });
+  card(s, 0.5, 3.75, 9, 0.85, "kit_qty");
+  s.addText([
+    { text: "1地区 300個／週 × 4週 ＝ 1,200個（10地区で計12,000個）", options: { bold: true, color: C.text2, fontSize: 14, breakLine: true } },
+    { text: "週ごとに仕分けて納品。手順カード・見本1点を同梱。※画像はAI生成のイメージ", options: { fontSize: 11 } },
+  ], tx({ x: 0.7, y: 3.82, w: 8.6, h: 0.72 }));
+}
+
 // ---------- 7. 4週ローテーション ----------
 {
   const s = content("ワークショップ", "4週ローテーション計画（11月最終週〜12月）");
@@ -243,82 +264,92 @@ sec("ワークショップ");
 sec("店頭演出");
 {
   const s = content("店頭演出", "クリスマスアーチ（開催中ツールの主役）");
-  s.addImage({ path: IMG.arch, x: 0.5, y: 1.15, w: 3.6, h: 3.58, altText: "サンタとスノーマン付きのエアーアーチ参考写真", objectName: "img_arch" });
-  s.addText("参考イメージ", tx({ x: 0.5, y: 4.78, w: 3.6, h: 0.3, fontSize: 10, color: C.accent4 }));
+  s.addImage({ path: G("arch"), x: 0.5, y: 1.1, w: 3.75, h: 3.75, altText: "店頭に設置したクリスマスアーチのイメージ", objectName: "img_arch" });
+  s.addText("設置イメージ（AI生成）", tx({ x: 0.5, y: 4.88, w: 3.75, h: 0.25, fontSize: 10, color: C.accent4 }));
+  s.addImage({ path: IMG.arch, x: 8.25, y: 3.75, w: 1.25, h: 1.24, altText: "アーチ参考商品", objectName: "img_arch_ref" });
+  s.addText("参考商品", tx({ x: 7.3, y: 4.7, w: 0.9, h: 0.3, fontSize: 10, color: C.accent4, align: "right" }));
   const pts = [
-    ["遠くからでも目立つ", "サンタ＆スノーマン付きのエアーアーチを入口に設置。ワークショップ開催中がひと目で伝わる。"],
+    ["遠くからでも目立つ", "サンタ＆スノーマン付きのエアーアーチを入口に設置。開催中がひと目で伝わる。"],
     ["フォトスポットに", "アーチ前での記念撮影がSNS投稿のきっかけに。"],
-    ["期間中レンタル", "4週の期間中は返却不要。期間終了後に回収。"],
+    ["期間中レンタル", "4週の期間中は返却不要。終了後に着払いで返送。"],
   ];
   pts.forEach(([h, b], i) => {
-    const y = 1.2 + i * 1.2;
-    badge(s, 4.5, y, String(i + 1), C.accent1, "arch_badge_" + i, 0.45);
-    s.addText(h, tx({ x: 5.1, y: y - 0.02, w: 4.4, h: 0.4, fontSize: 15, bold: true, color: C.text2 }));
-    s.addText(b, tx({ x: 5.1, y: y + 0.4, w: 4.4, h: 0.7, fontSize: 13 }));
+    const y = 1.15 + i * 0.85;
+    badge(s, 4.6, y, String(i + 1), C.accent1, "arch_badge_" + i, 0.42);
+    s.addText(h, tx({ x: 5.15, y: y - 0.03, w: 4.35, h: 0.35, fontSize: 14, bold: true, color: C.text2 }));
+    s.addText(b, tx({ x: 5.15, y: y + 0.32, w: 4.35, h: 0.5, fontSize: 12 }));
   });
 }
 
 // ---------- 9. 開催中ツール ----------
 {
-  const s = content("店頭演出", "ワークショップ開催中ツール（案）");
-  const tools = [
-    ["A", "スタンド看板", "ツリー型A型看板「ただいまワークショップ開催中」"],
-    ["B", "のぼり・タペストリー", "クリスマス柄。遠目でも開催がわかる"],
-    ["C", "テーブル装飾", "赤緑のテーブルクロス、ミニツリー、LEDライト"],
-    ["D", "吊り下げPOP", "雪の結晶・オーナメント型で天井から演出"],
-    ["E", "作品ディスプレイ", "完成見本を展示し、通行客に“つくれるもの”を見せる"],
-    ["F", "週替わり告知カード", "「来週はこれがつくれる！」で再来店を促す"],
+  const s = content("店頭演出", "ワークショップ開催中ツール（デザイン案）");
+  const items = [
+    ["tablecloth", "テーブルクロス", "赤地に雪の結晶とヒイラギ柄。ミニツリー・LEDライトと一緒に"],
+    ["nobori", "のぼり", "薄い赤×雪の結晶。遠目でも開催がわかる縦型"],
+    ["stand_sign", "スタンド看板", "ツリー型A型看板「ただいまワークショップ開催中」"],
   ];
-  tools.forEach(([ic, h, b], i) => {
-    const colI = i % 2, row = Math.floor(i / 2);
-    const x = 0.5 + colI * 4.6, y = 1.15 + row * 1.3;
-    card(s, x, y, 4.4, 1.15, "tool_" + i);
-    badge(s, x + 0.2, y + 0.3, ic, i % 2 ? C.text2 : C.accent1, "tool_badge_" + i);
-    s.addText(h, tx({ x: x + 0.85, y: y + 0.12, w: 3.4, h: 0.4, fontSize: 15, bold: true, color: C.text2 }));
-    s.addText(b, tx({ x: x + 0.85, y: y + 0.52, w: 3.4, h: 0.55, fontSize: 12 }));
+  const X = [0.5, 3.6, 6.7], W = 2.8, H = 2.55;
+  items.forEach(([img, h, b], i) => {
+    const x = X[i];
+    if (img === "nobori") {
+      s.addImage({ path: G(img), x: x + 0.55, y: 1.05, w: 1.7, h: H, altText: "のぼりデザイン案", objectName: "img_" + img });
+      // のぼり中央の白い余白に縦書き文字を重ねる
+      [["クリスマス", 1.45], ["WS開催中", 1.22]].forEach(([t, dx]) =>
+        s.addText(t.split("").join("\n"), tx({ x: x + dx, y: 1.45, w: 0.24, h: 1.1, fontSize: 10, bold: true, color: C.text2, align: "center", valign: "middle", margin: 0, lineSpacingMultiple: 0.85 })));
+    } else {
+      s.addImage({ path: G(img), x, y: 1.05, w: W, h: H, sizing: { type: "cover", w: W, h: H }, altText: h + "デザイン案", objectName: "img_" + img });
+    }
+    if (img === "stand_sign") {
+      s.addText("ただいま\nWS\n開催中", tx({ x: x + 1.0, y: 1.8, w: 1.0, h: 0.85, fontSize: 11, bold: true, color: C.text2, align: "center", valign: "middle", margin: 0 }));
+    }
+    s.addText(h, tx({ x, y: 3.7, w: W, h: 0.35, fontSize: 14, bold: true, color: C.text2 }));
+    s.addText(b, tx({ x, y: 4.05, w: W, h: 0.55, fontSize: 11 }));
   });
+  s.addText("その他：吊り下げPOP（雪の結晶）／作品ディスプレイ台／週替わり告知カード「来週はこれがつくれる！」　※画像はAI生成のイメージ",
+    tx({ x: 0.5, y: 4.72, w: 9, h: 0.4, fontSize: 10, color: C.accent4 }));
 }
 
 // ---------- 10. コスプレ ----------
 {
-  const s = content("店頭演出", "コスプレ（全週で週替わり展開）");
+  const s = content("店頭演出", "コスプレ（全週で週替わり展開・Amazon調達）");
   const items = [
-    ["サンタ（男女）", "帽子・ひげ・ベルト付セット", C.accent1],
-    ["トナカイ", "フリース着ぐるみ＋角カチューシャ", "8B5A2B"],
-    ["雪だるま", "着ぐるみ／ポンチョ", "9CC9DD"],
-    ["エルフ", "緑の衣装＋とんがり帽子", C.accent2],
-    ["ジンジャーブレッド", "着ぐるみタイプ", "B7792E"],
-    ["クリスマスツリー", "かぶり物・ポンチョ", C.accent4],
+    ["cos_santa", "サンタ（男女）", "サンタ コスプレ 大人 セット", "2,000〜5,000円"],
+    ["cos_reindeer", "トナカイ", "トナカイ 着ぐるみ 大人", "3,000〜6,000円"],
+    ["cos_snowman", "雪だるま", "雪だるま 着ぐるみ 大人", "3,000〜6,000円"],
+    ["cos_elf", "エルフ", "エルフ コスプレ 大人 クリスマス", "2,500〜5,000円"],
+    ["cos_gingerbread", "ジンジャー\nブレッド", "ジンジャーブレッドマン 着ぐるみ", "4,000〜8,000円"],
+    ["cos_tree", "ツリー", "クリスマスツリー ポンチョ 仮装", "2,000〜4,000円"],
   ];
-  items.forEach(([h, b, col], i) => {
-    const colI = i % 3, row = Math.floor(i / 3);
-    const x = 0.5 + colI * 3.05, y = 1.15 + row * 1.45;
-    card(s, x, y, 2.85, 1.3, "cos_" + i);
-    s.addShape(pres.shapes.OVAL, { x: x + 0.2, y: y + 0.35, w: 0.6, h: 0.6, fill: { color: col }, line: { color: col }, objectName: "cos_dot_" + i });
-    s.addText(h, tx({ x: x + 0.95, y: y + 0.2, w: 1.8, h: 0.45, fontSize: 14, bold: true, color: C.text2 }));
-    s.addText(b, tx({ x: x + 0.95, y: y + 0.65, w: 1.8, h: 0.55, fontSize: 11 }));
+  items.forEach(([img, h, kw, price], i) => {
+    const col = i % 3, row = Math.floor(i / 3);
+    const x = 0.5 + col * 3.05, y = 1.05 + row * 1.9;
+    card(s, x, y, 2.85, 1.75, "cos_" + i);
+    s.addImage({ path: G(img), x: x + 0.1, y: y + 0.1, w: 1.25, h: 1.55, sizing: { type: "cover", w: 1.25, h: 1.55 }, altText: h + "の衣装イメージ", objectName: "img_" + img });
+    s.addText(h, tx({ x: x + 1.45, y: y + 0.12, w: 1.35, h: 0.5, fontSize: 13, bold: true, color: C.text2 }));
+    s.addText([{ text: "検索語", options: { color: C.accent4, fontSize: 9, breakLine: true } }, { text: kw, options: { fontSize: 10, breakLine: true } },
+      { text: price, options: { fontSize: 11, bold: true, color: C.accent1 } }], tx({ x: x + 1.45, y: y + 0.62, w: 1.35, h: 1.05 }));
   });
-  s.addText("Amazonで調達可能な市販衣装から選定（大人サイズ・スタッフ着用）。週ごとに衣装を入れ替え、毎週ちがう店頭の雰囲気をつくります。",
-    tx({ x: 0.5, y: 4.15, w: 9, h: 0.7, fontSize: 13 }));
+  s.addText("画像はAI生成のイメージ。価格は想定（税込・1着）で、Amazonの実商品・在庫は発注前に確認します。", tx({ x: 0.5, y: 4.85, w: 9, h: 0.3, fontSize: 10, color: C.accent4 }));
 }
 
-// ---------- 11. B0ポスター ----------
+// ---------- 11. B0ボードPOP ----------
 {
   const s = content("店頭演出", "B0ボードPOP　デザイン案");
   const ideas = [
-    ["A", "スノードーム主役", "大きなスノードームの中に雪景色とお店。「あなただけのスノードームをつくろう」", false],
-    ["B", "4週カレンダー型", "4週の内容をアドベントカレンダー風に配置。「毎週かわる！クリスマスワークショップ」", true],
-    ["C", "キャラクター型", "サンタ・雪だるま・トナカイが手招き。完成作品の写真を大きく配置", false],
+    ["poster_a", "A", "スノードーム主役", false, [["あなただけの\nスノードームを\nつくろう", 0.1, 0.5, 13]]],
+    ["poster_b", "B", "4週カレンダー型", true, [["毎週かわる！", 0.035, 0.17, 11]]],
+    ["poster_c", "C", "キャラクター型", false, [["クリスマス\nワークショップ開催中", 0.1, 0.42, 13]]],
   ];
-  ideas.forEach(([no, h, b, rec], i) => {
-    const x = 0.5 + i * 3.05;
-    // B0の縦横比(1:1.41)を模したポスター枠
-    s.addShape(pres.shapes.RECTANGLE, { x: x + 0.75, y: 1.15, w: 1.35, h: 1.9, fill: { color: rec ? C.text2 : C.accent5 }, line: { color: rec ? C.text2 : C.accent1 }, objectName: "poster_" + no });
-    s.addText(no, tx({ x: x + 0.75, y: 1.15, w: 1.35, h: 1.9, fontSize: 40, bold: true, color: rec ? C.background1 : C.text2, align: "center", valign: "middle", margin: 0 }));
-    s.addText(h + (rec ? "（推奨）" : ""), tx({ x, y: 3.15, w: 2.85, h: 0.4, fontSize: 15, bold: true, color: rec ? C.accent1 : C.text2, align: "center" }));
-    s.addText(b, tx({ x: x + 0.1, y: 3.6, w: 2.65, h: 1.0, fontSize: 12 }));
+  ideas.forEach(([img, no, h, rec, texts], i) => {
+    const x = 0.5 + i * 3.05, w = 2.15, ph = 3.2, px = x + 0.35;
+    s.addImage({ path: G(img), x: px, y: 1.0, w, h: ph, altText: "B0ボードPOP " + no + "案", objectName: "img_" + img });
+    texts.forEach(([t, ry, rh, fs]) =>
+      s.addText(t, tx({ x: px + 0.1, y: 1.0 + ph * ry, w: w - 0.2, h: ph * rh * 0.6, fontSize: fs, bold: true, color: C.text2, align: "center", valign: "middle", margin: 0 })));
+    s.addText("11/28〜12/25　参加無料", tx({ x: px + 0.1, y: 1.0 + ph - 0.42, w: w - 0.2, h: 0.3, fontSize: 9, bold: true, color: C.background1, fill: { color: C.text2 }, align: "center", valign: "middle", margin: 0 }));
+    s.addText(no + "案　" + h + (rec ? "（推奨）" : ""), tx({ x, y: 4.3, w: 2.85, h: 0.35, fontSize: 13, bold: true, color: rec ? C.accent1 : C.text2, align: "center" }));
   });
-  s.addText("共通：開催日時・対象年齢・参加条件・店舗名記入欄（手書き可）", tx({ x: 0.5, y: 4.7, w: 9, h: 0.4, fontSize: 12, color: C.accent4 }));
+  s.addText("共通：開催日時・対象年齢・参加条件・店舗名記入欄（手書き可）　※背景はAI生成のイメージ", tx({ x: 0.5, y: 4.75, w: 9, h: 0.35, fontSize: 10, color: C.accent4 }));
 }
 
 // ---------- 12. 運用フロー ----------
