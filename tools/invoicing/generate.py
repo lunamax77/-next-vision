@@ -150,7 +150,7 @@ def main():
     with open(sys.argv[1], encoding="utf-8") as f:
         job = json.load(f)
     out, warnings, rental, transport = generate(job)
-    subtotal = sum(x["amount"] or 0 for x in rental + transport)
+    subtotal = sum(x["amount"] for x in rental + transport if isinstance(x["amount"], (int, float)))
     print(f"✅ 生成: {out}")
     print(f"   種別: {'御見積書' if job['type']=='quote' else '御請求書'} / 宛先: {job['customer']}")
     print(f"   明細: レンタル{len(rental)}件 + 運送{len(transport)}件 / 小計(税別) ￥{subtotal:,} → 税込 ￥{round(subtotal*1.1):,}")

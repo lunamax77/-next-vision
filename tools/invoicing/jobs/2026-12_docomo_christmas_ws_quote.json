@@ -1,0 +1,22 @@
+{
+  "type": "quote",
+  "customer": "株式会社NTTドコモ",
+  "subject": "クリスマスワークショップパッケージについて（10セット）",
+  "period": "2026年12月 4週間（日程別途調整）",
+  "issue_date": "2026-10-20",
+  "person": "竹村英哲",
+  "rental_items": [
+    {"name": "ワークショップキット（スノードーム/スクイーズ/チャーム）", "qty": 10, "days": 1, "unit_price": 300000, "amount": 3000000,
+     "note": "1地区300個/週×4週=1,200個"},
+    {"name": "エア遊具1点＋クリスマスアーチ（期間中レンタル）", "qty": 10, "days": 1, "unit_price": 100000, "amount": 1000000,
+     "note": "期間終了後に返却"},
+    {"name": "販促物一式（B0ポスター10枚・開催中ツール・コスプレ）", "qty": 10, "days": 1, "unit_price": 80000, "amount": 800000,
+     "note": "コスプレ：サンタ・雪だるま・トナカイ"},
+    {"name": "企画・ディレクション・運用マニュアル", "qty": 10, "days": 1, "unit_price": 20000, "amount": 200000}
+  ],
+  "transport_items": [
+    {"name": "配送料（10地区 往復）", "qty": 10, "days": 1, "unit_price": "別途", "amount": "別途請求",
+     "note": "北海道〜九州 10地区・実費"}
+  ],
+  "output": "../../docs/proposals/2026-12_docomo_christmas-ws/御見積書_NTTドコモ_クリスマスWS.xlsx"
+}
