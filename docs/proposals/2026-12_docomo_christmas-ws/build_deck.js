@@ -386,7 +386,7 @@ sec("運用・お見積");
   s.addText([
     { text: "店舗スタッフ様だけで運営できる体制", options: { bold: true, color: C.text2, fontSize: 13, breakLine: true } },
     { text: "運営スタッフの派遣はなし。キット・物品と運用マニュアル（準備・受付・制作手順・片付け）をお届けします。", options: { bullet: true, breakLine: true } },
-    { text: "4週分のキット・物品は開始前に一括配送（週ごとに仕分けて梱包）。アーチは箱を再利用し、同梱の着払い伝票で返送いただくだけです。", options: { bullet: true } },
+    { text: "4週分のキット・物品は開始前に一括配送。アーチは箱を再利用し、同梱の着払い伝票で返送いただくだけです。", options: { bullet: true } },
   ], tx({ x: 0.65, y: 3.9, w: 8.7, h: 1.1, fontSize: 11, paraSpaceAfter: 2 }));
 }
 
