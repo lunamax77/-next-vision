@@ -102,14 +102,14 @@ sec("ご提案の概要");
     { text: b, options: { color: C.text1, fill: { color: C.background2 } } },
   ]), { x: 0.5, y: 1.15, w: 5.6, colW: [1.5, 4.1], fontSize: 13, rowH: 0.52, valign: "middle",
     border: { type: "solid", pt: 2, color: "FFFFFF" }, objectName: "request_table" });
-  card(s, 6.4, 1.15, 3.1, 3.82, "area_card");
-  s.addText("配送先 10地区", tx({ x: 6.6, y: 1.3, w: 2.7, h: 0.4, fontSize: 15, bold: true, color: C.text2 }));
+  s.addImage({ path: G("ill_ship"), x: 6.4, y: 1.1, w: 3.1, h: 1.75, sizing: { type: "cover", w: 3.1, h: 1.75 }, altText: "全国10地区への配送イラスト", objectName: "img_ship" });
+  s.addText("配送先 10地区", tx({ x: 6.4, y: 2.95, w: 3.1, h: 0.35, fontSize: 14, bold: true, color: C.text2 }));
   const areas = ["北海道", "東北", "関信越", "首都圏", "東海", "北陸", "関西", "中国", "四国", "九州"];
   areas.forEach((a, i) => {
     const col = i % 2, row = Math.floor(i / 2);
-    const x = 6.6 + col * 1.4, y = 1.85 + row * 0.6;
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w: 1.25, h: 0.45, rectRadius: 0.06, fill: { color: C.background1 }, line: { color: C.accent4, width: 1 }, objectName: "area_" + i });
-    s.addText(a, tx({ x, y, w: 1.25, h: 0.45, fontSize: 13, align: "center", valign: "middle", margin: 0 }));
+    const x = 6.4 + col * 1.6, y = 3.35 + row * 0.34;
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w: 1.5, h: 0.29, rectRadius: 0.05, fill: { color: C.background2 }, line: { color: C.accent5, width: 1 }, objectName: "area_" + i });
+    s.addText(a, tx({ x, y, w: 1.5, h: 0.29, fontSize: 11, align: "center", valign: "middle", margin: 0 }));
   });
 }
 
@@ -122,33 +122,36 @@ sec("ご提案の概要");
     ["2", "毎週ちがう\n作品で再来店", "スノードームとスクイーズを週替わりで。型・モチーフも変え、4週連続の来店動機に。"],
     ["3", "親子分離で\n商談機会を創出", "お子様は約20分の制作に集中。その間に保護者様をカウンターへご案内できます。"],
   ];
+  const ills = ["ill_family", "ill_calendar", "ill_parent_child"];
   items.forEach(([no, h, b], i) => {
     const x = 0.5 + i * 3.05;
-    card(s, x, 1.75, 2.85, 3.2, "goal_" + no);
-    badge(s, x + 0.2, 1.95, no, C.accent1, "goal_badge_" + no, 0.6);
-    s.addText(h, tx({ x: x + 0.95, y: 1.9, w: 1.8, h: 0.75, fontSize: 15, bold: true, color: C.text2, valign: "middle" }));
-    s.addText(b, tx({ x: x + 0.2, y: 2.85, w: 2.5, h: 1.9, fontSize: 13 }));
+    card(s, x, 1.65, 2.85, 3.4, "goal_" + no);
+    s.addImage({ path: G(ills[i]), x: x + 0.1, y: 1.75, w: 2.65, h: 1.45, sizing: { type: "cover", w: 2.65, h: 1.45 }, altText: h.replace("\n", "") + "のイラスト", objectName: "goal_img_" + no });
+    badge(s, x + 0.15, 3.32, no, C.accent1, "goal_badge_" + no, 0.5);
+    s.addText(h, tx({ x: x + 0.75, y: 3.27, w: 2.0, h: 0.6, fontSize: 14, bold: true, color: C.text2, valign: "middle" }));
+    s.addText(b, tx({ x: x + 0.15, y: 3.95, w: 2.55, h: 1.05, fontSize: 11 }));
   });
 }
 
 // ---------- 4. パッケージ全体像 ----------
 {
   const s = content("ご提案の概要", "1セットの中身（×10セット）");
+  s.addImage({ path: G("ill_store_scene"), x: 0.5, y: 1.05, w: 3.95, h: 3.95, altText: "店頭ブースの完成イメージ", objectName: "img_store_scene" });
+  s.addText("店頭ブースの完成イメージ", tx({ x: 0.5, y: 5.0, w: 3.95, h: 0.22, fontSize: 9, color: C.accent4 }));
   const parts = [
-    ["WS", "WSキット", "1週に1種類だけ実施\nスノードーム週／スクイーズ週", C.accent1],
-    ["装", "クリスマスアーチ", "エアーディスプレイ（期間中レンタル）", C.accent2],
-    ["衣", "コスプレ衣装", "サンタ・トナカイ・雪だるま・エルフ ほか", C.accent3],
-    ["掲", "B0ボードPOP", "10枚。4週の内容がひと目でわかるデザイン", C.accent6],
-    ["飾", "開催中ツール", "スタンド看板・のぼり・テーブル装飾 ほか", C.accent4],
-    ["手", "運用マニュアル", "店舗スタッフ様だけで運営できる手順書", C.text2],
+    ["kit_snowdome", "WSキット", "1週に1種類（スノードーム週／スクイーズ週）"],
+    ["arch", "クリスマスアーチ", "エアーディスプレイ（期間中レンタル）"],
+    ["cos_santa", "コスプレ衣装", "サンタ・トナカイ・雪だるま・エルフ ほか"],
+    ["poster_b", "B0ボードPOP 10枚", "4週の内容がひと目でわかるデザイン"],
+    ["nobori", "開催中ツール", "のぼり・スタンド看板・テーブルクロス ほか"],
+    ["ill_manual", "運用マニュアル", "店舗スタッフ様だけで運営できる手順書"],
   ];
-  parts.forEach(([ic, h, b, col], i) => {
-    const colI = i % 3, row = Math.floor(i / 3);
-    const x = 0.5 + colI * 3.05, y = 1.15 + row * 1.95;
-    card(s, x, y, 2.85, 1.75, "part_" + i);
-    badge(s, x + 0.2, y + 0.2, ic, col, "part_badge_" + i, 0.55);
-    s.addText(h, tx({ x: x + 0.9, y: y + 0.2, w: 1.85, h: 0.55, fontSize: 15, bold: true, color: C.text2, valign: "middle" }));
-    s.addText(b, tx({ x: x + 0.2, y: y + 0.9, w: 2.5, h: 0.8, fontSize: 12 }));
+  parts.forEach(([img, h, b], i) => {
+    const y = 1.05 + i * 0.67;
+    card(s, 4.7, y, 4.8, 0.6, "part_" + i);
+    s.addImage({ path: G(img), x: 4.76, y: y + 0.05, w: 0.5, h: 0.5, sizing: { type: "cover", w: 0.5, h: 0.5 }, altText: h, objectName: "part_img_" + i });
+    s.addText(h, tx({ x: 5.4, y: y + 0.03, w: 4.0, h: 0.28, fontSize: 13, bold: true, color: C.text2, margin: 0 }));
+    s.addText(b, tx({ x: 5.4, y: y + 0.31, w: 4.0, h: 0.26, fontSize: 10, margin: 0 }));
   });
 }
 
@@ -167,15 +170,13 @@ sec("ワークショップ");
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 1.1, w: 2.1, h: 0.75, rectRadius: 0.08, fill: { color: col }, line: { color: col }, objectName: "wk_head_" + i });
     s.addText([{ text: w, options: { fontSize: 16, bold: true, breakLine: true } }, { text: d, options: { fontSize: 11 } }],
       tx({ x, y: 1.1, w: 2.1, h: 0.75, color: C.background1, align: "center", valign: "middle", margin: 0 }));
-    card(s, x, 1.95, 2.1, 2.2, "wk_body_" + i);
+    card(s, x, 1.95, 2.1, 2.25, "wk_body_" + i);
+    s.addImage({ path: G("ill_wk" + (i + 1)), x: x + 0.5, y: 1.98, w: 1.1, h: 1.1, altText: ws + "のイラスト", objectName: "wk_img_" + i });
     s.addText([
-      { text: "ワークショップ", options: { fontSize: 11, color: C.accent4, breakLine: true } },
-      { text: ws, options: { fontSize: 16, bold: true, color: col, breakLine: true } },
-      { text: motif, options: { fontSize: 12, breakLine: true } },
-      { text: " ", options: { fontSize: 8, breakLine: true } },
-      { text: "コスプレ", options: { fontSize: 11, color: C.accent4, breakLine: true } },
-      { text: cos, options: { fontSize: 12 } },
-    ], tx({ x: x + 0.12, y: 2.05, w: 1.86, h: 2.0 }));
+      { text: ws, options: { fontSize: 15, bold: true, color: col, breakLine: true } },
+      { text: motif, options: { fontSize: 11, breakLine: true } },
+      { text: "コスプレ：" + cos, options: { fontSize: 10, color: C.accent4 } },
+    ], tx({ x: x + 0.1, y: 3.08, w: 1.9, h: 1.08, align: "center" }));
   });
   card(s, 0.5, 4.3, 9, 0.75, "rot_note", C.accent5);
   s.addText("1週間に実施するのは1種類だけ。スノードーム週（第1・4週）とスクイーズ週（第2・3週）で、キットを入れ替えます。モチーフ・衣装も毎週変えて“新作”として訴求します。",
@@ -255,15 +256,16 @@ kitSlide("スクイーズキット", "第2週・第3週に実施", C.text2, "kit
     ["お子様", "約20分", ["その週の作品の型・モチーフを選ぶ", "見本と手順カードを見ながら制作に集中", "完成した作品を袋に入れて受け取る", "作品を持って保護者様と合流"], C.accent1],
     ["保護者様", "約20分", ["隣接の商談カウンターへご案内", "料金プラン・機種変更のご相談", "見積ご依頼でクリスマス特典をご案内", "お子様の完成作品を一緒に確認"], C.text2],
   ];
+  s.addImage({ path: G("ill_parent_child"), x: 0.5, y: 1.1, w: 3.3, h: 3.3, altText: "お子様は制作、保護者様は商談のイラスト", objectName: "img_parent_child" });
   cols.forEach(([who, t, steps, col], ci) => {
-    const x = 0.5 + ci * 4.6;
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 1.1, w: 4.4, h: 0.6, rectRadius: 0.08, fill: { color: col }, line: { color: col }, objectName: "pc_head_" + ci });
-    s.addText(who + "　" + t, tx({ x, y: 1.1, w: 4.4, h: 0.6, fontSize: 16, bold: true, color: C.background1, align: "center", valign: "middle", margin: 0 }));
+    const x = 4.0 + ci * 2.8, w = 2.7;
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 1.1, w, h: 0.5, rectRadius: 0.08, fill: { color: col }, line: { color: col }, objectName: "pc_head_" + ci });
+    s.addText(who + "　" + t, tx({ x, y: 1.1, w, h: 0.5, fontSize: 14, bold: true, color: C.background1, align: "center", valign: "middle", margin: 0 }));
     steps.forEach((st, i) => {
-      const y = 1.85 + i * 0.68;
-      card(s, x, y, 4.4, 0.58, `pc_${ci}_${i}`);
-      badge(s, x + 0.12, y + 0.09, String(i + 1), col, `pc_b_${ci}_${i}`, 0.4);
-      s.addText(st, tx({ x: x + 0.65, y, w: 3.65, h: 0.58, fontSize: 13, valign: "middle" }));
+      const y = 1.72 + i * 0.7;
+      card(s, x, y, w, 0.62, `pc_${ci}_${i}`);
+      badge(s, x + 0.08, y + 0.13, String(i + 1), col, `pc_b_${ci}_${i}`, 0.36);
+      s.addText(st, tx({ x: x + 0.5, y, w: w - 0.55, h: 0.62, fontSize: 11, valign: "middle" }));
     });
   });
   s.addText("運営スタッフの派遣はなし。店舗スタッフ様1名でも回せるよう、手順カードと運用マニュアルを同梱します。", tx({ x: 0.5, y: 4.62, w: 9, h: 0.4, fontSize: 12, color: C.accent4 }));
@@ -372,19 +374,20 @@ sec("運用・お見積");
     ["店舗で実施", "11/28〜12/25\n4週間"],
     ["返却", "アーチを梱包\n着払い伝票で返送"],
   ];
+  const flowImgs = [G("ill_order"), G("ill_make"), G("ill_ship"), G("ill_family"), G("ill_return")];
   steps.forEach(([h, b], i) => {
     const x = 0.5 + i * 1.84;
-    s.addShape(pres.shapes.CHEVRON, { x, y: 1.3, w: 1.75, h: 0.8, fill: { color: i === 3 ? C.text2 : C.accent1 }, line: { color: C.background1 }, objectName: "step_" + i });
-    s.addText(h, tx({ x: x + 0.2, y: 1.3, w: 1.4, h: 0.8, fontSize: 13, bold: true, color: C.background1, align: "center", valign: "middle", margin: 0 }));
-    s.addText(b, tx({ x, y: 2.2, w: 1.75, h: 0.75, fontSize: 12, align: "center" }));
+    s.addShape(pres.shapes.CHEVRON, { x, y: 1.05, w: 1.75, h: 0.65, fill: { color: i === 3 ? C.text2 : C.accent1 }, line: { color: C.background1 }, objectName: "step_" + i });
+    s.addText(h, tx({ x: x + 0.2, y: 1.05, w: 1.4, h: 0.65, fontSize: 12, bold: true, color: C.background1, align: "center", valign: "middle", margin: 0 }));
+    s.addImage({ path: flowImgs[i], x: x + 0.2, y: 1.8, w: 1.3, h: 1.3, altText: h + "のイラスト", objectName: "step_img_" + i });
+    s.addText(b, tx({ x, y: 3.15, w: 1.75, h: 0.55, fontSize: 11, align: "center" }));
   });
-  card(s, 0.5, 3.2, 9, 1.75, "ops_note");
+  card(s, 0.5, 3.85, 9, 1.2, "ops_note");
   s.addText([
-    { text: "店舗スタッフ様だけで運営できる体制", options: { bold: true, color: C.text2, fontSize: 15, breakLine: true } },
+    { text: "店舗スタッフ様だけで運営できる体制", options: { bold: true, color: C.text2, fontSize: 13, breakLine: true } },
     { text: "運営スタッフの派遣はなし。キット・物品と運用マニュアル（準備・受付・制作手順・片付け）をお届けします。", options: { bullet: true, breakLine: true } },
-    { text: "週替わりの内容に合わせ、キットは週ごとに仕分けして納品します。", options: { bullet: true, breakLine: true } },
-    { text: "アーチの返却は箱・緩衝材を再利用し、同梱の着払い伝票で発送いただくだけです。", options: { bullet: true } },
-  ], tx({ x: 0.7, y: 3.3, w: 8.6, h: 1.55, fontSize: 13, paraSpaceAfter: 4 }));
+    { text: "キットは週ごとに仕分けて納品。アーチは箱を再利用し、同梱の着払い伝票で返送いただくだけです。", options: { bullet: true } },
+  ], tx({ x: 0.65, y: 3.9, w: 8.7, h: 1.1, fontSize: 11, paraSpaceAfter: 2 }));
 }
 
 // ---------- 13. 御見積書 ----------
