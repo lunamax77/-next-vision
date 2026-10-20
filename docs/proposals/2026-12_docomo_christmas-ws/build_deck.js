@@ -9,6 +9,7 @@ const IMG = {
   squeezeEvent: path.join(__dirname, "../../../site/images/squeeze-event.jpg"),
   punilab: path.join(__dirname, "../../../site/images/punilab-animals.jpg"),
   arch: path.join(__dirname, "assets/arch_reference.jpg"),
+  snowdome: path.join(__dirname, "assets/snowdome_image.jpg"),
 };
 
 const FONT = "メイリオ";
@@ -162,8 +163,8 @@ sec("ご提案の概要");
 sec("ワークショップ");
 {
   const s = content("ワークショップ", "目玉①　スノードーム作り");
-  snowGlobe(s, 0.9, 1.35, 2.3, "main");
-  s.addText("クリスマス専用の新コンテンツ", tx({ x: 0.5, y: 4.3, w: 3.2, h: 0.4, fontSize: 13, color: C.accent4, align: "center" }));
+  s.addImage({ path: IMG.snowdome, x: 0.5, y: 1.1, w: 3.2, h: 3.2, altText: "スノードームの完成イメージ", objectName: "img_snowdome" });
+  s.addText("完成イメージ", tx({ x: 0.2, y: 4.4, w: 3.8, h: 0.4, fontSize: 13, color: C.accent4, align: "center" }));
   const rows = [
     ["内容", "ミニフィギュア（サンタ・ツリー・雪だるま等）とラメ雪を選んで、自分だけのスノードームを制作"],
     ["所要時間", "約15〜20分／人"],
