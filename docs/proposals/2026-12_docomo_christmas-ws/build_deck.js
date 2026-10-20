@@ -135,7 +135,7 @@ sec("ご提案の概要");
 {
   const s = content("ご提案の概要", "1セットの中身（×10セット）");
   const parts = [
-    ["WS", "WSキット", "スノードーム／スクイーズ\n300個／週 × 4週＝1,200個", C.accent1],
+    ["WS", "WSキット", "1週に1種類だけ実施\nスノードーム週／スクイーズ週", C.accent1],
     ["装", "クリスマスアーチ", "エアーディスプレイ（期間中レンタル）", C.accent2],
     ["衣", "コスプレ衣装", "サンタ・トナカイ・雪だるま・エルフ ほか", C.accent3],
     ["掲", "B0ボードPOP", "10枚。4週の内容がひと目でわかるデザイン", C.accent6],
@@ -152,68 +152,10 @@ sec("ご提案の概要");
   });
 }
 
-// ---------- 5. スノードーム ----------
+// ---------- 5. 4週ローテーション ----------
 sec("ワークショップ");
 {
-  const s = content("ワークショップ", "目玉①　スノードーム作り");
-  s.addImage({ path: IMG.snowdome, x: 0.5, y: 1.1, w: 3.2, h: 3.2, altText: "スノードームの完成イメージ", objectName: "img_snowdome" });
-  s.addText("完成イメージ", tx({ x: 0.2, y: 4.4, w: 3.8, h: 0.4, fontSize: 13, color: C.accent4, align: "center" }));
-  const rows = [
-    ["内容", "ミニフィギュア（サンタ・ツリー・雪だるま等）とラメ雪を選んで、自分だけのスノードームを制作"],
-    ["所要時間", "約15〜20分／人"],
-    ["対象", "3歳〜小学生（未就学児は保護者様と一緒に）"],
-    ["持ち帰り", "冬のインテリアとして飾れる。記念性が高く、家族の会話が続く"],
-  ];
-  rows.forEach(([h, b], i) => {
-    const y = 1.2 + i * 0.95;
-    s.addText(h, tx({ x: 4.1, y, w: 1.4, h: 0.8, fontSize: 14, bold: true, color: C.accent1 }));
-    s.addText(b, tx({ x: 5.5, y, w: 4.0, h: 0.8, fontSize: 14 }));
-  });
-}
-
-// ---------- 6. スクイーズ ----------
-{
-  const s = content("ワークショップ", "目玉②　スクイーズ作り（ぷにラボ）");
-  s.addImage({ path: IMG.squeezeEvent, x: 0.5, y: 1.1, w: 2.25, h: 3.0, altText: "ドコモ店頭でのスクイーズ作成体験ブース", objectName: "img_squeeze_event" });
-  s.addImage({ path: IMG.punilabPaw, x: 2.9, y: 1.1, w: 3.0, h: 3.0, altText: "肉球スクイーズの完成品", objectName: "img_punilab_paw" });
-  s.addText("ドコモ店頭での実施風景\n（ヨドバシ梅田）", tx({ x: 0.5, y: 4.15, w: 2.25, h: 0.5, fontSize: 10, color: C.accent4 }));
-  s.addText("完成品（肉球スクイーズ）", tx({ x: 2.9, y: 4.15, w: 3.0, h: 0.3, fontSize: 10, color: C.accent4 }));
-  const rows = [
-    ["内容", "型とカラーを選び、液を混ぜて型に流し込む。型のまま持ち帰り、おうちで完成"],
-    ["クリスマス仕様", "ツリー・ブーツ・雪だるま・プレゼント型／赤・緑・白"],
-    ["所要時間", "会場作業 約20分（＋自宅仕上げ）"],
-    ["実績", "ドコモショップ・量販店のドコモブースで実施済み"],
-  ];
-  rows.forEach(([h, b], i) => {
-    const y = 1.1 + i * 0.95;
-    s.addText(h, tx({ x: 6.15, y, w: 3.35, h: 0.3, fontSize: 13, bold: true, color: C.accent1 }));
-    s.addText(b, tx({ x: 6.15, y: y + 0.3, w: 3.35, h: 0.62, fontSize: 12 }));
-  });
-}
-
-// ---------- ワークショップキット ----------
-{
-  const s = content("ワークショップ", "ワークショップキット（イメージ）");
-  const kits = [
-    ["kit_snowdome", "スノードームキット", "ドーム・台座・ミニフィギュア（サンタ/ツリー/雪だるま）・ラメ雪・のり"],
-    ["kit_squeeze", "スクイーズキット", "クリスマス型モールド・計量カップ・カラー液（赤/緑/白）・マジックパウダー"],
-  ];
-  kits.forEach(([img, h, b], i) => {
-    const x = 0.5 + i * 4.6;
-    s.addImage({ path: G(img), x, y: 1.05, w: 2.45, h: 2.45, altText: h + "のイメージ", objectName: "img_" + img });
-    s.addText(h, tx({ x: x + 2.55, y: 1.1, w: 1.9, h: 0.4, fontSize: 13, bold: true, color: C.text2 }));
-    s.addText(b, tx({ x: x + 2.55, y: 1.55, w: 1.9, h: 1.9, fontSize: 11 }));
-  });
-  card(s, 0.5, 3.75, 9, 0.85, "kit_qty");
-  s.addText([
-    { text: "1地区 300個／週 × 4週 ＝ 1,200個（10地区で計12,000個）", options: { bold: true, color: C.text2, fontSize: 14, breakLine: true } },
-    { text: "週ごとに仕分けて納品。手順カード・見本1点を同梱。※画像はAI生成のイメージ", options: { fontSize: 11 } },
-  ], tx({ x: 0.7, y: 3.82, w: 8.6, h: 0.72 }));
-}
-
-// ---------- 7. 4週ローテーション ----------
-{
-  const s = content("ワークショップ", "4週ローテーション計画（11月最終週〜12月）");
+  const s = content("ワークショップ", "4週ローテーション（1週1コンテンツ）");
   const weeks = [
     ["第1週", "11/28(土)〜12/4(金)", "スノードーム", "サンタモチーフ", "サンタ／トナカイ", C.accent1],
     ["第2週", "12/5(土)〜12/11(金)", "スクイーズ", "ツリー・ブーツ型", "雪だるま／エルフ", C.text2],
@@ -222,28 +164,95 @@ sec("ワークショップ");
   ];
   weeks.forEach(([w, d, ws, motif, cos, col], i) => {
     const x = 0.5 + i * 2.3;
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 1.15, w: 2.1, h: 0.75, rectRadius: 0.08, fill: { color: col }, line: { color: col }, objectName: "wk_head_" + i });
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 1.1, w: 2.1, h: 0.75, rectRadius: 0.08, fill: { color: col }, line: { color: col }, objectName: "wk_head_" + i });
     s.addText([{ text: w, options: { fontSize: 16, bold: true, breakLine: true } }, { text: d, options: { fontSize: 11 } }],
-      tx({ x, y: 1.15, w: 2.1, h: 0.75, color: C.background1, align: "center", valign: "middle", margin: 0 }));
-    card(s, x, 2.0, 2.1, 2.3, "wk_body_" + i);
+      tx({ x, y: 1.1, w: 2.1, h: 0.75, color: C.background1, align: "center", valign: "middle", margin: 0 }));
+    card(s, x, 1.95, 2.1, 2.2, "wk_body_" + i);
     s.addText([
       { text: "ワークショップ", options: { fontSize: 11, color: C.accent4, breakLine: true } },
-      { text: ws, options: { fontSize: 16, bold: true, color: C.text2, breakLine: true } },
+      { text: ws, options: { fontSize: 16, bold: true, color: col, breakLine: true } },
       { text: motif, options: { fontSize: 12, breakLine: true } },
       { text: " ", options: { fontSize: 8, breakLine: true } },
       { text: "コスプレ", options: { fontSize: 11, color: C.accent4, breakLine: true } },
       { text: cos, options: { fontSize: 12 } },
-    ], tx({ x: x + 0.12, y: 2.1, w: 1.86, h: 2.1 }));
+    ], tx({ x: x + 0.12, y: 2.05, w: 1.86, h: 2.0 }));
   });
-  s.addText("同じワークショップが続く週も、型・モチーフ・衣装を変えて“新作”として訴求。毎週来ても新しい体験になります。",
-    tx({ x: 0.5, y: 4.45, w: 9, h: 0.6, fontSize: 13, color: C.text1 }));
+  card(s, 0.5, 4.3, 9, 0.75, "rot_note", C.accent5);
+  s.addText("1週間に実施するのは1種類だけ。スノードーム週（第1・4週）とスクイーズ週（第2・3週）で、キットを入れ替えます。モチーフ・衣装も毎週変えて“新作”として訴求します。",
+    tx({ x: 0.65, y: 4.33, w: 8.7, h: 0.7, fontSize: 12, valign: "middle" }));
 }
+
+// 週バッジ（どの週に実施するか）
+function weekTag(s, label, col) {
+  s.addText(label, tx({ x: 0.5, y: 0.98, w: 2.2, h: 0.32, fontSize: 11, bold: true, color: C.background1, fill: { color: col }, align: "center", valign: "middle", margin: 0 }));
+}
+// キット紹介ページ
+function kitSlide(title, label, col, img, items, note) {
+  const s = content("ワークショップ", title);
+  weekTag(s, label, col);
+  s.addImage({ path: G(img), x: 0.5, y: 1.45, w: 3.5, h: 3.5, altText: title + "のイメージ", objectName: "img_" + img });
+  s.addText("※AI生成のイメージ", tx({ x: 0.5, y: 4.95, w: 3.5, h: 0.22, fontSize: 9, color: C.accent4 }));
+  s.addText("キット内容（1人分）", tx({ x: 4.3, y: 1.45, w: 5.2, h: 0.35, fontSize: 14, bold: true, color: col }));
+  s.addText(items.map((t, i) => ({ text: t, options: { bullet: true, breakLine: i < items.length - 1 } })), tx({ x: 4.3, y: 1.85, w: 5.2, h: 1.6, fontSize: 13, paraSpaceAfter: 3 }));
+  card(s, 4.3, 3.6, 5.2, 0.9, "kit_qty_" + img);
+  s.addText([
+    { text: "1地区 300個／週 × 2週 ＝ 600個", options: { bold: true, color: C.text2, fontSize: 15, breakLine: true } },
+    { text: note, options: { fontSize: 11 } },
+  ], tx({ x: 4.45, y: 3.66, w: 4.9, h: 0.78 }));
+}
+
+// ---------- 6. スノードーム週 ----------
+{
+  const s = content("ワークショップ", "スノードーム作り");
+  weekTag(s, "第1週・第4週に実施", C.accent1);
+  s.addImage({ path: IMG.snowdome, x: 0.5, y: 1.45, w: 3.5, h: 3.5, altText: "スノードームの完成イメージ", objectName: "img_snowdome" });
+  s.addText("完成イメージ", tx({ x: 0.5, y: 4.95, w: 3.5, h: 0.22, fontSize: 9, color: C.accent4 }));
+  const rows = [
+    ["内容", "ミニフィギュアとラメ雪を選んで、自分だけのスノードームを制作"],
+    ["モチーフ", "第1週：サンタ／第4週：雪だるま・トナカイ"],
+    ["所要時間", "約15〜20分／人"],
+    ["対象", "3歳〜小学生（未就学児は保護者様と一緒に）"],
+    ["持ち帰り", "冬のインテリアとして飾れる記念品"],
+  ];
+  rows.forEach(([h, b], i) => {
+    const y = 1.45 + i * 0.7;
+    s.addText(h, tx({ x: 4.3, y, w: 1.3, h: 0.6, fontSize: 13, bold: true, color: C.accent1 }));
+    s.addText(b, tx({ x: 5.6, y, w: 3.9, h: 0.6, fontSize: 13 }));
+  });
+}
+kitSlide("スノードームキット", "第1週・第4週に実施", C.accent1, "kit_snowdome",
+  ["ドーム・台座", "ミニフィギュア（サンタ／ツリー／雪だるま等）", "ラメ雪・シルバーフレーク", "のり・手順カード"],
+  "第1週分・第4週分に分けて納品（10地区で計6,000個）");
+
+// ---------- 7. スクイーズ週 ----------
+{
+  const s = content("ワークショップ", "スクイーズ作り（ぷにラボ）");
+  weekTag(s, "第2週・第3週に実施", C.text2);
+  s.addImage({ path: IMG.squeezeEvent, x: 0.5, y: 1.45, w: 2.4, h: 3.2, altText: "ドコモ店頭でのスクイーズ作成体験ブース", objectName: "img_squeeze_event" });
+  s.addImage({ path: IMG.punilabPaw, x: 3.0, y: 1.45, w: 2.4, h: 2.4, altText: "肉球スクイーズの完成品", objectName: "img_punilab_paw" });
+  s.addText("ドコモ店頭での実施風景（ヨドバシ梅田）", tx({ x: 0.5, y: 4.7, w: 2.4, h: 0.45, fontSize: 9, color: C.accent4 }));
+  s.addText("完成品（肉球スクイーズ）", tx({ x: 3.0, y: 3.9, w: 2.4, h: 0.25, fontSize: 9, color: C.accent4 }));
+  const rows = [
+    ["内容", "型とカラーを選び、液を流し込む。型のまま持ち帰り、おうちで完成"],
+    ["モチーフ", "第2週：ツリー・ブーツ型／第3週：雪だるま・プレゼント型"],
+    ["所要時間", "会場作業 約20分（＋自宅仕上げ）"],
+    ["実績", "ドコモショップ・量販店のドコモブースで実施済み"],
+  ];
+  rows.forEach(([h, b], i) => {
+    const y = 1.45 + i * 0.88;
+    s.addText(h, tx({ x: 5.6, y, w: 3.9, h: 0.3, fontSize: 13, bold: true, color: C.text2 }));
+    s.addText(b, tx({ x: 5.6, y: y + 0.3, w: 3.9, h: 0.55, fontSize: 12 }));
+  });
+}
+kitSlide("スクイーズキット", "第2週・第3週に実施", C.text2, "kit_squeeze",
+  ["クリスマス型シリコンモールド（ツリー／ブーツ／雪だるま／プレゼント）", "計量カップ・カラー液（赤／緑／白）", "マジックパウダー", "お持ち帰り袋・手順カード"],
+  "第2週分・第3週分に分けて納品（10地区で計6,000個）");
 
 // ---------- 親子分離の運用 ----------
 {
   const s = content("ワークショップ", "親子分離の運用設計");
   const cols = [
-    ["お子様", "約20分", ["スノードーム／スクイーズを選ぶ", "見本と手順カードを見ながら制作に集中", "完成（スクイーズは型のまま袋へ）", "作品を持って保護者様と合流"], C.accent1],
+    ["お子様", "約20分", ["その週の作品の型・モチーフを選ぶ", "見本と手順カードを見ながら制作に集中", "完成した作品を袋に入れて受け取る", "作品を持って保護者様と合流"], C.accent1],
     ["保護者様", "約20分", ["隣接の商談カウンターへご案内", "料金プラン・機種変更のご相談", "見積ご依頼でクリスマス特典をご案内", "お子様の完成作品を一緒に確認"], C.text2],
   ];
   cols.forEach(([who, t, steps, col], ci) => {
@@ -390,21 +399,22 @@ sec("運用・お見積");
   const R = (cells) => cells.map((t, i) => ({ text: t, options: { align: [1, 6].includes(i) ? "left" : (i === 0 ? "center" : "right") } }));
   const rows = [
     [H("No"), H("御見積内容", "left"), H("数量"), H("日数"), H("単価"), H("金額"), H("摘要", "left")],
-    R(["1", "ワークショップキット（スノードーム／スクイーズ）", "10", "1", "400,000", "4,000,000", "1地区300個/週×4週"]),
-    R(["2", "販促物一式（クリスマスアーチ・B0ボードPOP10枚・開催中ツール・コスプレ）", "10", "1", "80,000", "800,000", "アーチは期間中レンタル"]),
-    R(["3", "管理運営費", "10", "1", "20,000", "200,000", ""]),
-    R(["4", "配送料（10地区 往復）", "10", "1", "別途", "別途請求", "実費"]),
+    R(["1", "スノードームキット（第1・4週）", "10", "1", "200,000", "2,000,000", "1地区300個/週×2週"]),
+    R(["2", "スクイーズキット（第2・3週）", "10", "1", "200,000", "2,000,000", "1地区300個/週×2週"]),
+    R(["3", "販促物一式（クリスマスアーチ・B0ボードPOP10枚・開催中ツール・コスプレ）", "10", "1", "80,000", "800,000", "アーチは期間中レンタル"]),
+    R(["4", "管理運営費", "10", "1", "20,000", "200,000", ""]),
+    R(["5", "配送料（10地区 往復）", "10", "1", "別途", "別途請求", "実費"]),
   ];
-  s.addTable(rows, { x: 0.5, y: 2.0, w: 9.0, colW: [0.4, 3.5, 0.5, 0.5, 0.85, 1.05, 2.2], fontSize: 10, rowH: 0.36,
+  s.addTable(rows, { x: 0.5, y: 2.0, w: 9.0, colW: [0.4, 3.5, 0.5, 0.5, 0.85, 1.05, 2.2], fontSize: 10, rowH: 0.32,
     valign: "middle", color: C.text1, border: { type: "solid", pt: 0.75, color: "E9B9C0" }, objectName: "quote_table" });
   const tot = [["小計", "5,000,000"], ["消費税（10%）", "500,000"], ["合計金額", "5,500,000"]];
   tot.forEach(([k, v], i) => {
-    const y = 4.05 + i * 0.36, last = i === 2;
-    s.addShape(pres.shapes.RECTANGLE, { x: 6.1, y, w: 3.4, h: 0.34, fill: { color: last ? C.accent1 : C.background2 }, line: { color: last ? C.accent1 : C.background2 }, objectName: "tot_" + i });
-    s.addText(k, tx({ x: 6.2, y, w: 1.5, h: 0.34, fontSize: 11, bold: last, color: last ? C.background1 : C.text1, valign: "middle", margin: 0 }));
-    s.addText("￥" + v, tx({ x: 7.7, y, w: 1.7, h: 0.34, fontSize: 12, bold: true, color: last ? C.background1 : C.text1, align: "right", valign: "middle", margin: 0 }));
+    const y = 4.12 + i * 0.33, last = i === 2;
+    s.addShape(pres.shapes.RECTANGLE, { x: 6.1, y, w: 3.4, h: 0.31, fill: { color: last ? C.accent1 : C.background2 }, line: { color: last ? C.accent1 : C.background2 }, objectName: "tot_" + i });
+    s.addText(k, tx({ x: 6.2, y, w: 1.5, h: 0.31, fontSize: 11, bold: last, color: last ? C.background1 : C.text1, valign: "middle", margin: 0 }));
+    s.addText("￥" + v, tx({ x: 7.7, y, w: 1.7, h: 0.31, fontSize: 12, bold: true, color: last ? C.background1 : C.text1, align: "right", valign: "middle", margin: 0 }));
   });
-  s.addText("※金額は税別表示。配送料は別途、実費にてご請求いたします。\n※運営スタッフの派遣は含みません。", tx({ x: 0.5, y: 4.1, w: 5.4, h: 0.9, fontSize: 10, color: C.text1 }));
+  s.addText("※金額は税別表示。配送料は別途、実費にてご請求いたします。\n※運営スタッフの派遣は含みません。", tx({ x: 0.5, y: 4.15, w: 5.4, h: 0.9, fontSize: 10, color: C.text1 }));
 }
 
 // ---------- 14. 会社概要 ----------
