@@ -42,4 +42,9 @@ return [
     // GitHub Actions からの自動デプロイ用トークン(server/deploy.php)。
     // GitHub の Secrets "ATTENDANCE_DEPLOY_TOKEN" と同じ値にする。空なら自動デプロイ無効。
     'deploy_token' => '',
+
+    // セキュリティ監視(server/cron/security_check.php)の通知先。未設定なら notify_from 宛
+    'security_email' => 'data@your-domain.example.com',
+    // 「異常なし」の定時報告を送る時刻(時・日本時間)
+    'security_report_hour' => 8,
 ];

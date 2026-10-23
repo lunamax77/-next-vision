@@ -4,6 +4,7 @@ declare(strict_types=1);
 header('Content-Type: application/json; charset=utf-8');
 
 require __DIR__ . '/../lib/db.php';
+require __DIR__ . '/../lib/audit.php';
 
 function respond(int $status, array $body): void
 {
@@ -24,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $token = $_SERVER['HTTP_X_APP_TOKEN'] ?? '';
 if (!hash_equals($config['app_token'], $token)) {
+    audit_log('api_token_invalid', ['script' => basename(__FILE__)]);
     respond(401, ['ok' => false, 'error' => 'invalid app token']);
 }
 
@@ -52,9 +54,11 @@ try {
 }
 
 if (!$row || (int)$row['is_active'] !== 1 || !password_verify($password, $row['password_hash'])) {
+    audit_log('login_failed', ['login_id' => $loginId]);
     respond(401, ['ok' => false, 'error' => 'IDまたはパスワードが違います']);
 }
 
+audit_log('login_ok', ['login_id' => $loginId]);
 respond(200, [
     'ok' => true,
     'login_id' => $loginId,

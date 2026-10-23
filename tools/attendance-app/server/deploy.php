@@ -207,6 +207,8 @@ $zip->close();
 if (count($errors) === 0) {
     file_put_contents($shaFile, $sha . "\n");
 }
+require_once __DIR__ . '/lib/audit.php';
+audit_log('deploy', ['sha' => substr($sha, 0, 7), 'updated' => $written, 'errors' => count($errors)]);
 $summary = sprintf('deployed %s: updated=%d skipped=%d errors=%d', substr($sha, 0, 7), $written, count($skipped), count($errors));
 out($summary);
 foreach ($errors as $e) {

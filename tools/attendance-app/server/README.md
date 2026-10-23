@@ -102,3 +102,16 @@ php /virtual/dcreation/public_html/attendance/server/deploy.php
 手動で今すぐ反映したいときはブラウザで
 `https://<domain>/attendance/server/deploy.php?token=<config.php の deploy_token>` を開く。
 `config.js` / `config.php` / `google-service-account.json` / `uploads/` / `.htpasswd` は上書きされない。
+
+## セキュリティ監視
+
+`server/cron/security_check.php` を CRON で1時間ごとに実行する:
+
+```
+php /virtual/dcreation/public_html/attendance/server/cron/security_check.php
+```
+
+- GitHub の正本と比較したファイル改ざん・不明な実行ファイルの検知
+- スタッフアカウントの作成・削除・パスワード変更の検知
+- 監査ログ(`server/audit.log`)からトークン不一致・ログイン失敗の連発、深夜の管理画面アクセスを検知
+- 異常があれば即時メール、毎朝(`security_report_hour`)に「異常なし」の定時報告

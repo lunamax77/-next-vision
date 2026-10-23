@@ -4,6 +4,8 @@ declare(strict_types=1);
 header('Content-Type: application/json; charset=utf-8');
 
 require __DIR__ . '/../lib/db.php';
+require __DIR__ . '/../lib/audit.php';
+audit_log('admin_access', ['script' => basename(__FILE__), 'method' => $_SERVER['REQUEST_METHOD'] ?? '']);
 require __DIR__ . '/../lib/staff_auth.php';
 require __DIR__ . '/../lib/geocode.php';
 
@@ -88,6 +90,7 @@ if ($method === 'POST') {
             error_log('accounts.php create error: ' . $e->getMessage());
             respond(500, ['ok' => false, 'error' => 'db error']);
         }
+        audit_log('account_created', ['login_id' => $loginId, 'display_name' => $displayName]);
         respond(200, [
             'ok' => true,
             'login_id' => $loginId,
@@ -153,6 +156,7 @@ if ($method === 'POST') {
             error_log('accounts.php update error: ' . $e->getMessage());
             respond(500, ['ok' => false, 'error' => 'db error']);
         }
+        audit_log('account_updated', ['id' => $id, 'display_name' => $displayName]);
         respond(200, ['ok' => true, 'station_geocoded' => $stationGeocoded]);
     }
 
@@ -167,6 +171,7 @@ if ($method === 'POST') {
         if ($stmt->rowCount() === 0) {
             respond(404, ['ok' => false, 'error' => 'account not found']);
         }
+        audit_log('password_reset', ['id' => $id]);
         respond(200, ['ok' => true, 'password' => $password]);
     }
 
@@ -178,6 +183,7 @@ if ($method === 'POST') {
         }
         $stmt = $pdo->prepare('UPDATE staff_accounts SET is_active = :active WHERE id = :id');
         $stmt->execute(['active' => $isActive, 'id' => $id]);
+        audit_log('account_set_active', ['id' => $id, 'is_active' => $isActive]);
         respond(200, ['ok' => true]);
     }
 
@@ -192,6 +198,7 @@ if ($method === 'POST') {
         if ($stmt->rowCount() === 0) {
             respond(404, ['ok' => false, 'error' => 'account not found']);
         }
+        audit_log('account_deleted', ['id' => $id]);
         respond(200, ['ok' => true]);
     }
 

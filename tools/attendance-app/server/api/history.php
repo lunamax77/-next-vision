@@ -4,6 +4,7 @@ declare(strict_types=1);
 header('Content-Type: application/json; charset=utf-8');
 
 require __DIR__ . '/../lib/db.php';
+require __DIR__ . '/../lib/audit.php';
 
 function respond(int $status, array $body): void
 {
@@ -20,6 +21,7 @@ $config = require $configPath;
 
 $token = $_SERVER['HTTP_X_APP_TOKEN'] ?? '';
 if (!hash_equals($config['app_token'], $token)) {
+    audit_log('api_token_invalid', ['script' => basename(__FILE__)]);
     respond(401, ['ok' => false, 'error' => 'invalid app token']);
 }
 

@@ -5,3 +5,5 @@ uploads/*
 admin_api/.htpasswd
 deploy.log
 .deployed_sha
+audit.log
+.security_state.json

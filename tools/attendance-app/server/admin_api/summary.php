@@ -4,6 +4,8 @@ declare(strict_types=1);
 header('Content-Type: application/json; charset=utf-8');
 
 require __DIR__ . '/../lib/db.php';
+require __DIR__ . '/../lib/audit.php';
+audit_log('admin_access', ['script' => basename(__FILE__), 'method' => $_SERVER['REQUEST_METHOD'] ?? '']);
 require __DIR__ . '/../lib/mailer.php';
 require __DIR__ . '/../lib/summary.php';
 
