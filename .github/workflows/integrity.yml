@@ -1,0 +1,24 @@
+# nextvision.fun 改ざん検知（毎日2回）
+# - GitHub の定期実行はデフォルトブランチの設定ファイルだけが動くため、この1ファイルのみここに置く
+# - 実際の HP 正本と照合スクリプトは作業ブランチ claude/hp-zip-import-a2ibct にある（checkout の ref で指定）
+# - 公開中の HP とリポジトリの正本が一致しない／取得できない／不審なコードがある場合は失敗になり、代表へメール通知
+name: Site integrity check (改ざん検知)
+
+on:
+  schedule:
+    - cron: "0 0,12 * * *"   # 日本時間 9:00 / 21:00
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Compare live site with repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/hp-zip-import-a2ibct
+      - name: Build reference (dist/)
+        run: python3 tools/cache_bust.py site dist
+      - name: Compare with https://nextvision.fun
+        run: python3 tools/integrity_check.py dist https://nextvision.fun
