@@ -128,6 +128,8 @@
 
     var form = document.getElementById('inquiry');
     if (form) {
+      var tsf = form.querySelector('input[name="ts"]');
+      if (tsf) tsf.value = String(Date.now());
       form.addEventListener('submit', function () {
         var p = form.querySelector('input[name="purpose"]:checked');
         var c = form.querySelector('[name="content"]');
