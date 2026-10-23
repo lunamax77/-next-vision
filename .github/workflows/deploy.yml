@@ -12,6 +12,7 @@ on:
     paths:
       - "site/**"
       - "tools/cache_bust.py"
+      - "tools/integrity_check.py"
   workflow_dispatch:
 
 # 同時に2つ走らないようにする（前の同期が終わってから次を実行）
@@ -57,3 +58,18 @@ jobs:
             **/node_modules/**
             **/.DS_Store
           log-level: standard
+
+  # デプロイ直後に、公開中の HP が正本と一致しているかを確認（改ざん検知の即時版。毎日の定期実行は integrity.yml）
+  verify:
+    name: Verify live site matches repository
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for server cache
+        run: sleep 45
+      - name: Build reference (dist/)
+        run: python3 tools/cache_bust.py site dist
+      - name: Compare with https://nextvision.fun
+        run: python3 tools/integrity_check.py dist https://nextvision.fun
