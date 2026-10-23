@@ -1,0 +1,21 @@
+# nextvision.fun 改ざん検知
+# - 毎日 2回（日本時間 9:00 / 21:00）と、手動実行で、公開中の HP とリポジトリの正本を比較する
+# - 一致しない／取得できない／不審なコードがある場合はこのワークフローが「失敗」になり、GitHub から代表へメール通知が届く
+name: Site integrity check (改ざん検知)
+
+on:
+  schedule:
+    - cron: "0 0,12 * * *"
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Compare live site with repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build reference (dist/)
+        run: python3 tools/cache_bust.py site dist
+      - name: Compare with https://nextvision.fun
+        run: python3 tools/integrity_check.py dist https://nextvision.fun
