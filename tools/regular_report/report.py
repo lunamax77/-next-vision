@@ -151,6 +151,7 @@ def classify(msg, post_time):
 STAY_HOURS_REGULAR = 5  # 常連の滞在時間(投稿からこの時間まで在店とみなす)
 STAY_HOURS_OTHER = 3  # 常連以外・カップルの滞在時間
 REGULAR_MAX_HOURS = 6  # 常連は部の終了までいるが最大この時間
+MALE_PART1_STAY = 0.5  # 1部の男性は16:30以降この割合だけ残る(半分帰る)
 
 
 PART_START = {"1": 13 * 60, "1.5": 16 * 60 + 30, "2": 19 * 60}
@@ -388,23 +389,30 @@ def main():
     # 女性率は Lv3以上の女性常連を女性として数えない(代表の基準)
     women = [(k, v) for k, v in present.items() if k[0] == "女性" and v[1] and level("女性", v[0]) < 3]
 
+    # 1部の男性は 1.5部開始(16:30)以降は半分帰った想定で 0.5人として数える(代表の決定)
+    def wt(k, v, t):
+        return MALE_PART1_STAY if k[0] == "男性" and v[2] == "1部" and t >= at(start, PART_START["1.5"]) else 1
+
     def judge(t):
-        n4 = [v[0] for k, v in lv4 if v[1] <= t < leave(k, v)]
+        n4l = [(k, v) for k, v in lv4 if v[1] <= t < leave(k, v)]
+        n4 = [v[0] for k, v in n4l]
+        c4 = sum(wt(k, v, t) for k, v in n4l)
         m = [(k, v) for k, v in men if v[1] <= t < leave(k, v)]
-        mr = sum(1 for k, v in m if key(v[0]) in reg["男性"])
+        mn = sum(wt(k, v, t) for k, v in m)
+        mr = sum(wt(k, v, t) for k, v in m if key(v[0]) in reg["男性"])
         why = []
-        if len(n4) >= 2:
-            why.append(f"Lv4が{len(n4)}名")
-        if m and mr * 2 > len(m):
-            why.append(f"男性常連{mr * 100 // len(m)}%")
+        if c4 >= 2:
+            why.append(f"Lv4が{c4:g}名")
+        if mn and mr * 2 > mn:
+            why.append(f"男性常連{int(mr * 100 / mn)}%")
         nw = sum(1 for k, v in women if v[1] <= t < leave(k, v))
-        if nw + len(m) and nw * 10 <= (nw + len(m)) * 4:
-            why.append(f"女性率{nw * 100 // (nw + len(m))}%")
-        return why, n4, (mr, len(m))
+        if nw + mn and nw * 10 <= (nw + mn) * 4:
+            why.append(f"女性率{int(nw * 100 / (nw + mn))}%")
+        return why, n4, (mr, mn)
 
     why, lv4_now, (mr, mn) = judge(now_dt)
     verdict = f"✕ 行かない方がいい({'・'.join(why)})" if why else "○ OK"
-    print(f"\n**判定: {verdict}** 今いるLv4: {'、'.join(lv4_now) or 'なし'} / 男性常連 {mr}/{mn}名")
+    print(f"\n**判定: {verdict}** 今いるLv4: {'、'.join(lv4_now) or 'なし'} / 男性常連 {mr:g}/{mn:g}名")
     # この先(閉店まで)の✕の時間帯
     t, close, bad, cur = now_dt.replace(minute=now_dt.minute // 10 * 10, second=0, microsecond=0), at(start, 29 * 60), [], None
     while t < close:
@@ -425,7 +433,7 @@ def main():
             print(f"- これから来るLv4: {v[0]}({v[1]:%H:%M}〜{leave(k, v):%H:%M})")
     print(f"- この先 ✕になる時間帯: {'、'.join(bad) or 'なし(今の予告では)'}")
     # 時間帯別(1時間ごと)の推定
-    print("\n【時間帯別】(各時刻にいると思われる人数。女性・女性率はLv3以上の女性常連を除く)")
+    print("\n【時間帯別】(各時刻にいると思われる人数。女性・女性率はLv3以上の女性常連を除く。1部の男性は16:30以降0.5人で計算)")
     print("| 時刻 | 女性 | 男性 | カップル | 女性率 | 女性常連率 | 男性常連率 | 全体常連率 | Lv4 | 判定 |")
     print("|---|---|---|---|---|---|---|---|---|---|")
     for h in range(13, 29):
@@ -434,11 +442,11 @@ def main():
         nw = sum(1 for k, v in women if v[1] <= t < leave(k, v))
         wr = sum(1 for k, v in women if v[1] <= t < leave(k, v) and key(v[0]) in reg["女性"])
         nc = sum(1 for k, v in present.items() if k[0] == "カップル" and v[1] and v[1] <= t < leave(k, v))
-        fr = f"{nw * 100 // (nw + mn)}%" if nw + mn else "-"
+        fr = f"{int(nw * 100 / (nw + mn))}%" if nw + mn else "-"
         mark = "✕" if why else "○"
         past = "(済)" if t + timedelta(hours=1) <= now_dt else ""
-        pc = lambda a, b: f"{a * 100 // b}%" if b else "-"
-        print(f"| {h % 24}:00{past} | {nw} | {mn} | {nc}組 | {fr} | {pc(wr, nw)} | {pc(mr, mn)} "
+        pc = lambda a, b: f"{int(a * 100 / b)}%" if b else "-"
+        print(f"| {h % 24}:00{past} | {nw} | {mn:g} | {nc}組 | {fr} | {pc(wr, nw)} | {pc(mr, mn)} "
               f"| {pc(wr + mr, nw + mn)} | {len(n4)} | {mark} |")
     tomorrow = [f"{n}({g})" for (g, n), part in people.items() if part == "明日"]
     if tomorrow:
