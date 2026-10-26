@@ -665,6 +665,13 @@ async function resendPendingEntries() {
   }
 }
 
+// 出発駅と到着駅をワンタッチで入れ替え(帰りの入力用)
+document.getElementById("routeSwap").addEventListener("click", () => {
+  const a = routeFromInput.value;
+  routeFromInput.value = routeToInput.value;
+  routeToInput.value = a;
+});
+
 document.getElementById("monthPrev").addEventListener("click", () => {
   if (monthOffset >= 12) return;
   monthOffset++;

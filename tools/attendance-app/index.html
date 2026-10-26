@@ -212,6 +212,18 @@
   .route-row{display:flex;align-items:center;gap:8px;}
   .route-row input{flex:1;min-width:0;}
   .route-arrow{color:var(--text-faint);font-size:14px;flex-shrink:0;}
+  .route-swap{
+    flex-shrink:0;
+    width:40px;height:36px;
+    background:transparent;
+    border:1px solid var(--accent-dim);
+    color:var(--accent);
+    font-size:18px;line-height:1;
+    cursor:pointer;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .route-swap:active{background:var(--accent);color:#161310;}
   .history-title{font-size:10.5px;color:var(--text-faint);margin-top:12px;margin-bottom:6px;}
   .history-chips{display:flex;flex-wrap:wrap;gap:6px;}
   .history-chip{
@@ -469,7 +481,7 @@
       <label>経路 <span class="req">*</span></label>
       <div class="route-row">
         <input type="text" id="routeFrom" placeholder="最寄駅(出発)" list="stationList">
-        <span class="route-arrow">→</span>
+        <button type="button" class="route-swap" id="routeSwap" aria-label="出発と到着を入れ替え" title="出発と到着を入れ替え">⇄</button>
         <input type="text" id="routeTo" placeholder="到着駅" list="stationList">
       </div>
       <datalist id="stationList"></datalist>
