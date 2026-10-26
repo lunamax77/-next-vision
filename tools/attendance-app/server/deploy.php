@@ -129,6 +129,7 @@ $protectedExact = [
     'server/sheets_debug.log',
     'server/deploy.log',
     'server/.deployed_sha',
+    'server/cron.log',
 ];
 $protectedPatterns = [
     '#(^|/)\.htpasswd$#',

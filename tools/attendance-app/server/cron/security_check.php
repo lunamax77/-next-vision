@@ -53,7 +53,7 @@ $notes = [];    // 参考: 定時報告に載せる
 $out = static function (string $s) { echo $s, "\n"; };
 
 // ---------- 1. ファイル改ざん ----------
-$protectedExact = ['config.js', 'server/config.php', 'server/google-service-account.json', 'server/sheets_debug.log', 'server/deploy.log', 'server/audit.log', 'server/.deployed_sha', 'server/.security_state.json'];
+$protectedExact = ['config.js', 'server/config.php', 'server/google-service-account.json', 'server/sheets_debug.log', 'server/deploy.log', 'server/audit.log', 'server/.deployed_sha', 'server/.security_state.json', 'server/cron.log'];
 $isProtected = static function (string $rel) use ($protectedExact): bool {
     if (in_array($rel, $protectedExact, true)) return true;
     return (bool)preg_match('#(^|/)\.htpasswd$|^server/uploads/|(^|/)\.git[a-z]*$|(^|/)\.ftp-deploy-sync-state\.json$#', $rel);
