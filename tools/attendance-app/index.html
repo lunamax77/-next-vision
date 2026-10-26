@@ -317,27 +317,37 @@
   #cameraModal canvas{display:none;}
   .cam-bar{
     flex-shrink:0;
-    padding:20px;
+    /* iPhone のホームバー・Safari のツールバーと重ならないよう下に余白を取る */
+    padding:16px 20px calc(28px + env(safe-area-inset-bottom, 0px));
     display:flex;
     justify-content:center;
     align-items:center;
-    gap:28px;
+    gap:36px;
     background:#000;
+    position:relative;
+    z-index:2;
   }
   .cam-shot{
-    width:60px;height:60px;border-radius:50%;
+    width:84px;height:84px;border-radius:50%;
     background:transparent;
-    border:1.5px solid var(--accent);
+    border:2px solid var(--accent);
     position:relative;
     cursor:pointer;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+    padding:0;
   }
   .cam-shot::after{
     content:"";
     position:absolute;
-    inset:6px;
+    inset:8px;
     border-radius:50%;
     background:var(--accent);
+    transition:transform .08s ease;
   }
+  .cam-shot:active::after,.cam-shot.pressed::after{transform:scale(.85);}
+  .cam-shot:disabled{opacity:.5;}
+  .cam-bar .cam-cancel{padding:12px 16px;touch-action:manipulation;}
   .cam-cancel{
     color:var(--text-sub);
     background:none;
@@ -478,7 +488,7 @@
 
 <div id="cameraModal">
   <video id="video" autoplay playsinline muted></video>
-  <p class="cam-hint" id="camHint">本人確認のため顔が写るように撮影してください</p>
+  <p class="cam-hint" id="camHint">本人確認のため顔が写るように撮影してください。丸いボタンを押すと撮影します</p>
   <div class="cam-bar">
     <button class="cam-cancel" id="camCancel">キャンセル</button>
     <button class="cam-shot" id="camShot" aria-label="撮影"></button>

@@ -505,6 +505,8 @@ async function openCamera(type, label, extra) {
     });
     video.srcObject = stream;
     modal.classList.add("open");
+    camShot.disabled = false;
+    try { await video.play(); } catch {}
   } catch (err) {
     setStatus("カメラを使用できませんでした。カメラへのアクセスを許可してから再度お試しください。", true);
   }
@@ -518,7 +520,18 @@ function closeCamera() {
   }
 }
 
+let shotLock = 0;
 function takeShot() {
+  // iOS では pointerup と click の両方が来ることがあるので短時間の二重発火を防ぐ
+  const nowTs = Date.now();
+  if (nowTs - shotLock < 800) return;
+  shotLock = nowTs;
+  if (!stream) return;
+  if (video.readyState < 2) {
+    setStatus("カメラ準備中です。1〜2秒待ってからもう一度押してください", true);
+    return;
+  }
+  camShot.disabled = true;
   const w = video.videoWidth || 480;
   const h = video.videoHeight || 640;
   canvas.width = w;
@@ -654,6 +667,14 @@ document.querySelectorAll(".action-btn").forEach((btn) => {
   });
 });
 
+// タップの取りこぼし対策: pointerup を優先し、click は保険(二重発火は takeShot 側で抑止)
+if (window.PointerEvent) {
+  camShot.addEventListener("pointerdown", () => camShot.classList.add("pressed"));
+  camShot.addEventListener("pointerup", (e) => { camShot.classList.remove("pressed"); e.preventDefault(); takeShot(); });
+  camShot.addEventListener("pointercancel", () => camShot.classList.remove("pressed"));
+} else {
+  camShot.addEventListener("touchend", (e) => { e.preventDefault(); takeShot(); }, { passive: false });
+}
 camShot.addEventListener("click", takeShot);
 camCancel.addEventListener("click", closeCamera);
 
