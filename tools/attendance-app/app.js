@@ -132,14 +132,28 @@ function pruneOldEntries() {
 
 let monthRecords = [];
 
+// 表示中の月(0 = 今月、1 = 先月 …)。最大12か月前まで
+let monthOffset = 0;
+
+function viewedMonth() {
+  const d = new Date();
+  d.setDate(1);
+  d.setMonth(d.getMonth() - monthOffset);
+  return d;
+}
+
 function renderTodayLog() {
   if (!session) return;
-  const now = new Date();
+  const vm = viewedMonth();
   const title = document.getElementById("todayLogTitle");
-  if (title) title.textContent = `${now.getMonth() + 1}月の記録`;
+  if (title) title.textContent = `${vm.getFullYear()}年${vm.getMonth() + 1}月の記録`;
+  const prevBtn = document.getElementById("monthPrev");
+  const nextBtn = document.getElementById("monthNext");
+  if (prevBtn) prevBtn.disabled = monthOffset >= 12;
+  if (nextBtn) nextBtn.disabled = monthOffset <= 0;
 
   // サーバーに未送信の端末内記録(今月分)を先頭に出す
-  const pending = loadEntries()
+  const pending = (monthOffset === 0 ? loadEntries() : [])
     .filter((e) => e.loginId === session.login_id && !e.synced)
     .map((e) => ({
       label: e.label,
@@ -162,7 +176,7 @@ function renderTodayLog() {
   const items = [...pending, ...synced].sort((a, b) => b.date - a.date);
 
   if (items.length === 0) {
-    todayLogList.innerHTML = '<div class="today-log-empty">まだ今月の記録はありません</div>';
+    todayLogList.innerHTML = `<div class="today-log-empty">${monthOffset === 0 ? "まだ今月の記録はありません" : "この月の記録はありません"}</div>`;
     return;
   }
 
@@ -193,11 +207,13 @@ function renderTodayLog() {
 async function loadMonthRecords() {
   if (!session || !CONFIG.API_URL) return;
   try {
+    const vm = viewedMonth();
+    const monthParam = `${vm.getFullYear()}-${String(vm.getMonth() + 1).padStart(2, "0")}`;
     const url = CONFIG.API_URL.replace(/\/save\.php$/, "/records.php") +
-      "?login_id=" + encodeURIComponent(session.login_id);
+      "?login_id=" + encodeURIComponent(session.login_id) + "&month=" + monthParam;
     const res = await fetch(url, { headers: { "X-App-Token": CONFIG.APP_TOKEN || "" } });
     const data = await res.json();
-    if (res.ok && data.ok) {
+    if (res.ok && data.ok && data.month === monthParam) {
       monthRecords = data.records || [];
       renderTodayLog();
     }
@@ -648,6 +664,21 @@ async function resendPendingEntries() {
     syncing = false;
   }
 }
+
+document.getElementById("monthPrev").addEventListener("click", () => {
+  if (monthOffset >= 12) return;
+  monthOffset++;
+  monthRecords = [];
+  renderTodayLog();
+  loadMonthRecords();
+});
+document.getElementById("monthNext").addEventListener("click", () => {
+  if (monthOffset <= 0) return;
+  monthOffset--;
+  monthRecords = [];
+  renderTodayLog();
+  loadMonthRecords();
+});
 
 setInterval(resendPendingEntries, 60 * 1000);
 window.addEventListener("online", resendPendingEntries);

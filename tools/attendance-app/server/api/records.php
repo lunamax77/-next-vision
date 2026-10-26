@@ -33,7 +33,16 @@ if ($loginId === '') {
 // 今月(日本時間)の範囲を UTC に変換して絞り込む(recorded_at は UTC で保存されている)
 $jst = new DateTimeZone('Asia/Tokyo');
 $utc = new DateTimeZone('UTC');
+// ?month=YYYY-MM で過去月も参照できる(最大12か月前まで)。省略時は今月
+$monthParam = (string)($_GET['month'] ?? '');
 $monthStart = new DateTime('first day of this month 00:00:00', $jst);
+if (preg_match('/^(\d{4})-(\d{2})$/', $monthParam, $mm)) {
+    $req = new DateTime(sprintf('%s-%s-01 00:00:00', $mm[1], $mm[2]), $jst);
+    $limit = (clone $monthStart)->modify('-12 months');
+    if ($req <= $monthStart && $req >= $limit) {
+        $monthStart = $req;
+    }
+}
 $monthEnd = (clone $monthStart)->modify('+1 month');
 $fromUtc = (clone $monthStart)->setTimezone($utc)->format('Y-m-d H:i:s');
 $toUtc = (clone $monthEnd)->setTimezone($utc)->format('Y-m-d H:i:s');

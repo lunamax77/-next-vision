@@ -274,6 +274,18 @@
   .status.is-error{color:var(--danger);}
 
   .today-log{margin-top:8px;}
+  .today-log-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;}
+  .today-log-head .today-log-title{margin-bottom:0;}
+  .month-nav{
+    width:40px;height:32px;
+    background:transparent;
+    border:1px solid var(--border);
+    color:var(--text-sub);
+    font-size:18px;line-height:1;
+    cursor:pointer;
+    touch-action:manipulation;
+  }
+  .month-nav:disabled{opacity:.3;}
   .today-log-title{
     font-size:10.5px;
     letter-spacing:.1em;
@@ -475,7 +487,11 @@
   <div class="status" id="status"></div>
 
   <div class="today-log">
-    <div class="today-log-title" id="todayLogTitle">今月の記録</div>
+    <div class="today-log-head">
+      <button type="button" class="month-nav" id="monthPrev" aria-label="前の月">‹</button>
+      <div class="today-log-title" id="todayLogTitle">今月の記録</div>
+      <button type="button" class="month-nav" id="monthNext" aria-label="次の月">›</button>
+    </div>
     <div class="today-log-list" id="todayLogList"></div>
   </div>
 
