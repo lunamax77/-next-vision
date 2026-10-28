@@ -22,6 +22,8 @@ const modal = document.getElementById("cameraModal");
 const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const camShot = document.getElementById("camShot");
+const camHint = document.getElementById("camHint");
+const CAM_HINT_DEFAULT = camHint ? camHint.textContent : "";
 const camCancel = document.getElementById("camCancel");
 
 const loginBox = document.getElementById("loginBox");
@@ -127,6 +129,8 @@ function pruneOldEntries() {
     const d = new Date(e.time);
     return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
   });
+  // 送信済みの写真は端末に残さない(容量超過でシャッターが効かなくなるのを防ぐ)
+  entries.forEach((e) => { if (e.synced && e.photo) e.photo = null; });
   saveEntries(entries);
 }
 
@@ -332,8 +336,37 @@ function loadEntries() {
   }
 }
 
+// 端末内保存。iPhone は localStorage が約5MBまでなので、容量超過時は
+// 送信済み記録の写真を落として再試行し、それでも入らなければ古い送信済み記録から削除する。
 function saveEntries(entries) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+  const write = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+  try {
+    write();
+    return;
+  } catch (e1) {
+    entries.forEach((e) => { if (e.synced && e.photo) e.photo = null; });
+    try {
+      write();
+      return;
+    } catch (e2) {
+      // 送信済みの古いものから順に削除して再試行(未送信は残す)
+      for (let i = 0; i < 50; i++) {
+        let idx = -1;
+        for (let j = entries.length - 1; j >= 0; j--) {
+          if (entries[j].synced) { idx = j; break; }
+        }
+        if (idx < 0) break;
+        entries.splice(idx, 1);
+        try {
+          write();
+          return;
+        } catch {}
+      }
+      // 最終手段: 未送信の写真も落として保存(記録自体は失わない)
+      entries.forEach((e) => { e.photo = null; });
+      try { write(); } catch {}
+    }
+  }
 }
 
 function setStatus(text, isError = false) {
@@ -530,6 +563,8 @@ async function openCamera(type, label, extra) {
 
 function closeCamera() {
   modal.classList.remove("open");
+  camShot.disabled = false;
+  if (camHint) camHint.textContent = CAM_HINT_DEFAULT;
   if (stream) {
     stream.getTracks().forEach((t) => t.stop());
     stream = null;
@@ -544,20 +579,33 @@ function takeShot() {
   shotLock = nowTs;
   if (!stream) return;
   if (video.readyState < 2) {
-    setStatus("カメラ準備中です。1〜2秒待ってからもう一度押してください", true);
+    // モーダルの裏にある status では見えないので、カメラ画面内の案内文に出す
+    if (camHint) camHint.textContent = "カメラ準備中です。1〜2秒待ってからもう一度押してください";
+    shotLock = 0;
     return;
   }
   camShot.disabled = true;
-  const w = video.videoWidth || 480;
-  const h = video.videoHeight || 640;
-  canvas.width = w;
-  canvas.height = h;
-  const ctx = canvas.getContext("2d");
-  ctx.drawImage(video, 0, 0, w, h);
-  const photo = canvas.toDataURL("image/jpeg", 0.7);
+  let photo = null;
+  try {
+    const w = video.videoWidth || 480;
+    const h = video.videoHeight || 640;
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, w, h);
+    photo = canvas.toDataURL("image/jpeg", 0.7);
+  } catch (err) {
+    photo = null; // 撮影に失敗しても打刻自体は進める
+  }
 
-  addEntry(pendingType, pendingLabel, pendingLocation, photo, pendingExtra);
+  // 先にカメラを閉じる(記録処理で例外が出てもボタンが固まらないようにする)
   closeCamera();
+  try {
+    addEntry(pendingType, pendingLabel, pendingLocation, photo, pendingExtra);
+  } catch (err) {
+    const reason = err && err.message ? err.message : String(err);
+    setStatus(`${pendingLabel}: 記録に失敗しました(${reason})。もう一度お試しください`, true);
+  }
 }
 
 function addEntry(type, label, location, photo, extra) {
@@ -632,6 +680,7 @@ async function syncEntry(entry) {
     if (target) {
       target.synced = true;
       target.address = data.address || null;
+      target.photo = null; // 送信済みの写真は端末に残さない(容量対策)
       saveEntries(entries);
     }
     setStatus(`${entry.label} を記録しました`);
