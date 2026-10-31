@@ -13,7 +13,7 @@
 | 07 | 2026-10-10 | 公開済（2026-10-10） | 商談中に子どもが飽きる問題を「着座ワークショップ」で解決する | 商談中 子供 退屈 対策 店舗／携帯ショップ イベント 集客／家電量販店 イベント 集客 | seal.html / punilab.html | seal.jpg |
 | 08 | 2026-10-17 | 公開済（2026-10-17） | 住宅展示場のファミリー集客｜子どもが主役の来場イベント設計 | 住宅展示場 集客 子供／住宅展示場 イベント アイデア | klp.html | klp-photo-session.jpg |
 | 09 | 2026-10-24 | 公開済（2026-10-24） | カーディーラーの来店イベントに子ども向け運転体験が向いている理由 | カーディーラー イベント 子供／カーディーラー 集客 イベント | klp.html | klp-photo-scene.jpg |
-| 10 | 2026-10-31 | 待機 | イベント機材は「借りる」か「任せる」か｜自社運営と運営代行の比較 | イベント 運営代行 子供／イベント 機材 レンタル 運営 どっち | index.html#plan | case-klp-store.jpg |
+| 10 | 2026-10-31 | 公開済（2026-10-31） | イベント機材は「借りる」か「任せる」か｜自社運営と運営代行の比較 | イベント 運営代行 子供／イベント 機材 レンタル 運営 どっち | index.html#plan | case-klp-store.jpg |
 | 11 | 2026-11-07 | 待機 | 屋外キッズイベントの雨天対策と季節別の企画例（年末年始・冬休み・GW） | イベント 雨天 対策 屋外／冬休み イベント 商業施設 企画 | index.html#faq | airizm.jpg |
 | 12 | 2026-11-14 | 待機 | 初めてのキッズイベント開催チェックリスト｜会場・電源・安全（旧04の書き直し） | 店頭イベント 準備 チェックリスト／子ども向けイベント 企画 | index.html#contact | klp-photo-scene.jpg |
 
@@ -32,3 +32,4 @@
 | 07 | 2026-10-10 | https://nextvision.fun/blog/shodan-chakuza-workshop.html |
 | 08 | 2026-10-17 | https://nextvision.fun/blog/jutaku-tenjijo-family.html |
 | 09 | 2026-10-24 | https://nextvision.fun/blog/car-dealer-kids-drive-event.html |
+| 10 | 2026-10-31 | https://nextvision.fun/blog/rental-vs-operation.html |
