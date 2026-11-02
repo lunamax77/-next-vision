@@ -331,9 +331,11 @@ def main():
     for (g, n), (a, guess) in eta.items():
         if a and people.get((g, n)) in PART_END:
             lv = level(g, n) if g in reg else 0
+            pk = (g, n if g == "カップル" else key(n))
+            out = f"〜{leave(pk, present[pk]):%H:%M}" if pk in present and present[pk][1] else ""
             slots.setdefault(a.replace(minute=0, second=0, microsecond=0), {}).setdefault(g, []).append(
-                (a, f"{n}{f'[Lv{lv}]' if lv else ''} {a:%H:%M}{'予測' if guess else ''}"))
-    print("\n【予告の到着時刻別】")
+                (a, f"{n}{f'[Lv{lv}]' if lv else ''} {a:%H:%M}{'予測' if guess else ''}{out}"))
+    print("\n【予告の到着時刻別】(到着〜帰る想定時刻)")
     print("| 到着 | 女性 | 男性 | カップル |")
     print("|---|---|---|---|")
     for h in sorted(slots):
