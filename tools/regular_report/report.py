@@ -331,20 +331,19 @@ def main():
             end = min(end, at(start, PART_END[v[2]]))
         return end
 
-    # 予告の到着時刻別(1時間ごと、代表の指示で毎回表示)
-    slots = {}
+    # 予告の到着時刻別(1人1行・到着順、代表の指示で毎回表示)
+    rows = []
     for (g, n), (a, guess) in eta.items():
         if a and people.get((g, n)) in PART_END:
-            pk = (g, n if g == "カップル" else key(n))
-            out = f"〜{leave(pk, present[pk]):%H:%M}" if pk in present and present[pk][1] else ""
-            slots.setdefault(a.replace(minute=0, second=0, microsecond=0), {}).setdefault(g, []).append(
-                (a, f"{label(g, n)} {a:%H:%M}{'予測' if guess else ''}{out}"))
-    print("\n【予告の到着時刻別】(到着〜帰る想定時刻)")
-    print("| 到着 | 女性 | 男性 | カップル |")
-    print("|---|---|---|---|")
-    for h in sorted(slots):
-        cells = ["、".join(x for _, x in sorted(slots[h].get(g, []))) or "-" for g in ("女性", "男性", "カップル")]
-        print(f"| {h:%H}時台 | {' | '.join(cells)} |")
+            lv = level(g, n) if g in ("女性", "男性") else 0
+            c = HISTORY.get("counts", {}).get(g, {}).get(n if g == "カップル" else key(norm(n)), 0)
+            rows.append((a, {"女性": "♀", "男性": "♂", "カップル": "👫"}[g], n, f"Lv{lv}" if lv else "-",
+                         f"{c}回" if c else "初", "予測" if guess else ""))
+    print("\n【予告の到着時刻別】")
+    print("| 到着 | | 名前 | Lv | 回数 |")
+    print("|---|---|---|---|---|")
+    for a, sym, n, lv, c, guess in sorted(rows):
+        print(f"| {a:%H:%M}{guess} | {sym} | {n} | {lv} | {c} |")
     here = {k: v for k, v in present.items() if v[1] and v[1] <= now_dt < leave(k, v)}
     print(f"\n【今いると思われる人】(常連は部の終了まで在店[最大{REGULAR_MAX_HOURS}h]・それ以外は来店から{STAY_HOURS_OTHER}h、部の終了で退店)")
     print("| | Lv4 | Lv3 | Lv2 | Lv1 | 常連以外 | 計 | 常連の割合 |")
