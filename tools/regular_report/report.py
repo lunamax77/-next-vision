@@ -44,7 +44,12 @@ def fetch(page):
 def key(s):
     """常連照合用: 絵文字・記号を除いて比較する(例: もも🍑 → もも)。句読点は残す。"""
     s = unicodedata.normalize("NFKC", s)  # 半角・全角を同一視
-    return "".join(c for c in s if unicodedata.category(c) not in ("So", "Sk", "Cf", "Mn")).strip()
+    s = "".join(c for c in s if unicodedata.category(c) not in ("So", "Sk", "Cf", "Mn")).strip()
+    return ALIAS.get(s, s)
+
+
+# 同一人物の別名(代表確認済み): 別名 -> 照合キー
+ALIAS = {"りり(エース)": "りり"}
 
 
 def norm(s):
