@@ -7,6 +7,10 @@
  * Sheets の values:append は「表」の自動検出に失敗すると別の行・列に
  * ずれて書き込まれることがあるため、A列の件数を数えて次の空き行を
  * 自分で計算し、values:update でその行に直接書き込む方式にしている。
+ *
+ * ただしこの方式は、ほぼ同時(1〜2秒差)に2人が打刻すると同じ行番号を計算して
+ * 後の書き込みが前の行を上書きしてしまうため、ファイルロックで
+ * 「行番号の計算〜書き込み」を同時に1件ずつしか実行しないようにしている。
  */
 class GoogleSheetsClient
 {
@@ -52,6 +56,33 @@ class GoogleSheetsClient
         }
         $accessToken = $this->fetchAccessToken();
         $this->resolveSheetName($accessToken);
+
+        // 同時打刻による行の上書きを防ぐロック(最大20秒待つ)
+        $lockPath = __DIR__ . '/../.sheets.lock';
+        $lock = @fopen($lockPath, 'c');
+        $locked = false;
+        if ($lock) {
+            for ($i = 0; $i < 200 && !$locked; $i++) {
+                $locked = flock($lock, LOCK_EX | LOCK_NB);
+                if (!$locked) {
+                    usleep(100000);
+                }
+            }
+        }
+        try {
+            $this->writeRows($accessToken, $rows);
+        } finally {
+            if ($lock) {
+                if ($locked) {
+                    flock($lock, LOCK_UN);
+                }
+                fclose($lock);
+            }
+        }
+    }
+
+    private function writeRows(string $accessToken, array $rows): void
+    {
         $nextRow = $this->findNextRow($accessToken);
         $lastRow = $nextRow + count($rows) - 1;
 
