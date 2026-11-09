@@ -12,6 +12,7 @@ import csv
 import json
 import os
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -100,6 +101,7 @@ def main():
         if page >= data.get("pagingInfo", {}).get("pageCount", 0) or page >= 5:
             break
         page += 1
+        time.sleep(1.2)  # 楽天APIは1秒1リクエストまで(超えると429)
 
     if not rows:
         print("条件に合う空室はありません")
