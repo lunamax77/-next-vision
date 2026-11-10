@@ -135,7 +135,7 @@ def ladder(s, d):
     # 見出し
     text(s, "対象", x0, y0, name_w, 30, 15, True, GRAY)
     text(s, "前回 9/15 時点", x0 + name_w, y0, txt_w, 30, 15, True, GRAY)
-    text(s, "今回 11/5 時点", x0 + name_w + txt_w + 40, y0, txt_w, 30, 15, True, AMBER)
+    text(s, "今回（最新）", x0 + name_w + txt_w + 40, y0, txt_w, 30, 15, True, AMBER)
     for k, st in enumerate(stages):
         text(s, st, dot_x + k * 85 - 20, y0 - 8, 105, 44, 11, True, GRAY, PP_ALIGN.CENTER)
     row_h = 150
@@ -162,7 +162,7 @@ def ladder(s, d):
 def checklist(s, d):
     y = 250
     text(s, "9/15に設定した宿題", 340, y, 560, 30, 15, True, GRAY)
-    text(s, "11/5時点の結果", 1000, y, 540, 30, 15, True, GRAY)
+    text(s, "最新の結果", 1000, y, 540, 30, 15, True, GRAY)
     row_h = 118
     for i, r in enumerate(d["rows"]):
         yy = y + 40 + i * row_h
