@@ -70,6 +70,9 @@ function addLocationItem(form) {
     .setChoiceValues(choices).showOtherOption(true).setRequired(true);
 }
 
+// 管理簿O列：フォームの回答日時（取りこぼし・二重発行の照合用）
+const LEDGER_KEY_COL = 15;
+
 const LEDGER_HEADERS = [
   '発行番号', '発行日時', '発行会社', '氏名', '送付先', '入社予定日',
   '雇用形態', '配属先', '職種', '勤務地', '給与', 'PDF', '送信状況', '備考',
@@ -157,26 +160,67 @@ function onFormSubmit(e) {
   const lock = LockService.getScriptLock();
   lock.waitLock(30000);
   try {
-    processEntry(normalize(e.namedValues));
+    const d = normalize(e.namedValues);
+    if (!isProcessed(getLedger(), d)) processEntry(d);
   } finally {
     lock.releaseLock();
   }
 }
 
-/** 手動テスト用：回答シートの最終行を処理する */
-function processLastResponse() {
-  const ss = getSpreadsheet();
-  const sheet = ss.getSheets().find(s => s.getFormUrl());
-  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getDisplayValues()[0];
-  const values = sheet.getRange(sheet.getLastRow(), 1, 1, headers.length).getDisplayValues()[0];
-  const named = {};
-  headers.forEach((h, i) => (named[h] = [values[i]]));
-  processEntry(normalize(named));
+/**
+ * 取りこぼし対策：全フォームの回答のうち、管理簿に無いものを発行する。
+ * installBackupTrigger() で1時間ごとに自動実行される。手動実行も可。
+ */
+function processMissingResponses() {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const ledger = getLedger();
+    getSpreadsheet().getSheets().filter(sh => sh.getFormUrl()).forEach(sheet => {
+      const last = sheet.getLastRow();
+      if (last < 2) return;
+      const rows = sheet.getRange(1, 1, last, sheet.getLastColumn()).getDisplayValues();
+      const headers = rows[0];
+      rows.slice(1).forEach(values => {
+        const named = {};
+        headers.forEach((h, i) => (named[h] = [values[i]]));
+        const d = normalize(named);
+        if (d.name && !isProcessed(ledger, d)) processEntry(d);
+      });
+    });
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/** 取りこぼし対策の定期実行（1時間ごと）を登録し、今ある取りこぼしも処理する。1回だけ実行 */
+function repair() {
+  ScriptApp.getProjectTriggers()
+    .filter(t => t.getHandlerFunction() === 'processMissingResponses')
+    .forEach(t => ScriptApp.deleteTrigger(t));
+  ScriptApp.newTrigger('processMissingResponses').timeBased().everyHours(1).create();
+  processMissingResponses();
+  Logger.log('取りこぼしの処理と、1時間ごとの自動チェックの登録が完了しました');
+}
+
+/** 回答が発行済みか（回答日時で照合。回答日時の無い古い行は氏名で照合） */
+function isProcessed(ledger, d) {
+  const last = lastDataRow(ledger);
+  if (last < 2) return false;
+  return ledger.getRange(2, 1, last - 1, LEDGER_KEY_COL).getDisplayValues().some(row => {
+    const key = row[LEDGER_KEY_COL - 1];
+    return key ? key === d.timestamp : row[3] === d.name;
+  });
+}
+
+function getLedger() {
+  return getSpreadsheet().getSheetByName(CONFIG.LEDGER_SHEET);
 }
 
 function normalize(named) {
   const get = key => String((named[key] || [''])[0]).trim();
   return {
+    timestamp: get('タイムスタンプ'),
     company: get(Q.company),
     name: get(Q.name),
     joinDate: get(Q.joinDate),
@@ -190,7 +234,7 @@ function normalize(named) {
 }
 
 function processEntry(d) {
-  const ledger = getSpreadsheet().getSheetByName(CONFIG.LEDGER_SHEET);
+  const ledger = getLedger();
   const company = COMPANIES[d.company];
   const now = new Date();
   const row = lastDataRow(ledger) + 1;
@@ -202,6 +246,10 @@ function processEntry(d) {
     issueNo, now, d.company, d.name, CONFIG.RECIPIENT, d.joinDate,
     d.employment, d.department, d.job, d.location, d.salary, '', '処理中', '',
   ]]);
+  ledger.getRange(row, LEDGER_KEY_COL).setNumberFormat('@').setValue(d.timestamp);
+  if (ledger.getRange(1, LEDGER_KEY_COL).getValue() === '') {
+    ledger.getRange(1, LEDGER_KEY_COL).setValue('回答日時').setFontWeight('bold');
+  }
 
   try {
     if (!company) throw new Error('発行会社が不明です: ' + d.company);
