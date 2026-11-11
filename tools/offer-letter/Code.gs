@@ -196,7 +196,7 @@ function processMissingResponses() {
 /** 全権限の確認・エラー行のやり直し・取りこぼし処理・1時間ごとの自動チェック登録。問題があれば実行 */
 function repair() {
   // 権限が一部しか許可されていない場合、ここで全権限の許可を求める（ドライブ等のチェック漏れ対策）
-  ScriptApp.requireAllScopes(ScriptApp.AuthMode.FULL);
+  if (ScriptApp.requireAllScopes) ScriptApp.requireAllScopes(ScriptApp.AuthMode.FULL);
 
   // エラーで止まった行を消して、取りこぼしとしてやり直す
   const ledger = getLedger();
