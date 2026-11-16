@@ -136,4 +136,4 @@ const card = (s, x, y, w, h, fill) => s.addShape(pres.shapes.ROUNDED_RECTANGLE, 
     T(s,runs,{ x:x+0.15,y:2.7,w:2.6,h:1.8,fontSize:11,paraSpaceAfter:5 }); });
   T(s,[ { text:'次回：', options:{ bold:true, color:HEX.navy } }, { text:'イオンモール都城駅前（11/20〜23）、トキハわさだタウン（11/27〜29）で上記3点を実行', options:{} } ],{ x:0.5,y:4.72,w:9,h:0.35,fontSize:11 }); }
 
-(async()=>{ await pres.writeFile({ fileName:'PP大分_実施報告書_1113-1115.pptx' }); await applyTheme('PP大分_実施報告書_1113-1115.pptx', THEME); console.log('ok'); })();
+(async()=>{ await pres.writeFile({ fileName:'PP大分_実施報告書_1113-1115.pptx' }); await applyTheme('PP大分_実施報告書_1113-1115.pptx', THEME); require('child_process').execFileSync('python3',['fix_ja.py','PP大分_実施報告書_1113-1115.pptx']); console.log('ok'); })();
