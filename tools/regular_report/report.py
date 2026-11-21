@@ -302,7 +302,8 @@ def main():
         total = sum(len(r) + len(o) for _, r, o in rows)
         if part == "時間不明" and not total and not couples:
             continue
-        print(f"\n【{part}】計{total}名" + (f" + カップル{len(couples)}組" if couples else ""))
+        span = {"1部": "13:00〜19:00", "1.5部": "16:30〜23:30", "2部": "19:00〜翌5:00"}.get(part)
+        print(f"\n【{part}{f'({span})' if span else ''}】計{total}名" + (f" + カップル{len(couples)}組" if couples else ""))
         print("| | Lv4 | Lv3 | Lv2 | Lv1 | 常連以外 | 計 |")
         print("|---|---|---|---|---|---|---|")
         for g, r, o in rows:
@@ -313,9 +314,21 @@ def main():
         def lt(g, n):
             a, guess = eta.get((g, n), (None, False))
             return label(g, n) + (f" {a:%H:%M}" + ("予測" if guess else "") if a else " 時刻不明")
+        def akey(g, n):
+            a = eta.get((g, n), (None,))[0]
+            return (a is None, a or now_dt, n)
         for g, r, o in rows:
-            if r or o:
-                print(f"- {g} 常連: {'、'.join(lt(g, n) for n in r) or '-'} / 非常連: {'、'.join(lt(g, n) for n in o) or '-'}")
+            if r:
+                print(f"- {g}常連: {'、'.join(lt(g, n) for n in sorted(r, key=lambda n: akey(g, n)))}")
+        # 常連以外は女性・男性を横に並べ、1人1行・到着順(代表の指示)
+        fo = [lt("女性", n) for n in sorted(rows[0][2], key=lambda n: akey("女性", n))]
+        mo = [lt("男性", n) for n in sorted(rows[1][2], key=lambda n: akey("男性", n))]
+        if fo or mo:
+            print("\n常連以外")
+            print(f"| 女性({len(fo)}名) | 男性({len(mo)}名) |")
+            print("|---|---|")
+            for i in range(max(len(fo), len(mo))):
+                print(f"| {fo[i] if i < len(fo) else ''} | {mo[i] if i < len(mo) else ''} |")
         if couples:
             print(f"- カップル: {'、'.join(lt('カップル', n) for n in couples)}")
     # 在店推定: 投稿時刻から滞在時間以内の人
@@ -331,28 +344,6 @@ def main():
             end = min(end, at(start, PART_END[v[2]]))
         return end
 
-    # 予告の到着時刻別(部ごと・男女別、1人1行・到着順。代表の指示で毎回表示)
-    rows = {}
-    for (g, n), (a, guess) in eta.items():
-        part = people.get((g, n))
-        if a and part in PART_END:
-            lv = level(g, n) if g in ("女性", "男性") else 0
-            c = HISTORY.get("counts", {}).get(g, {}).get(n if g == "カップル" else key(norm(n)), 0)
-            rows.setdefault(part, {}).setdefault(g, []).append(
-                (a, n, f"Lv{lv}" if lv else "-", f"{c}回" if c else "初", "予測" if guess else ""))
-    print("\n【予告の到着時刻別】")
-    for part in ("1部", "1.5部", "2部"):
-        if part not in rows:
-            continue
-        print(f"\n■{part}")
-        for g in ("女性", "男性", "カップル"):
-            if g not in rows[part]:
-                continue
-            print(f"\n{g}({len(rows[part][g])}{'組' if g == 'カップル' else '名'})")
-            print("| 到着 | 名前 | Lv | 回数 |")
-            print("|---|---|---|---|")
-            for a, n, lv, c, guess in sorted(rows[part][g]):
-                print(f"| {a:%H:%M}{guess} | {n} | {lv} | {c} |")
     here = {k: v for k, v in present.items() if v[1] and v[1] <= now_dt < leave(k, v)}
     print(f"\n【今いると思われる人】(常連は部の終了まで在店[最大{REGULAR_MAX_HOURS}h]・それ以外は来店から{STAY_HOURS_OTHER}h、部の終了で退店)")
     print("| | Lv4 | Lv3 | Lv2 | Lv1 | 常連以外 | 計 | 常連の割合 |")
