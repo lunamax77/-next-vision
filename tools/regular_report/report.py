@@ -314,18 +314,13 @@ def main():
         def lt(g, n):
             a, guess = eta.get((g, n), (None, False))
             return label(g, n) + (f" {a:%H:%M}" + ("予測" if guess else "") if a else " 時刻不明")
-        def akey(g, n):
-            a = eta.get((g, n), (None,))[0]
-            return (a is None, a or now_dt, n)
-        for g, r, o in rows:
-            if r:
-                print(f"- {g}常連: {'、'.join(lt(g, n) for n in sorted(r, key=lambda n: akey(g, n)))}")
-        # 常連以外は女性・男性を横に並べ、1人1行・到着順(代表の指示)
-        fo = [lt("女性", n) for n in sorted(rows[0][2], key=lambda n: akey("女性", n))]
-        mo = [lt("男性", n) for n in sorted(rows[1][2], key=lambda n: akey("男性", n))]
+        # 常連も含め女性・男性を横に並べ、1人1行・来店回数の多い順(代表の指示)
+        def cnt(g, n):
+            return HISTORY.get("counts", {}).get(g, {}).get(key(norm(n)), 0)
+        fo = [lt("女性", n) for n in sorted(rows[0][1] + rows[0][2], key=lambda n: (-cnt("女性", n), n))]
+        mo = [lt("男性", n) for n in sorted(rows[1][1] + rows[1][2], key=lambda n: (-cnt("男性", n), n))]
         if fo or mo:
-            print("\n常連以外")
-            print(f"| 女性({len(fo)}名) | 男性({len(mo)}名) |")
+            print(f"\n| 女性({len(fo)}名) | 男性({len(mo)}名) |")
             print("|---|---|")
             for i in range(max(len(fo), len(mo))):
                 print(f"| {fo[i] if i < len(fo) else ''} | {mo[i] if i < len(mo) else ''} |")
