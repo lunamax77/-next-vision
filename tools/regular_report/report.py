@@ -97,11 +97,11 @@ def label(g, n):
     if n.startswith("予告なし"):
         return n
     lv = level(g, n) if g in ("女性", "男性") else 0
-    tag = n + (f"[Lv{lv}]" if lv else "")
     if not HISTORY:
-        return tag
+        return n + (f"[Lv{lv}]" if lv else "")
     c = HISTORY.get("counts", {}).get(g, {}).get(n if g == "カップル" else key(norm(n)), 0)
-    return tag + (f"({c}回)" if c else "(初)")
+    cs = f"{c}回" if c else "初"
+    return n + (f"[Lv{lv}・{cs}]" if lv else f"({cs})")
 
 
 # 集計から除外する名前(代表ご本人)
@@ -342,7 +342,7 @@ def main():
         fo = [lt("女性", n) for n in sorted(rows[0][1] + rows[0][2], key=lambda n: (-cnt("女性", n), n))]
         cf = [f"{lt('女性', n)}(←{pt}〜{lv:%H:%M})" for n, pt, lv in sorted(carry, key=lambda x: (-cnt("女性", x[0]), x[0]))]
         if cf:
-            fo = sorted(fo + cf, key=lambda x: -int((re.search(r"\((\d+)回\)", x) or [0, 0])[1]))
+            fo = sorted(fo + cf, key=lambda x: -int((re.search(r"[(・](\d+)回[)\]]", x) or [0, 0])[1]))
         mo = [lt("男性", n) for n in sorted(rows[1][1] + rows[1][2], key=lambda n: (-cnt("男性", n), n))]
         if fo or mo:
             print(f"\n| 女性({len(fo)}名{f'・うち前の部から{len(cf)}名' if cf else ''}) | 男性({len(mo)}名) |")
