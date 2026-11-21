@@ -292,6 +292,19 @@ def main():
 
     now = now_dt.strftime("%Y-%m-%d %H:%M")
     print(f"■ ご来店予告 集計({now} JST 時点 / 営業日 {today} 5:00〜)")
+    # 在店推定: 投稿時刻から滞在時間以内の人
+    def stay(k):
+        g, kk = k
+        return STAY_HOURS_REGULAR if g in reg and kk in reg[g] else STAY_HOURS_OTHER
+
+    def leave(k, v):
+        if v[2] in PART_END and stay(k) == STAY_HOURS_REGULAR:  # 常連は部の終了まで(最大6h)
+            return min(at(start, PART_END[v[2]]), v[1] + timedelta(hours=REGULAR_MAX_HOURS))
+        end = v[1] + timedelta(hours=stay(k))
+        if v[2] in PART_END:  # 部の終了時刻で退店
+            end = min(end, at(start, PART_END[v[2]]))
+        return end
+
     # 部の移動はないものとして、部ごとに表を分けて表示する
     for part in PARTS:
         rows = []
@@ -317,28 +330,27 @@ def main():
         # 常連も含め女性・男性を横に並べ、1人1行・来店回数の多い順(代表の指示)
         def cnt(g, n):
             return HISTORY.get("counts", {}).get(g, {}).get(key(norm(n)), 0)
+        # 前の部の女性も、帰る想定時刻までこの部の開始後に残っていれば入れる(代表の指示)
+        carry = []
+        if part in ("1.5部", "2部"):
+            ps = at(start, PART_START[part.rstrip("部")])
+            for (gg, n), pt in people.items():
+                k = (gg, key(n))
+                if gg == "女性" and pt in PART_END and PARTS.index(pt) < PARTS.index(part) and k in present \
+                        and present[k][1] and leave(k, present[k]) > ps:
+                    carry.append((n, pt, leave(k, present[k])))
         fo = [lt("女性", n) for n in sorted(rows[0][1] + rows[0][2], key=lambda n: (-cnt("女性", n), n))]
+        cf = [f"{lt('女性', n)}(←{pt}〜{lv:%H:%M})" for n, pt, lv in sorted(carry, key=lambda x: (-cnt("女性", x[0]), x[0]))]
+        if cf:
+            fo = sorted(fo + cf, key=lambda x: -int((re.search(r"\((\d+)回\)", x) or [0, 0])[1]))
         mo = [lt("男性", n) for n in sorted(rows[1][1] + rows[1][2], key=lambda n: (-cnt("男性", n), n))]
         if fo or mo:
-            print(f"\n| 女性({len(fo)}名) | 男性({len(mo)}名) |")
+            print(f"\n| 女性({len(fo)}名{f'・うち前の部から{len(cf)}名' if cf else ''}) | 男性({len(mo)}名) |")
             print("|---|---|")
             for i in range(max(len(fo), len(mo))):
                 print(f"| {fo[i] if i < len(fo) else ''} | {mo[i] if i < len(mo) else ''} |")
         if couples:
             print(f"- カップル: {'、'.join(lt('カップル', n) for n in couples)}")
-    # 在店推定: 投稿時刻から滞在時間以内の人
-    def stay(k):
-        g, kk = k
-        return STAY_HOURS_REGULAR if g in reg and kk in reg[g] else STAY_HOURS_OTHER
-
-    def leave(k, v):
-        if v[2] in PART_END and stay(k) == STAY_HOURS_REGULAR:  # 常連は部の終了まで(最大6h)
-            return min(at(start, PART_END[v[2]]), v[1] + timedelta(hours=REGULAR_MAX_HOURS))
-        end = v[1] + timedelta(hours=stay(k))
-        if v[2] in PART_END:  # 部の終了時刻で退店
-            end = min(end, at(start, PART_END[v[2]]))
-        return end
-
     here = {k: v for k, v in present.items() if v[1] and v[1] <= now_dt < leave(k, v)}
     print(f"\n【今いると思われる人】(常連は部の終了まで在店[最大{REGULAR_MAX_HOURS}h]・それ以外は来店から{STAY_HOURS_OTHER}h、部の終了で退店)")
     print("| | Lv4 | Lv3 | Lv2 | Lv1 | 常連以外 | 計 | 常連の割合 |")
